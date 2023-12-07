@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>会社コード一覧画面</title>
+	<link href="/vendor/jquery-ui-1.12.1/jquery-ui.css" th:href="@{/vendor/jquery-ui-1.12.1/jquery-ui.css}" rel="stylesheet" />
+	<link href="/vendor/bootstrap-3.3.7/css/bootstrap.min.css" th:href="@{/vendor/bootstrap-3.3.7/css/bootstrap.min.css}" rel="stylesheet" />
+	<link href="/vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css" th:href="@{/vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css}" rel="stylesheet" />
+	<link href="/vendor/datatables/dataTables.bootstrap.css" th:href="@{/vendor/datatables/dataTables.bootstrap.css}" rel="stylesheet" />
+	<link href="/css/common.css" th:href="@{/css/common.css}" rel="stylesheet" />
+
+	<!-- common's javascript start -->
+	<script type="text/javascript" src="/vendor/jquery-3.2.1.js" th:src="@{/vendor/jquery-3.2.1.js}"></script>
+	<script type="text/javascript" src="/vendor/jquery-ui-1.12.1/jquery-ui.min.js" th:src="@{/vendor/jquery-ui-1.12.1/jquery-ui.min.js}"></script>
+	<script type="text/javascript" src="/vendor/datatables/jquery.dataTables.js" th:src="@{/vendor/datatables/jquery.dataTables.js}"></script>
+	<script type="text/javascript" src="/vendor/datatables/dataTables.bootstrap.js" th:src="@{/vendor/datatables/dataTables.bootstrap.js}"></script>
+	<script type="text/javascript" src="/vendor/bootstrap-3.3.7/js/bootstrap.min.js" th:src="@{/vendor/bootstrap-3.3.7/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" src="/vendor/bootstrap-3.3.7/datepicker/js/moment.min.js" th:src="@{/vendor/bootstrap-3.3.7/datepicker/js/moment.min.js}"></script>
+	<script type="text/javascript" src="/vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js" th:src="@{/vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js}"></script>
+	<script type="text/javascript" src="/vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js" th:src="@{/vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js}"></script>
+	<script type="text/javascript" src="/vendor/knockout-3.4.2.js" th:src="@{/vendor/knockout-3.4.2.js}"></script>
+	<script type="text/javascript" src="/js/axio_common.js" th:src="@{/js/axio_common.js}"></script>
+	<!-- common's javascript end -->
+	<script src="./js/authComCodeList.js" th:src="@{./js/authComCodeList.js}"></script>
+	<script>
+		jQuery(function($){
+
+/*
+			$("#searchResultTable").DataTable({
+					 lengthChange: false	// 件数切替機能 無効
+					,searching: false		// 検索機能 無効
+					,ordering: false		// ソート機能 無効
+					,info: false			// 情報表示 無効
+					,paging: false			// ページング機能 無効
+//					,scrollY: '370px'		// 縦スクロールバーを有効にする (scrollYは200, "200px"など「最大の高さ」を指定します)
+					,scrollCollapse: true
+					,autoWidth:false		// 列幅の自動計算 無効
+					,destroy: true			// 再描画 可能
+					,columns:[
+							 {"width":"10%" }	// チェックボックス
+							,{"width":"20%"}	// コード
+							,{"width":"70%"}	// 名称
+							]
+			});
+*/
+		});
+	</script>
+</head>
+
+<body>
+	<nav class="navbar navbar-default " >
+		<h3 class="navbar-text " style= "color:#fff; padding-top:5px; padding-left:40px;" >権限管理機能：会社一覧画面</h3>
+	</nav>
+	<div class="container">
+		<div layout:fragment="content">
+			<form role="form-inline" action="/authComCodeList" th:action="@{/}" th:object="${AuthComCodeListForm}" method="post" class="form-horizontal" id="authComCodeListForm">
+				<input type="hidden" id="callForm" name="callForm" th:field="*{callForm}" />
+				<input type="hidden" id="callParameter" name="callParameter" th:field="*{callParameter}" />
+				<input type="hidden" id="callRetrun" name="callReturn" th:field="*{callReturn}" />
+				<input type="hidden" id="checkedCodes" name="checkedCodes" th:field="*{checkedCodes}" />
+				<input type="hidden" id="searchResultCount" name="searchResultCount" th:value="*{searchResultList.size()}" />
+				<div id="ActionErrorMessage" class="col-sm-12 alert alert-danger asm_alert" th:style="*{errMessage} ? 'display:block' : 'display:none'" role="alert" >
+					<span id="ActionErrorText" th:text="*{errMessage}"></span>
+				</div>
+				<div class="row ">
+					<div class="form-inline " >
+						<div class="asm_ctrl text-right col-xs-12" style="margin-top: 10px;">
+							<button type="button" id="Search" class="btn btn-info axio_btn_middle" data-action="./authComCodeListSearch">検索</button>
+							<button type="button" id="Ok" class="btn btn-info axio_btn_middle" data-dismiss="modal">確定</button>
+							<button type="button" id="Cancel" class="btn btn-info axio_btn_middle" data-dismiss="modal">キャンセル</button>
+						</div>
+					</div>
+					<fieldset class="scheduler-border">
+						<legend class="scheduler-border " >検索条件</legend>
+						<div class="col-xs-12" >
+							<div class="form-group form-group-flex">
+								<div class="td-color2 col-xs-2 form-group-flex middle-center "><label class="control-label " >会社コード</label></div>
+								<div class="td-color3 col-xs-4">
+									<input type="text" id="searchCompanyCode" name="searchCompanyCode" class="form-control input-sm" th:field="*{searchCompanyCode}" />
+								</div>
+								<div class="td-color2 col-xs-2 form-group-flex middle-center"><label class="control-label " >会社名称</label></div>
+								<div class="td-color3 col-xs-4 ">
+									<input type="text" id="searchCompanyName" name="searchCompanyName" class="form-control input-sm " th:field="*{searchCompanyName}" />
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="scheduler-border">
+						<legend class="scheduler-border " >検索結果一覧</legend>
+							<table id="searchResultTable" class="table table-bordered asm_data_table text-center" style="margin-bottom:2px;">
+								<thead >
+									<tr class="asm_data_table_header">
+										<th class="text-center" style="width:10%;">
+											<div style="display: inline-block; text-align: center; width: 10px;"><input type="checkbox" id="checkAll" name="checkAll" autocomplete="off"></div>
+											<div style="display: inline-block; text-align: right; width: 30px;">NO</div>
+ 										</th>
+										<th class="text-center" style="width:20%;">会社コード</th>
+										<th class="text-center" style="width:70%;">会社名称</th>
+									</tr>
+								</thead>
+								<tbody id="resultList">
+									<tr th:each="searchResult, start : *{searchResultList}" th:object="${searchResult}">
+										<td class="asm_data_table_header text-center">
+											<div style="display: inline-block; text-align: center; width: 10px;"><input type="checkbox" th:id="${'companyCodeCheck_' + start.index}" name="companyCodeCheck" autocomplete="off" th:attr="data-index= ${start.index}" th:value="${searchResult.companyCode}" th:checked="${searchResult.checkedFlag}"></input></div>
+											<div style="display: inline-block; text-align: right; width: 30px;" th:id="${'no_' + start.index}" class="asm_data_table_header text-right" th:text="${start.index + 1}"></div>
+											<input type="hidden" th:id="${'companyNameHidden_' + start.index}" name="companyNameHidden" th:value="${searchResult.companyName}" />
+										</td>
+										<td th:if="${searchResult.selectedFlag}" style="background-color: #66FFFF;" th:id="${'companyCode_' + start.index}" class="master-back-grey text-left" th:text="${searchResult.companyCode}" />
+										<td th:if="${!searchResult.selectedFlag}" style="background-color: #eaedf7;" th:id="${'companyCode_' + start.index}" class="master-back-grey text-left" th:text="${searchResult.companyCode}" />
+										<td th:if="${searchResult.selectedFlag}" style="background-color: #66FFFF;" th:id="${'companyName_' + start.index}" class="master-back-grey text-left" th:text="${searchResult.companyName}" />
+										<td th:if="${!searchResult.selectedFlag}" style="background-color: #eaedf7;" th:id="${'companyName_' + start.index}" class="master-back-grey text-left" th:text="${searchResult.companyName}" />
+									</tr>
+							</tbody>
+						</table>
+					</fieldset>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>

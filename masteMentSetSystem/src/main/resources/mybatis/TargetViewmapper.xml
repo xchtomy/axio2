@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.axio.masterMentsetSystem.repository.TargetViewMapper">
+  <resultMap id="BaseResultMap" type="jp.co.axio.masterMentsetSystem.dto.TargetViewInfoResultListDto">
+    <result column="ordinal_position" jdbcType="VARCHAR" property="dirNo" />
+    <result column="description" jdbcType="VARCHAR" property="columnLogicalName" />
+    <result column="column_name" jdbcType="VARCHAR" property="columnPhysicalName" />
+  </resultMap>
+
+  <select id="selectAllByView" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    c.ordinal_position,
+    c.column_name,
+    pgd.description
+    from
+      pg_catalog.pg_class as cs
+    inner join
+      pg_catalog.pg_description pgd
+    on  (pgd.objoid = cs.oid)
+    right outer join
+      information_schema.columns c
+    on  (
+        pgd.objsubid = c.ordinal_position
+        and c.table_name = cs.relname
+        )
+    where
+      c.table_schema = 'public'
+      and cs.relname = #{sqlOutTableName,jdbcType=VARCHAR}
+    order by c.ordinal_position
+  </select>
+
+    <select id="countBySystemId" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCsvExportDefInfo" resultType="java.lang.Long">
+    select count(*) from m_gp_csvexport_definfo
+    where system_id = #{systemId,jdbcType=VARCHAR}
+    <if test="sqlNo != null">
+          and sql_no <![CDATA[ <> ]]>  #{sqlNo,jdbcType=INTEGER}
+    </if>
+  </select>
+
+    <select id="countByFullFile" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCsvExportDefInfo" resultType="java.lang.Long">
+    select count(*) from m_gp_csvexport_definfo
+    where
+    file_save_path = #{fileSavePath,jdbcType=VARCHAR}
+    and file_name = #{fileName,jdbcType=VARCHAR}
+    and file_class = #{fileClass,jdbcType=VARCHAR}
+    and file_naming_class = #{fileNamingClass,jdbcType=VARCHAR}
+    <if test="sqlNo != null">
+          and sql_no <![CDATA[ <> ]]> #{sqlNo,jdbcType=INTEGER}
+    </if>
+  </select>
+</mapper>

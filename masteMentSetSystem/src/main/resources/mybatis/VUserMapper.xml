@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.axio.masterMentsetSystem.repository.VUserMapper">
+<!-- ①検索画面の検索SQL -->
+<!-- ②検索結果のCSV出力 -->
+<!-- ④利用システム一覧の取得SQL -->
+  <select id="selectUserList" parameterType="jp.co.axio.masterMentsetSystem.controller.UserListForm" resultType="jp.co.axio.masterMentsetSystem.model.VGamenUserEntity">
+    select *
+    from V_GAMEN_USER
+    where 1 = 1
+      <if test="userId != null and userId != '' ">
+        and (user_id = #{userId,jdbcType=VARCHAR} or login_id = #{userId,jdbcType=VARCHAR})
+      </if>
+      <if test="userName != null and userName != ''">
+        and name_jp like concat('%' , #{userName,jdbcType=VARCHAR} ,'%')
+      </if>
+      <if test="orgName != null and orgName != ''">
+        and organization_name_jp like concat('%' , #{orgName,jdbcType=VARCHAR} ,'%')
+      </if>
+      <if test="surnameEn != null and surnameEn != ''">
+        and surname_en like concat('%' , #{surnameEn,jdbcType=VARCHAR} ,'%')
+      </if>
+      <if test="givennameEn != null and givennameEn != ''">
+        and givenname_en like concat('%' , #{givennameEn,jdbcType=VARCHAR} ,'%')
+      </if>
+      <if test="tel != null and tel != ''">
+        and tel_ex like concat('%' , #{tel,jdbcType=VARCHAR} ,'%')
+      </if>
+      <if test="telEx != null and telEx != ''">
+        and tel like concat('%' , #{telEx,jdbcType=VARCHAR} ,'%')
+      </if>
+      <if test="InvUserFlg != null and InvUserFlg != 'ON' ">
+        and end_date >= now()
+      </if>
+      <if test="orderbyStr != null and orderbyStr != ''">
+        ORDER BY ${orderbyStr}
+      </if>
+
+        LIMIT #{cntInt}
+      <if test=" offset != null and  offset gt 0">
+        OFFSET #{offset,jdbcType=INTEGER}
+      </if>
+  </select>
+
+<!-- ①検索画面の検索SQL (件数取得) -->
+  <select id="getUserCount" parameterType="jp.co.axio.masterMentsetSystem.controller.UserListForm" resultType="java.lang.String">
+    select count(*)
+    from V_GAMEN_USER
+    where 1 = 1
+      <if test="userId != null and userId != '' ">
+        and (user_id = #{userId,jdbcType=VARCHAR} or login_id = #{userId,jdbcType=VARCHAR})
+      </if>
+      <if test="userName != null and userName != ''">
+        and name_jp like concat('%' , #{userName,jdbcType=VARCHAR} ,'%')
+      </if>
+      <if test="orgName != null and orgName != ''">
+        and organization_name_jp like concat('%' , #{orgName,jdbcType=VARCHAR} ,'%')
+      </if>
+      <if test="surnameEn != null and surnameEn != ''">
+        and surname_en like concat('%' , #{surnameEn,jdbcType=VARCHAR} ,'%')
+      </if>
+      <if test="givennameEn != null and givennameEn != ''">
+        and givenname_en like concat('%' , #{givennameEn,jdbcType=VARCHAR} ,'%')
+      </if>
+      <if test="tel != null and tel != ''">
+        and tel_ex = #{tel}
+      </if>
+      <if test="telEx != null and telEx != ''">
+        and tel = #{telEx}
+      </if>
+      <if test="InvUserFlg != null and InvUserFlg != 'ON' ">
+        and end_date >= now()
+      </if>
+  </select>
+<!-- ②検索結果のCSV出力 -->
+  <select id="getCsvList" parameterType="jp.co.axio.masterMentsetSystem.controller.UserListForm" resultType="jp.co.axio.masterMentsetSystem.model.VGamenUserEntity">
+    select *
+    from V_GAMEN_USER
+    where 1 = 1
+      <if test="userId != null and userId != '' ">
+        and (user_id = #{userId,jdbcType=VARCHAR} or login_id = #{userId,jdbcType=VARCHAR})
+      </if>
+      <if test="userName != null and userName != ''">
+        and name_jp like concat('%' , #{userName,jdbcType=VARCHAR} ,'%')
+      </if>
+      <if test="orgName != null and orgName != ''">
+        and organization_name_jp like concat('%' , #{orgName,jdbcType=VARCHAR} ,'%')
+      </if>
+      <if test="surnameEn != null and surnameEn != ''">
+        and surname_en like concat('%' , #{surnameEn,jdbcType=VARCHAR} ,'%')
+      </if>
+      <if test="givennameEn != null and givennameEn != ''">
+        and givenname_en like concat('%' , #{givennameEn,jdbcType=VARCHAR} ,'%')
+      </if>
+      <if test="tel != null and tel != ''">
+        and tel_ex = #{tel}
+      </if>
+      <if test="telEx != null and telEx != ''">
+        and tel = #{telEx}
+      </if>
+  </select>
+<!-- ③ユーザー情報の検索SQL ★権限情報タブの上部分を含む -->
+  <select id="getUser" parameterType="jp.co.axio.masterMentsetSystem.model.VGamenUserEntity" resultType="jp.co.axio.masterMentsetSystem.model.VGamenUserEntity">
+    select
+      *
+    from
+      V_GAMEN_USER
+    where
+      user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+
+<!-- ⑤セキュリティグループ一覧の取得SQL -->
+  <select id="getUserGrp" parameterType="java.lang.String" resultType="jp.co.axio.masterMentsetSystem.dto.UserGrpDto">
+	with member_list as (
+	    select
+	        m_member_group.group_id as group_id
+	        , m_group.group_name_jp as group_name_jp
+	        , option_flag
+	    from
+	        m_member_group
+	        inner join m_group
+	            on m_group.group_id = m_member_group.group_id
+	    where
+	        user_id = #{userId,jdbcType=VARCHAR}
+	        and valid_flag = '1'
+	)
+	, group_type_list as (
+	    select
+	        value_1 as code
+	        , value_2 as name
+	    from
+	        m_gp_code_mst
+	    where
+	        class_code = '00100'
+	        and delete_flag = '0'
+	)
+	select distinct
+	    group_name_jp
+	    , group_type_list.name as group_type
+	    , CASE
+	        WHEN option_flag = '1'
+	            THEN '個別権限'
+	        ELSE '自動権限'
+	        END as root_type
+	from
+	    member_list
+	    inner join m_adgroup
+	        on m_adgroup.group_id = member_list.group_id
+	    inner join group_type_list
+	        on group_type_list.code = m_adgroup.group_type
+	union
+	select
+	    group_name_jp
+	    , '--' as group_type
+	    , CASE
+	        WHEN option_flag = '1'
+	            THEN '個別権限'
+	        ELSE '自動権限'
+	        END as root_type
+	from
+	    member_list
+	where
+	    not exists (
+	        select
+	            null
+	        from
+	            m_adgroup
+	        where
+	            m_adgroup.group_id = member_list.group_id
+	    )
+	order by
+	    group_name_jp
+  </select>
+
+<!-- ⑥発令兼務一覧の取得SQL -->
+  <select id="getAnnCmbOrg" parameterType="java.lang.String" resultType="jp.co.axio.masterMentsetSystem.dto.UserAnnCmbOrgDto">
+	select
+	  m_user_organization.company_code
+	  , m_user_organization.organization_code
+	  , m_organization.organization_name_jp
+	  , m_user_organization.position_code
+	  , m_position.position_name_jp
+	from
+	  m_user_organization
+	inner join m_organization on
+	  m_user_organization.company_code = m_organization.company_code
+	  and m_user_organization.organization_code = m_organization.organization_code
+	inner join m_position on
+	  m_user_organization.company_code = m_position.company_code
+	  and m_user_organization.position_code = m_position.position_code
+	where
+	  m_user_organization.user_id = #{userId,jdbcType=VARCHAR}
+	  and m_user_organization.invalid_flag = '0'
+	  and m_user_organization.honmu_flag = '0'
+	  and m_user_organization.register_id = 'AxioBatU0020'
+	order by m_user_organization.position_code
+  </select>
+
+<!-- ⑦役職リストの取得SQL -->
+<select id="getPosList" resultType="jp.co.axio.masterMentsetSystem.dto.UserPositionInfoDto">
+	select distinct
+	    position_code
+	  , position_name_jp
+	from m_position
+	order by position_code
+ </select>
+
+<!-- ⑧手動兼務一覧の取得SQL -->
+  <select id="getManCmbOrg" parameterType="java.lang.String" resultType="jp.co.axio.masterMentsetSystem.dto.UserManCmbOrgDto">
+	select
+	  m_user_org_before.company_code
+	  , m_user_org_before.organization_code
+	  , m_organization.organization_name_jp
+	  , m_user_org_before.position_code
+	  , m_position.position_name_jp
+	  , concurrency_order
+	from
+	  m_user_org_before
+	inner join m_organization on
+	  m_user_org_before.company_code = m_organization.company_code
+	  and m_user_org_before.organization_code = m_organization.organization_code
+	inner join m_position on
+	  m_user_org_before.company_code = m_position.company_code
+	  and m_user_org_before.position_code = m_position.position_code
+	where
+	  m_user_org_before.user_id = #{userId,jdbcType=VARCHAR}
+	  and m_user_org_before.invalid_flag = '0'
+	  and m_user_org_before.organization_kbn = '2'
+	order by m_user_org_before.concurrency_order
+  </select>
+
+<!-- ⑨経歴情報取得SQL -->
+  <select id="getCareerInfo" parameterType="java.lang.String" resultType="jp.co.axio.masterMentsetSystem.dto.UserCareerInfoDto">
+	select distinct
+	  organization_name_jp
+	  , to_char(min(reflecion_stamp), 'YYYY/MM/DD') as start_date
+	  , to_char(end_date, 'YYYY/MM/DD') as end_date
+	  , position_name_jp
+	from
+	  v_m_user_audit
+	where
+	  user_id = #{userId,jdbcType=VARCHAR}
+	group by
+	  organization_name_jp
+	  , end_date
+	  , position_name_jp
+	order by
+	  start_date desc
+  </select>
+
+<!-- ⑩その他情報取得SQL -->
+  <select id="getOthersInfo" parameterType="java.lang.String" resultType="jp.co.axio.masterMentsetSystem.dto.UserOtherInfoDto">
+	select
+	  m_others_values.user_id
+	  , m_others_menu.column_name
+	  , m_others_values.value_value
+	  , m_others_menu.edit_flag
+	  , m_others_menu.display_order
+	from
+	  m_others_values
+	  inner join m_others_menu
+	    on m_others_menu.menu_id = m_others_values.menu_id
+	where
+	  m_others_values.user_id = #{userId,jdbcType=VARCHAR}
+	order by
+	  m_others_menu.display_order
+	LIMIT 20
+  </select>
+
+<!-- ALL取得 -->
+<select id="getUserOrgBefore" parameterType="java.lang.String" resultType="jp.co.axio.masterMentsetSystem.model.MUserOrgBeforeEntity">
+    select *
+    from m_user_org_before
+    where user_id = #{userId,jdbcType=VARCHAR}
+    and m_user_org_before.organization_kbn = '2'
+
+</select>
+
+<!-- 論理削除 -->
+  <update id="delUserOrgBefore" parameterType="jp.co.axio.masterMentsetSystem.model.MUserOrgBeforeEntity">
+    update m_user_org_before
+    set invalid_flag = '1',
+        updater_id = #{updaterId,jdbcType=VARCHAR},
+        update_ts = #{updateTs,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=VARCHAR}
+      and company_code = #{companyCode,jdbcType=VARCHAR}
+      and organization_code = #{organizationCode,jdbcType=VARCHAR}
+      and position_code = #{positionCode,jdbcType=VARCHAR}
+      and m_user_org_before.organization_kbn = '2'
+  </update>
+
+<!-- 更新(復活) -->
+  <update id="updUserOrgBefore" parameterType="jp.co.axio.masterMentsetSystem.model.MUserOrgBeforeEntity">
+    update m_user_org_before
+    set invalid_flag = '0' ,
+        position_code = #{positionCode,jdbcType=VARCHAR},
+        updater_id = #{updaterId,jdbcType=VARCHAR},
+        update_ts = #{updateTs,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=VARCHAR}
+      and company_code = #{companyCode,jdbcType=VARCHAR}
+      and organization_code = #{organizationCode,jdbcType=VARCHAR}
+      and m_user_org_before.organization_kbn = '2'
+
+  </update>
+
+<!-- 新規追加 -->
+   <insert id="insUserOrgBefore" parameterType="jp.co.axio.masterMentsetSystem.model.MUserOrgBeforeEntity">
+    insert into m_user_org_before (
+      user_id,
+      company_code,
+      organization_code,
+      start_date,
+      end_date,
+      invalid_flag,
+      organization_kbn,
+      location_code,
+      register_id,
+      regist_ts,
+      updater_id,
+      update_ts,
+      position_code,
+      concurrency_order
+    )
+    values(
+      #{userId,jdbcType=VARCHAR},
+      #{companyCode,jdbcType=VARCHAR},
+      #{organizationCode,jdbcType=VARCHAR},
+      #{startDate,jdbcType=DATE},
+      #{endDate,jdbcType=DATE},
+      #{invalidFlag,jdbcType=VARCHAR},
+      #{organizationKbn,jdbcType=VARCHAR},
+      #{locationCode,jdbcType=VARCHAR},
+      #{registerId,jdbcType=VARCHAR},
+      #{registTs,jdbcType=TIMESTAMP},
+      #{updaterId,jdbcType=VARCHAR},
+      #{updateTs,jdbcType=TIMESTAMP},
+      #{positionCode,jdbcType=VARCHAR},
+      #{concurrencyOrder,jdbcType=VARCHAR}
+    )
+  </insert>
+
+  <select id="selectVUserByAuthUserCodeList" parameterType="java.lang.String" resultType="jp.co.axio.masterMentsetSystem.model.VGamenUserEntity">
+    select *
+    from V_GAMEN_USER
+    where '1' = '1'
+    <if test="!searchFlag">
+      <foreach item="codeMap" index="index" collection="codeMapList" open="and (" separator=" or " close=")">
+        <foreach item="value" index="key" collection="codeMap" open="(" separator=" and " close=")">
+          <if test="key == 'userCode'">
+            user_id = #{value,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </foreach>
+    </if>
+    <if test="searchFlag">
+      and (
+        (
+        user_id like '%' || #{searchUserCode,jdbcType=VARCHAR} || '%'
+        and (name_jp like '%' || #{searchUserName,jdbcType=VARCHAR} || '%')
+       	<if test="searchStartDateYmd != null and searchStartDateYmd != ''">
+       		<![CDATA[and TO_DATE(#{searchStartDateYmd,jdbcType=VARCHAR}, 'yyyy/MM/dd') between start_date and end_date ]]>
+       	</if>
+        )
+        <foreach item="codeMap" index="index" collection="codeMapList" open="or (" separator=" or " close=")">
+          <foreach item="value" index="key" collection="codeMap" open="(" separator=" and " close=")">
+            <if test="key == 'userCode'">
+              user_id = #{value,jdbcType=VARCHAR}
+            </if>
+          </foreach>
+        </foreach>
+        )
+    </if>
+    order by user_id
+  </select>
+
+</mapper>

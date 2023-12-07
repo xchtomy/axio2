@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>組織セキュリティグループ設定</title>
+
+  <!-- 共通設定CSS -->
+  <link href="./vendor/jquery-ui-1.12.1/jquery-ui.css" th:href="@{./vendor/jquery-ui-1.12.1/jquery-ui.css}"
+    rel="stylesheet" />
+  <link href="./vendor/bootstrap-3.3.7/css/bootstrap.min.css"
+    th:href="@{./vendor/bootstrap-3.3.7/css/bootstrap.min.css}" rel="stylesheet" />
+  <link href="./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css"
+    th:href="@{./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css}" rel="stylesheet" />
+  <link href="./vendor/datatables/dataTables.bootstrap.css" th:href="@{./vendor/datatables/dataTables.bootstrap.css}"
+    rel="stylesheet" />
+  <link href="./css/common.css" th:href="@{./css/common.css}" rel="stylesheet" />
+  <!-- 個別設定CSS -->
+  <link href="./assets/css/style.css" th:href="@{./assets/css/style.css}" rel="stylesheet" />
+  <link href="./assets/css/style2.css" th:href="@{./assets/css/style2.css}" rel="stylesheet" />
+  <link href="./assets/css/security_grp_set.css" th:href="@{./assets/css/security_grp_set.css}" rel="stylesheet" />
+  <link href="./vendor/fontawesome-free-6.1.1-web/css/all.css"
+    th:href="@{./vendor/fontawesome-free-6.1.1-web/css/all.css}" rel="stylesheet">
+
+  <!-- common's javascript start -->
+  <script type="text/javascript" th:src="@{./vendor/jquery-3.2.1.js}"></script>
+  <script type="text/javascript" th:src="@{./vendor/jquery-ui-1.12.1/jquery-ui.min.js}"></script>
+  <script type="text/javascript" th:src="@{./vendor/datatables/jquery.dataTables.js}"></script>
+  <script type="text/javascript" th:src="@{./vendor/datatables/dataTables.bootstrap.js}"></script>
+  <script type="text/javascript" th:src="@{./vendor/bootstrap-3.3.7/js/bootstrap.min.js}"></script>
+  <script type="text/javascript" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js}"></script>
+  <script type="text/javascript" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js}"></script>
+  <script type="text/javascript"
+    th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js}"></script>
+  <script type="text/javascript" th:src="@{./vendor/knockout-3.4.2.js}"></script>
+  <!-- 個別設定JS -->
+  <script type="text/javascript" th:src="@{./js/axio_common.js}"></script>
+  <script type="text/javascript" th:src="@{./js/SecurityGrpReg.js}"></script>
+
+</head>
+
+<body>
+
+  <!-- ダイヤログモーダル表示エリア -->
+  <div id="listModalArea">
+    <div class="modal fade" id="listModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog" style="width:1100px;">
+        <div class="modal-content" style="width:1100px;height:800px;overflow-y:auto">
+          <form id="dialogParamForm" name="dialogParamForm">
+            <input type="hidden" id="callFrom" name="callFrom" value="" />
+            <input type="hidden" id="callParameter" name="callParameter" value="" />
+            <input type="hidden" id="callReturn" name="callReturn" value="" />
+          </form>
+          <div id="modal_dailog_body">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header id="header" class="header">
+    <div class="header__inner">
+      <figure class="header__img"><img src="./assets/img/common/img_logo01.png"
+          th:src="@{./assets/img/common/img_logo01.png}" alt="AXIO" width="73" height="36"></figure>
+      <a href="./logout" class="header__link">ログアウト</a>
+    </div>
+  </header>
+
+  <form role="form-inline" id="SecurityGrpRegForm" th:action="@{/}" th:object="${SecurityGrpRegForm}" method="post"
+    class="form-horizontal">
+    <!-- 隠し項目エリア -->
+    <input type="hidden" th:field="*{accessToken}" />
+    <input type="hidden" th:field="*{selectSecurityGrpCode}" />
+    <input type="hidden" th:value="*{errMessage}" name="errMessage" id="errMessage" />
+    <input type="hidden" th:value="*{wanMessage}" name="wanMessage" id="wanMessage" />
+    <input type="hidden" th:value="*{wanUrl}" name="wanUrl" id="wanUrl" />
+    <input type="hidden" th:value="*{wanCheck}" name="wanCheck" id="wanCheck" />
+
+    <!-- 変更有無判断用隠し項目 -->
+    <!-- <input type="hidden" th:value="*{groupFlag}" id="groupFlag_hd" /></input>
+    <input type="hidden" th:value="*{groupName}" id="groupName_hd" /></input>
+    <input type="hidden" th:value="*{mangGroupFlg}" id="mangGroupFlg_hd" /></input>
+    <input type="hidden" th:value="*{mailGroupFlg}" id="mailGroupFlg_hd" /></input>
+    <input type="hidden" th:value="*{mailGroupName}" id="mailGroupName_hd" /></input>
+    <input type="hidden" th:value="*{excludeTempFlag}" id="excludeTempFlag_hd" /></input>
+    <input type="hidden" th:value="*{reflectDate}" id="reflectDate_hd" /></input> -->
+
+    <main class="main">
+      <!-- タイトルエリア -->
+      <div class="modTitleArea">
+        <div class="modTitleArea__inner">
+          <h1 class="modTitleArea__title">組織セキュリティグループ設定</h1>
+          <a class="modTitleArea__prevButton" id="backbtn"><span>戻る</span></a>
+        </div>
+      </div>
+
+      <!-- 完了メッセージ保存エリア -->
+      <div style="display:none;">
+        <div id="axioMessageDialog" title="完了" th:if="${axioMessage}">
+          <span th:text="${axioMessage}"></span>
+        </div>
+        <div id="axioErrDialog" title="エラー" class="col-sm-12 alert alert-danger asm_alert">
+          <span th:text="${SecurityGrpRegForm.errMessage}"></span>
+        </div>
+        <div id="axioWanDialog" title="確認" class="col-sm-12 alert alert-danger asm_alert">
+          <span th:text="${SecurityGrpRegForm.wanMessage}"></span>
+        </div>
+      </div>
+
+
+      <!-- 内容エリア -->
+      <div class="main__inner container">
+
+        <!-- 保存ボタン行 -->
+        <div class="searchBox">
+          <div class="searchBox__titleArea">
+            <div class="searchBox__titleArea__title">
+              <div class="tabs">
+                <input id="securityGrpSetLink" type="radio" name="tab_item">
+                <label class="tab_item" for="securityGrpSetLink">
+                  組織セキュリティグループ編集
+                </label>
+                <input id="securityGrpRegLink" type="radio" name="tab_item" checked>
+                <label class="tab_item" for="securityGrpRegLink">
+                  <span class="selected__menu">
+                    組織セキュリティグループ登録 <i class="fa-solid fa-caret-down"></i>
+                  </span>
+                  
+                </label>
+              </div>
+              <div class="searchDetailBox__titleArea__btnArea">
+                <button type="button" id="setSaveBtn">
+                  <i class="fa-solid fa-floppy-disk"></i> 保存
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+
+
+          <!-- 登録メイン画面 -->
+          <div class="setup_org_content">
+            <div class="searchDetailBox__infoBox__area">
+
+              <!-- SGグループ -->
+              <div class="row">
+                <div class="searchDetailBox__table__area">
+                  <div class="searchDetailBox__sgid__area">
+                    <span class="searchDetailBox__sgid" th:text="'SGID : ' + *{selectSecurityGrpCode}"></span>
+                    <div class="setup_org__button__area">
+                      <button class="userSet__btn" id="groupSearch" type="button">グループ検索</button>
+                      <button class="userSet__btn" id="invalid" type="button"
+                        th:disabled="*{selectSecurityGrpCode eq ''}">グループ無効</button>
+                      <button class="userSet__btn" id="clear" type="button">クリア</button>
+                    </div>
+                  </div>
+
+
+                  <table class="modTable jsViewTable">
+                    <tbody>
+                      <tr>
+                        <th style="width: 5%;">No</th>
+                        <th style="width: 25%;">グループ種類</th>
+                        <th style="width: 35%;">グループ名</th>
+                        <th style="width: 35%;">備考</th>
+                      </tr>
+
+                      <tr th:each="securityGrpBaseList, st : *{securityGrpBaseList}" class="align-middle">
+                        <!-- グループタイプ -->
+                        <td>
+                          <div class="text" th:text="*{securityGrpBaseList[__${st.index}__].groupType}"></div>
+                          <input type="hidden" th:field="*{securityGrpBaseList[__${st.index}__].groupType}">
+                        </td>
+                        <!-- グループタイプ名 -->
+                        <td>
+                          <div class="text" th:text="*{securityGrpBaseList[__${st.index}__].groupTypeName}"></div>
+                          <input type="hidden" th:field="*{securityGrpBaseList[__${st.index}__].groupTypeName}">
+                          <input type="hidden" th:field="*{securityGrpBaseList[__${st.index}__].groupId}">
+                        </td>
+                        <!-- グループ名 -->
+                        <td>
+                          <div class="text">
+                            <input
+                              th:classappend="${#fields.hasErrors('securityGrpBaseList') ? 'axio_field_error' : ''}"
+                              type="text" th:field="*{securityGrpBaseList[__${st.index}__].groupName}">
+                          </div>
+                        </td>
+                        <!-- 備考 -->
+                        <td>
+                          <div class="text">
+                            <input type="text" th:field="*{securityGrpBaseList[__${st.index}__].note}">
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <span class="text-danger alert-danger" th:if="${#fields.hasErrors('securityGrpBaseList')}"
+                  th:errors="*{securityGrpBaseList}"></span>
+              </div>
+
+
+              <!-- 開始日、終了日 -->
+              <div class="row">
+
+                <ul class="searchDetailBox__profileList">
+                  <li class="searchDetailBox__profileList__item">
+                    <p class="title">開始日
+                      <span class="font-red"> (※)</span>
+                    </p>
+                    <div class="text">
+                      <input th:classappend="${#fields.hasErrors('startDate') ? 'axio_field_error' : ''}"
+                        class="dpickDateCalendar" type="text" th:field="*{startDate}" placeholder="2000/04/01">
+                        
+                    </div>
+                  </li>
+
+                  <li class="searchDetailBox__profileList__item">
+                    <p class="title">終了日
+                      <span class="font-red"> (※)</span>
+                    </p>
+                    <div class="text">
+                      <input th:classappend="${#fields.hasErrors('startDate') ? 'axio_field_error' : ''}"
+                        class="dpickDateCalendar" type="text" th:field="*{endDate}" placeholder="2999/12/31">
+                    </div>
+                  </li>
+
+                </ul>
+                <span class="text-danger alert-danger" th:if="${#fields.hasErrors('startDate')}"
+                  th:errors="*{startDate}"></span>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </main>
+    <input type="hidden" id="changedFlg" name="changedFlg" value="0"/>
+  </form>
+  <!--#include virtual="/assets/include/footer.html" -->
+  <footer id="footer" class="footer">
+    <p class="footer__text">Copyright &copy; AXIO corporation. All Rights Reserved.</p>
+  </footer>
+</body>
+
+</html>

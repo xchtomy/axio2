@@ -1,0 +1,142 @@
+.header {
+	padding: 10px 20px 14px;
+	background-color: #fff
+}
+
+.header__inner {
+	max-width: 1260px;
+	margin: 0 auto;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: justify;
+	-ms-flex-pack: justify;
+	justify-content: space-between;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center
+}
+
+.header__img {
+	width: 73px
+}
+
+.header__link {
+	position: relative;
+	margin-top: 2px;
+	padding: 6px 17px 5px 28px;
+	border-radius: 4px;
+	border: 1px solid #ddd;
+	z-index: 10;
+	letter-spacing: -1px;
+	font-size: 12px;
+	font-size: 1.2rem
+}
+
+.header__link::before {
+	position: absolute;
+	content: "";
+	width: 14px;
+	height: 14px;
+	background-image: url("/assets/img/common/icon_logout.svg");
+	top: 50%;
+	left: 10px;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%)
+}
+
+.modTitleArea {
+	background-color: #fff;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #dddddd;
+	margin-bottom: 10px
+}
+
+.modTitleArea__inner {
+	position: relative;
+	max-width: 1280px;
+	margin: 0 auto
+}
+
+.modTitleArea__title {
+	letter-spacing: -0.5px;
+	font-size: 22px;
+	font-size: 2.2rem;
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 15px 0 12px;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: justify;
+	-ms-flex-pack: justify;
+	justify-content: space-between;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	font-weight: 700
+}
+
+.modTitleArea__title>span {
+	font-size: 14px;
+	font-size: 1.4rem;
+	font-weight: normal
+}
+
+.modTitleArea__prevButton {
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	width: 100px;
+	height: 100%;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	background-color: #1F3990
+}
+
+.modTitleArea__prevButton>span {
+	color: #fff;
+	position: relative;
+	font-size: 14px;
+	font-size: 1.4rem;
+	font-weight: 700;
+	position: relative;
+	padding-left: 12px
+}
+
+.modTitleArea__prevButton>span::before {
+	position: absolute;
+	content: "";
+	top: 50%;
+	left: 0;
+	width: 8px;
+	height: 8px;
+	border-top: 2px solid #fff;
+	border-right: 2px solid #fff;
+	-webkit-transform: translateY(-50%) rotate(-135deg);
+	transform: translateY(-50%) rotate(-135deg)
+}
+
+
+.footer {
+	text-align: center;
+	padding: 5px 0;
+	background-color: #1F3990;
+	letter-spacing: -0.5px;
+	margin-top: 30px;
+	height: 25px;
+	
+}
+
+.footer__text {
+	color: #fff;
+	font-size: 12px;
+	font-size: 1.2rem
+}

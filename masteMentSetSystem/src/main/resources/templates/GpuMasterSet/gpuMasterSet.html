@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>汎用コードマスタ管理機能</title>
+<link href="./vendor/jquery-ui-1.12.1/jquery-ui.css" th:href="@{./vendor/jquery-ui-1.12.1/jquery-ui.css}" rel="stylesheet" />
+<link href="./vendor/bootstrap-3.3.7/css/bootstrap.min.css" th:href="@{./vendor/bootstrap-3.3.7/css/bootstrap.min.css}" rel="stylesheet" />
+<link href="./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css" th:href="@{./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css}" rel="stylesheet" />
+<link href="./vendor/datatables/dataTables.bootstrap.css" th:href="@{./vendor/datatables/dataTables.bootstrap.css}" rel="stylesheet" />
+<link href="./css/common.css" th:href="@{./css/common.css}" rel="stylesheet" />
+<!-- 個別設定CSS -->
+<link href="./assets/css/header_footer.css" th:href="@{./assets/css/header_footer.css}" rel="stylesheet" />
+
+<!-- common's javascript start -->
+<script type="text/javascript" src="./vendor/jquery-3.2.1.js" th:src="@{./vendor/jquery-3.2.1.js}"></script>
+<script type="text/javascript" src="./vendor/jquery-ui-1.12.1/jquery-ui.min.js" th:src="@{./vendor/jquery-ui-1.12.1/jquery-ui.min.js}"></script>
+<script type="text/javascript" src="./vendor/datatables/jquery.dataTables.js" th:src="@{./vendor/datatables/jquery.dataTables.js}"></script>
+<script type="text/javascript" src="./vendor/datatables/dataTables.bootstrap.js" th:src="@{./vendor/datatables/dataTables.bootstrap.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/js/bootstrap.min.js" th:src="@{./vendor/bootstrap-3.3.7/js/bootstrap.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js}"></script>
+<script type="text/javascript" src="./vendor/knockout-3.4.2.js" th:src="@{./vendor/knockout-3.4.2.js}"></script>
+<script type="text/javascript" src="./js/axio_common.js" th:src="@{./js/axio_common.js}"></script>
+<!-- common's javascript end -->
+<script>
+
+jQuery(function($){
+    $(".asm_data_table").DataTable({
+    	lengthChange: true,	// 件数切替機能 無効
+    	searching: false,	// 検索機能 無効
+    	ordering: true,	// ソート機能 有効
+    	info: false,	// 情報表示 無効
+    	paging: false,	// ページング機能 無効
+//    	scrollY: '390px',	// 縦スクロールバーを有効にする (scrollYは200, "200px"など「最大の高さ」を指定します)
+    	scrollCollapse: true,
+        autoWidth:false,     // 列幅の自動計算 無効
+        destroy: true,
+        columns:[
+            {"width":"5%" }, // チェックボックス
+            {"width":"15%"}, //  コードNO
+            {"width":"28%"}, // コード名称
+            {"width":"12%"}, //  表示順
+            {"width":"40%"}  // コード内容
+            ]
+    });
+
+});
+
+</script>
+<script src="./js/gpuMasterSet.js" th:src="@{./js/gpuMasterSet.js}"></script>
+</head>
+<body>
+
+    <!-- ヘッダーエリア -->
+    <header id="header" class="header">
+        <div class="header__inner">
+          <figure class="header__img"><img src="./assets/img/common/img_logo01.png" th:src="@{./assets/img/common/img_logo01.png}" alt="AXIO" width="73" height="36"></figure>
+          <a href="./logout" class="header__link">ログアウト</a>
+        </div>
+      </header>
+
+      <!-- タイトルエリア -->
+      <div class="modTitleArea">
+        <div class="modTitleArea__inner">
+          <h1 class="modTitleArea__title">汎用コードマスタ管理機能</h1>
+          <a class="modTitleArea__prevButton" id="btn_logout" href="./login"  th:href="@{./login}"><span>戻る</span></a>
+        </div>
+      </div>
+
+
+
+ <div class="container">
+  <div style="display:none;">
+   <div id="axioMessageDialog" title="完了" th:if="${axioMessage}">
+        <span th:text="${axioMessage}"></span>
+   </div>
+  </div>
+  <div layout:fragment="content"   >
+    <form role="form-inline" action="./GpuMasterSet" th:action="@{/}" th:object="${GpuMasterSetForm}" method="post" class="form-horizontal" id="gpuMastersetForm">
+     <div id="MSTO0001M001" class="col-sm-12 alert alert-danger asm_alert" style="display:none" role="alert" >
+        <p th:utext="#{MSTO0001M001}"></p>
+     </div>
+      <ul th:if="${#fields.hasErrors('*')}" class="col-sm-12 alert alert-danger asm_alert" role="alert">
+      <!-- 	<li th:each="e : ${#fields.detailedErrors()}" th:text="${e.global}? ${'*:' + e.message } : ${e.fieldName + ':' + e.message}" /> -->
+      	<li th:each="e : ${#fields.errors('*')}" th:text="${e}" />
+      </ul>
+       <div class="row ">
+                <div class="form-group " >
+                    <div class="asm_ctrl text-right col-xs-12" style="margin-top:10px; margin-bottom: -15px;">
+              			<button type="button" id="save" class="btn btn-info btn-md  submit" data-action="./GpuMasterSetSave" data-button="登録" th:disabled="*{disabledBtnSave}">保存</button>
+                        <button type="button" id="clearSearch" class="btn btn-info btn-md axio_btn_middle" data-action="/GpuMasterSet">クリア</button>
+                    </div>
+                </div>
+            <fieldset class="scheduler-border">
+                <legend class="scheduler-border " >汎用コード情報検索</legend>
+
+                <div class="col-xs-12" >
+                <div class="form-group form-group-flex">
+                    <div class="td-color2 col-xs-3 form-group-flex middle-center "><label class="control-label " >分類コードID</label></div>
+                    <div class="td-color3 col-xs-2 ">
+                        <input  type="text"  id="classCodeId" name="classCodeId" th:errorclass="axio_field_error" class="form-control input-sm " readonly="readonly" th:value="*{classCodeId}" />
+                    </div>
+
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center"><label class="control-label " >分類コード名称</label></div>
+                    <div class="td-color3 col-xs-5 form-group-flex middle-center">
+                        <select id="selectClassCode" name="selectClassCode" th:errorclass="axio_field_error" class="form-control input-sm "  >
+                            <option th:each="gpCode : *{gpCodeSearchList}" th:value="${gpCode.codeValue}" th:selected="${gpCode.gpCodeMstName == GpuMasterSetForm.selectClassName}"  th:inline="text">[[${gpCode.gpCodeMstName}]]</option>
+                        </select>
+                    </div>
+                	<input type="hidden" id="hSelectClassCode" name="hSelectClassCode" th:value="${GpuMasterSetForm.selectClassCode}"/>
+                	<input type="hidden" id="hSelectClassName" name="hSelectClassName" th:value="${GpuMasterSetForm.selectClassName}"/>
+                </div>
+                </div>
+
+        </fieldset>
+    </div>
+
+
+
+        <div class="row">
+            <fieldset class="scheduler-border">
+                <legend class="scheduler-border " >値種別選択</legend>
+                <div class=" col-xs-12">
+                <div class="form-group form-group-flex" >
+                    <div class="td-color2 col-xs-3 form-group-flex middle-center"><label class="control-label  ">値種別</label></div>
+                    <div class="td-color3 col-xs-9 form-group-flex middle-center">
+                        <select id="classCodeValue" name="classCodeValue" th:errorclass="axio_field_error" class="form-control input-sm "  >
+                            <option th:each="gpCode : *{classCodeValueList}" th:value="${gpCode.codeValue}"  th:selected="${gpCode.codeValue == GpuMasterSetForm.selectClassCodeValue}" th:inline="text">[[${gpCode.codeName}]]</option>
+                        </select>
+                    </div>
+                </div>
+
+                <input type="hidden" id="selectClassCodeValue" name="selectClassCodeValue" th:value="${GpuMasterSetForm.selectClassCodeValue}"/>
+                <input type="hidden" id="selectClassCodeName" name="selectClassCodeName" th:value="${GpuMasterSetForm.selectClassCodeName}"/>
+            </div>
+
+            </fieldset>
+    </div>
+
+
+
+    <div class="row">
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border ">値編集</legend>
+            <div class="col-xs-12">
+            <div class="form-group form-group-flex">
+                <div class="td-color2 col-xs-3 form-group-flex middle-center"><label class="control-label ">値種別</label></div>
+                <div class="td-color3 col-xs-9 ">
+                  <input type="text" id="txtClassCode" name="txtClassCode" th:errorclass="axio_field_error" class="form-control input-sm " readonly="readonly" th:field="${GpuMasterSetForm.txtClassCode}" />
+                </div>
+
+            </div>
+            <div class="form-group form-group-flex">
+              <div class="td-color2 col-xs-3 form-group-flex middle-center"><label class="control-label ">コードNO</label></div>
+              <div class="td-color3 col-xs-9 ">
+                  <input type="text" id="classCodeNo" name="classCodeNo" th:maxlength="20" th:errorclass="axio_field_error" class="form-control input-sm "  th:field="${GpuMasterSetForm.classCodeNo}" />
+              </div>
+            </div>
+            <div class="form-group form-group-flex">
+              <div class="td-color2 col-xs-3 form-group-flex middle-center"><label class="control-label ">コード名称</label></div>
+              <div class="td-color3 col-xs-9 ">
+                  <input type="text" id="classCodeName" name="classCodeName" th:maxlength="250" th:errorclass="axio_field_error" class="form-control input-sm " th:field="${GpuMasterSetForm.classCodeName}" data-ignore-prohibited-char="yes" style="ime-mode:active;" />
+              </div>
+            </div>
+
+            <div class="form-group form-group-flex">
+              <div class="td-color2 col-xs-3 form-group-flex middle-center "><label class="control-label ">コード内容</label></div>
+              <div class="td-color3 col-xs-9 ">
+                <input type="text" id="classCodeDetail" name="classCodeDetail" th:maxlength="500" th:errorclass="axio_field_error" class="form-control input-sm " th:field="${GpuMasterSetForm.classCodeDetail}" data-ignore-prohibited-char="yes" style="ime-mode:active;" />
+              </div>
+            </div>
+
+            <div class="form-group form-group-flex">
+              <div class="td-color2 col-xs-3 form-group-flex middle-center "><label class="control-label ">表示順</label></div>
+              <div class="td-color3 col-xs-9 ">
+                <input type="text" id="classCodeOrder" name="classCodeOrder" th:maxlength="50" th:errorclass="axio_field_error" class="form-control input-sm " th:value="${GpuMasterSetForm.classCodeOrder}" style="ime-mode:inactive;" />
+              </div>
+            </div>
+
+            <input type="hidden" id="selectClassName" name="selectClassName" th:value="${GpuMasterSetForm.selectClassName}"/>
+            <input type="hidden" id="editFlg" name="editFlg" th:value="${GpuMasterSetForm.editFlg}"/>
+            <input type="hidden" id="changedDataFlg" th:field="*{changedDataFlg}" />
+            <input type="hidden" id="searchFlg" name="searchFlg" th:value="${GpuMasterSetForm.searchFlg}" />
+            <input type="hidden" id="selectFlg" name="selectFlg" th:value="${GpuMasterSetForm.selectFlg}" />
+            <input type="hidden" id="accessToken" name="accessToken" th:field="*{accessToken}" />
+            </div>
+            <div class="form-group">
+               <div class="asm_ctrl text-right col-xs-12" style="margin-top: 15px;">
+                    <button type="button" id="deletebutton" class="btn btn-info btn-md " >リストから削除</button>
+                    <button type="button" class="btn btn-info btn-md    axio_btn_middle submit"  data-action="./GpuMasterSetReflection" >リストに反映</button>
+
+               </div>
+             </div>
+            <table class="table table-bordered asm_data_table text-center"  >
+                <thead >
+                     <tr class="asm_data_table_header">
+                        <th class="text-center"><input type="checkbox" autocomplete="off"/></th>
+                        <th class="text-center">コードNO</th>
+                        <th class="text-center">コード名称</th>
+                        <th class="text-center">表示順</th>
+                        <th class="text-center">コード内容</th>
+                    </tr>
+                 </thead>
+                 <tbody id="resultList">
+                    <tr th:each="resultList, start : *{selectClassCodeList}" th:object="${resultList}" th:switch="${GpuMasterSetForm.selectClassCodeValue}" th:if="${resultList.editClass != '3'}">
+                        <td>
+                            <input type="checkbox" th:id="${'classCodeCheck_' + start.index}" name="classCodeCheck" autocomplete="off" th:attr="data-index= ${start.index}" th:value="${resultList.codeValue}"></input>
+                        </td>
+                        <td th:id="${'classCodeValue_' + start.index}" class="master-back-grey text-left" th:text="${resultList.codeValue}"></td>
+                        <td th:id="${'gpCodeMstName_' + start.index}" class="text-left" th:text="${resultList.gpCodeMstName}"></td>
+                        <td th:id="${'dispOrder_' + start.index}" class="text-left" th:text="${resultList.dispOrder}"></td>
+                        <td th:id="${'codeDetail_' + start.index}" class="text-left" th:text="${resultList.value}"></td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+<!-- ボタンを上に揃える
+      <div class="row">
+          <div class="form-group">
+            <div class="asm_ctrl text-right col-xs-12" style="margin-top: 15px;">
+              <button type="button" class="btn btn-info btn-md  submit" data-action="./GpuMasterSetSave" data-button="登録" th:disabled="*{disabledBtnSave}">保存</button>
+            </div>
+          </div>
+      </div>
+ -->
+    </form>
+    </div>
+    </div>
+    <!-- フッター -->
+    <footer id="footer" class="footer">
+        <p class="footer__text">Copyright &copy; AXIO corporation. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

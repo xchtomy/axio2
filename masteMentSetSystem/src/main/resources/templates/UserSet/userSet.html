@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>利用者情報画面</title>
+
+  <link href="./vendor/jquery-ui-1.12.1/jquery-ui.css" th:href="@{./vendor/jquery-ui-1.12.1/jquery-ui.css}"
+    rel="stylesheet" />
+  <link href="./vendor/bootstrap-3.3.7/css/bootstrap.min.css"
+    th:href="@{./vendor/bootstrap-3.3.7/css/bootstrap.min.css}" rel="stylesheet" />
+  <link href="./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css"
+    th:href="@{./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css}" rel="stylesheet" />
+  <link href="./vendor/datatables/dataTables.bootstrap.css" th:href="@{./vendor/datatables/dataTables.bootstrap.css}"
+    rel="stylesheet" />
+  <link href="./css/common.css" th:href="@{./css/common.css}" rel="stylesheet" />
+  <!-- 個別設定CSS -->
+  <link href="./assets/css/style2.css" th:href="@{./assets/css/style2.css}" rel="stylesheet" />
+
+  <!-- common's javascript start -->
+  <script type="text/javascript" src="./vendor/jquery-3.2.1.js" th:src="@{./vendor/jquery-3.2.1.js}"></script>
+  <script type="text/javascript" src="./vendor/jquery-ui-1.12.1/jquery-ui.min.js"
+    th:src="@{./vendor/jquery-ui-1.12.1/jquery-ui.min.js}"></script>
+  <script type="text/javascript" src="./vendor/datatables/jquery.dataTables.js"
+    th:src="@{./vendor/datatables/jquery.dataTables.js}"></script>
+  <script type="text/javascript" src="./vendor/datatables/dataTables.bootstrap.js"
+    th:src="@{./vendor/datatables/dataTables.bootstrap.js}"></script>
+  <script type="text/javascript" src="./vendor/bootstrap-3.3.7/js/bootstrap.min.js"
+    th:src="@{./vendor/bootstrap-3.3.7/js/bootstrap.min.js}"></script>
+  <script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js"
+    th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js}"></script>
+  <script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js"
+    th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js}"></script>
+  <script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js"
+    th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js}"></script>
+  <script type="text/javascript" src="./vendor/knockout-3.4.2.js" th:src="@{./vendor/knockout-3.4.2.js}"></script>
+  <!-- common's javascript end -->
+
+  <script type="text/javascript" src="./js/axio_common.js" th:src="@{./js/axio_common.js}"></script>
+  <script type="text/javascript" src="./js/userSet.js" th:src="@{./js/userSet.js}"></script>
+
+</head>
+
+<body>
+  <!-- ダイヤログモーダル表示エリア -->
+  <div id="listModalArea">
+    <div class="modal fade" id="listModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog" style="width:1100px;">
+        <div class="modal-content" style="width:1100px;height:800px;overflow-y:auto">
+          <form id="dialogParamForm" name="dialogParamForm">
+            <input type="hidden" id="callFrom" name="callFrom" value="" />
+            <input type="hidden" id="callParameter" name="callParameter" value="" />
+            <input type="hidden" id="callReturn" name="callReturn" value="" />
+          </form>
+          <div id="modal_dailog_body">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- message-->
+  <!-- 完了メッセージ保存エリア -->
+  <div style="display:none;">
+    <div id="axioMessageDialog" title="完了" th:if="${axioMessage}">
+      <span th:text="${axioMessage}"></span>
+    </div>
+
+    <div id="axioErrDialog" title="エラー" class="col-sm-12 alert alert-danger asm_alert">
+      <span id="errMessage" th:text="${UserSetForm.errMessage}"></span>
+    </div>
+  </div>
+
+  <!--// header -->
+  <header id="header" class="header">
+    <div class="header__inner">
+      <figure class="header__img"><img src="./assets/img/common/img_logo01.png"
+          th:src="@{./assets/img/common/img_logo01.png}" alt="AXIO" width="73" height="36"></figure>
+      <a href="./logout" class="header__link">ログアウト</a>
+    </div>
+  </header>
+  <!-- header //-->
+
+  <form role="form-inline" id="UserSetForm" th:action="@{/}" th:object="${UserSetForm}" method="post"
+    class="form-horizontal">
+    <input type="hidden" th:value="${UserSetForm.userDetailDto.userId}" name="userDetailDto.userId"></input>
+    <input type="hidden" th:value="${UserSetForm.userDetailDto.companyCode}" name="userDetailDto.companyCode"
+      id="companyCode"></input>
+    <input type="hidden" th:value="${UserSetForm.userDetailDto.loginId}" name="userDetailDto.loginId"></input>
+    <input type="hidden" th:value="*{errFlg}" name="errFlg" id="errFlg" /></input>
+    <input type="hidden" th:value="*{errMessage}" name="errMessage" id="errMessage" /></input>
+    <input type="hidden" id="changedFlg" />
+
+    <!--#include virtual="/assets/include/header.html" -->
+    <div class="searchDetail">
+      <main class="main">
+        <div class="modTitleArea">
+          <div class="modTitleArea__inner">
+            <h1 class="modTitleArea__title">利用者情報<span th:text="|統一ID：${UserSetForm.userDetailDto.loginId}|"></span>
+            </h1>
+            <a href="./userList" class="modTitleArea__prevButton" id="btn_back"><span>戻る</span></a>
+          </div>
+        </div>
+
+        <div class="main__inner">
+          <section class="searchDetailBox">
+            <div class="searchDetailBox__titleArea">
+              <h2 class="searchDetailBox__titleArea__title"><span th:text="${UserSetForm.userDetailDto.nameJp}"
+                  style="margin-left:0px; font-size: 2.4rem; font-weight: 700; ">川上 竜也</span><span
+                  th:text="${UserSetForm.userDetailDto.nameEn}">INOUE YUTAKA</span><i
+                  th:text="${UserSetForm.userDetailDto.enrollmentName}">在籍</i></h2>
+              <div class="searchDetailBox__titleArea__textArea">
+                <p>社員番号:</p>
+                <p th:text="${UserSetForm.userDetailDto.userId}">3284</p>
+              </div>
+              <div class="searchDetailBox__titleArea__btnArea">
+                <button type="button" class="save" id="saveBtn">保存</button>
+                <button type="button" class="output" id="downloadBtn">CSV出力</button>
+              </div>
+            </div>
+
+            <ul class="searchDetailBox__profileList">
+              <li class="searchDetailBox__profileList__item">
+                <p class="title">雇用区分</p>
+                <p class="text" th:text="${UserSetForm.userDetailDto.employmentName}"></p>
+              </li>
+              <li class="searchDetailBox__profileList__item">
+                <p class="title">役職</p>
+                <p class="text" th:text="${UserSetForm.userDetailDto.positionNameJp}"></p>
+              </li>
+              <li class="searchDetailBox__profileList__item searchDetailBox__profileList__item--full">
+                <p class="title">部署名</p>
+                <p class="text" th:text="${UserSetForm.userDetailDto.organizationNameJp}"
+                  th:title="${UserSetForm.userDetailDto.organizationNameEn}"></p>
+              </li>
+              <li class="searchDetailBox__profileList__item">
+                <p class="title">内線番号</p>
+                <p class="text" th:text="${UserSetForm.userDetailDto.telEx}"></p>
+              </li>
+              <li class="searchDetailBox__profileList__item">
+                <p class="title">外線番号</p>
+                <p class="text" th:text="${UserSetForm.userDetailDto.tel}"></p>
+              </li>
+              <li class="searchDetailBox__profileList__item">
+                <p class="title">入社日</p>
+                <p class="text" th:text="${UserSetForm.userDetailDto.startDate}"></p>
+              </li>
+              <li class="searchDetailBox__profileList__item">
+                <p class="title">退職日</p>
+                <p class="text" th:text="${UserSetForm.userDetailDto.endDate}"></p>
+              </li>
+            </ul>
+            <div class="searchDetailBox__infoBox">
+              <ul class="searchDetailBox__infoBox__list">
+                <li id="tab1" class="item jsTabMenuItem is-on" onclick="showTab('div_1');">権限情報</li>
+                <li id="tab2" class="item jsTabMenuItem" onclick="showTab('div_2');">兼務情報</li>
+                <li id="tab3" class="item jsTabMenuItem" onclick="showTab('div_3');">経歴情報</li>
+                <li id="tab4" class="item jsTabMenuItem" onclick="showTab('div_4');">その他</li>
+              </ul>
+              <div class="searchDetailBox__infoBox__area" style="min-height: 230px;">
+                <div id="div_1" class="box jsTabMenuArea is-on">
+                  <ul class="box__list">
+                    <li class="box__list__item">
+                      <p class="title">ドメインアカウント</p>
+                      <p th:text="${UserSetForm.userDetailDto.loginId}">1212</p>
+                    </li>
+                    <li class="box__list__item">
+                      <p class="title">利用言語</p>
+                      <p th:text="${UserSetForm.userDetailDto.langName}">japan</p>
+                    </li>
+                    <li class="box__list__item">
+                      <p class="title">メールアドレス（メイン）</p>
+                      <p th:text="${UserSetForm.userDetailDto.mailaddrNotification}">111@text.com</p>
+                    </li>
+                    <li class="box__list__item">
+                      <p class="title">メールアドレス（サブ）</p>
+                      <p th:text="${UserSetForm.userDetailDto.mailaddr}"> 111@test.com</p>
+                    </li>
+                  </ul>
+                  <button class="modAccordion jsAccordionTable" type="button"
+                    onclick="changeShow('grouptab');">セキュリティグループ一覧</button>
+                  <!-- <table class="modTable jsViewTable is-hide" id="grouptab"> -->
+                  <table class="modTable jsViewTable" id="grouptab">
+                    <colgroup>
+                      <col width="100">
+                      <col width="500">
+                      <col width="200">
+                      <col width="200">
+                    </colgroup>
+                    <tr>
+                      <th>No</th>
+                      <th class="align-left">セキュリティグループ名</th>
+                      <th>権限種別</th>
+                      <th>区分</th>
+                    </tr>
+                    <tr th:each="rs, status : ${UserSetForm.userGrpList}">
+                      <td th:text="${status.count}"></td>
+                      <td class="align-left" th:text="${rs.groupNameJp}"></td>
+                      <td th:text="${rs.groupType}"></td>
+                      <td th:text="${rs.rootType}"></td>
+                    </tr>
+                  </table>
+                </div>
+
+                <!-- 兼務タブ -->
+                <div id="div_2" class="box jsTabMenuArea">
+                  <!-- 発令兼務一覧 -->
+                  <button class="modAccordion jsAccordionTable" type="button"
+                    onclick="changeShow('anntab');">発令兼務一覧</button>
+                  <!-- <table class="modTable jsViewTable is-hide" id="anntab"> -->
+                  <table class="modTable jsViewTable" id="anntab">
+                    <tr>
+                      <th style="width: 40px;">No</th>
+                      <th style="width: 120px;">会社コード</th>
+                      <th style="width: 120px;">部署コード</th>
+                      <th style="width: 460px;" class="align-left">部署名</th>
+                      <th style="width: 100px;">兼務順</th>
+                      <th style="width: 120px;">役職</th>
+                    </tr>
+                    <tr th:each="rs, status : ${UserSetForm.userAnnCmbOrgInfoList}">
+                      <td style="width: 40px;" th:text="${status.count}"></td>
+                      <td style="width: 120px;" th:text="${rs.companyCode}" class="companyCode"></td>
+                      <td style="width: 120px;" th:text="${rs.organizationCode}" class="organizationCode"></td>
+                      <td style="width: 460px; word-break : break-all;" th:text="${rs.organizationNameJp}"
+                        class="align-left organizationNameJp"></td>
+                      <td style="width: 100px;">-</td>
+                      <td style="width: 120px;" th:text="${rs.positionNameJp}" class="align-center positionNameJp"></td>
+                    </tr>
+                  </table>
+
+                  <!-- 手動兼務一覧 -->
+                  <button class="modAccordion jsAccordionTable" type="button" onclick="changeShow('mandiv'); ">手動兼務一覧</button>
+                  <div id="mandiv" class="box jsTabMenuArea is-on">
+                    <input type="hidden" value="" id="orgCode"></input>
+                    <input type="hidden" value="" id="orgName"></input>
+
+                    <div style="margin:10px 0px 10px 30px;">
+                      <span class="item__text">組織検索</span>
+                      <span style="display: inline-block;"><input type="text" class="form-control" name="organization"
+                          id="organization" style="width:500px;" disabled></span>
+                      <button class="userSet__btn" style="margin-left: 10px;" type="button"
+                        id="organizationSelect">検索</button>
+                    </div>
+                    <div style="margin:10px 0px 10px 30px;">
+                      <span class="item__text">役職選択</span>
+                      <span style="display: inline-block;">
+                        <select id="posselect" class="form-control" style="width:200px;">
+                          <th:block th:each="rs, status : ${UserSetForm.userPositionInfoList}">
+                            <option th:value="${rs.positionCode}" th:text="${rs.positionNameJp}">
+                            </option>
+                          </th:block>
+                        </select>
+                      </span>
+                      <button class="userSet__btn" type="button" style="margin-left: 10px;"
+                        onclick="addRow()">登録</button>
+                    </div>
+                    <table class="modTable jsViewTable" id="mantab">
+                      <tr>
+                        <th style="width: 40px;">No</th>
+                        <th style="width: 120px;">会社コード</th>
+                        <th style="width: 120px;">部署コード</th>
+                        <th style="width: 460px;" class="align-left">部署名</th>
+                        <th style="width: 100px;">役職</th>
+                        <th style="width: 120px;">削除</th>
+                      </tr>
+                      <tr th:each="rs, status : ${UserSetForm.userManCmbOrgInfoList}"
+                        th:id="'userManCmbOrgInfo_' + ${status.count}">
+                        <td style="width: 40px;" th:text="${status.count}" class="no"></td>
+                        <td style="width: 120px;"><input style="width: 90px; padding:0px;" type="text"
+                            th:value="${rs.companyCode}"
+                            th:name="'userManCmbOrgInfoList[' + ${status.index} +'].companyCode'"
+                            class="align-center companyCode" readonly></td>
+                        <td style="width: 120px;"><input style="width: 90px; padding:0px;" type="text"
+                            th:value="${rs.organizationCode}"
+                            th:name="'userManCmbOrgInfoList[' + ${status.index} +'].organizationCode'"
+                            class="align-center organizationCode" readonly></td>
+                        <td style="width: 460px;"><input
+                            style="width: 430px; padding:0px;word-wrap: break-word; word-break: break-all;" type="text"
+                            th:value="${rs.organizationNameJp}"
+                            th:name="'userManCmbOrgInfoList[' + ${status.index} +'].organizationNameJp'"
+                            class="align-left organizationNameJp" readonly></td>
+                        <td style="width: 100px;">
+                          <input type="hidden" th:value="${rs.positionCode}"
+                            th:name="'userManCmbOrgInfoList[' + ${status.index} +'].positionCode'" class="positionCode">
+                          <input type="text" style="width: 70px; padding:0px;" th:value="${rs.positionNameJp}"
+                            th:name="'userManCmbOrgInfoList[' + ${status.index} +'].positionNameJp'"
+                            class="align-center positionNameJp" readonly>
+                        </td>
+                        <td style="width: 120px;">
+                          <button type="button"
+                            style="width: 22px; padding:0px; background-color: #1F3990; border-color: #1F3990;border-radius: 0px; color:#FFFFFF; "
+                            th:onclick="delRow(this)">×</button>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- 経歴情報タブ -->
+                <div id="div_3" class="box jsTabMenuArea">
+                  <table class="modTable jsViewTable">
+                    <!-- is-hide -->
+                    <colgroup>
+                      <col width="100">
+                      <col width="450">
+                      <col width="150">
+                      <col width="150">
+                      <col width="150">
+                    </colgroup>
+                    <tr>
+                      <th>No.</th>
+                      <th class="align-left">部署名</th>
+                      <th>有効開始日</th>
+                      <th>有効終了日</th>
+                      <th>役職</th>
+                    </tr>
+                    <tr th:each="rs, status : ${UserSetForm.userCareerInfoList}">
+                      <td th:text="${status.count}"></td>
+                      <td th:text="${rs.organizationNameJp}" class="align-left"></td>
+                      <td th:text="${rs.startDate}"></td>
+                      <td th:text="${rs.endDate}"></td>
+                      <td th:text="${rs.positionNameJp}"></td>
+                    </tr>
+                  </table>
+                </div>
+
+                <!-- そのたタブ -->
+                <div id="div_4" class="box jsTabMenuArea">
+                  <table class="modTable jsViewTable">
+                    <!-- is-hide -->
+                    <colgroup>
+                      <col width="200">
+                      <col width="300">
+                      <col width="*">
+                    </colgroup>
+                    <tr>
+                      <th>項目名</th>
+                      <th class="align-left">値</th>
+                      <th></th>
+                    </tr>
+                    <tr th:each="rs, status : ${UserSetForm.userOtherInfoList}">
+                      <td th:text="${rs.columnName}">項目名</td>
+                      <td th:text="${rs.valueValue}" class="align-left">値</td>
+                      <td></td>
+                    </tr>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </form>
+  <!--#include virtual="/assets/include/footer.html" -->
+  <footer id="footer" class="footer">
+    <p class="footer__text">Copyright &copy; AXIO corporation. All Rights Reserved.</p>
+  </footer>
+</body>
+
+</html>

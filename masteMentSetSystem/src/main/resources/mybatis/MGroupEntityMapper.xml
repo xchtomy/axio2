@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.axio.masterMentsetSystem.repository.MGroupEntityMapper">
+  <resultMap id="BaseResultMap" type="jp.co.axio.masterMentsetSystem.model.MGroupEntity">
+    <id column="group_id" jdbcType="VARCHAR" property="groupId" />
+    <result column="group_name_en" jdbcType="VARCHAR" property="groupNameEn" />
+    <result column="group_name_jp" jdbcType="VARCHAR" property="groupNameJp" />
+    <result column="start_date" jdbcType="DATE" property="startDate" />
+    <result column="end_date" jdbcType="DATE" property="endDate" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="invalid_flag" jdbcType="CHAR" property="invalidFlag" />
+    <result column="register_id" jdbcType="VARCHAR" property="registerId" />
+    <result column="regist_ts" jdbcType="TIMESTAMP" property="registTs" />
+    <result column="updater_id" jdbcType="VARCHAR" property="updaterId" />
+    <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    group_id, group_name_en, group_name_jp, start_date, end_date, note, invalid_flag,
+    register_id, regist_ts, updater_id, update_ts
+  </sql>
+  <select id="selectByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MGroupEntityExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from public.m_group
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from public.m_group
+    where group_id = #{groupId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from public.m_group
+    where group_id = #{groupId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MGroupEntityExample">
+    delete from public.m_group
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="jp.co.axio.masterMentsetSystem.model.MGroupEntity">
+    insert into public.m_group (group_id, group_name_en, group_name_jp,
+      start_date, end_date, note,
+      invalid_flag, register_id, regist_ts,
+      updater_id, update_ts)
+    values (#{groupId,jdbcType=VARCHAR}, #{groupNameEn,jdbcType=VARCHAR}, #{groupNameJp,jdbcType=VARCHAR},
+      #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, #{note,jdbcType=VARCHAR},
+      #{invalidFlag,jdbcType=CHAR}, #{registerId,jdbcType=VARCHAR}, #{registTs,jdbcType=TIMESTAMP},
+      #{updaterId,jdbcType=VARCHAR}, #{updateTs,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="jp.co.axio.masterMentsetSystem.model.MGroupEntity">
+    insert into public.m_group
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="groupNameEn != null">
+        group_name_en,
+      </if>
+      <if test="groupNameJp != null">
+        group_name_jp,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+      <if test="invalidFlag != null">
+        invalid_flag,
+      </if>
+      <if test="registerId != null">
+        register_id,
+      </if>
+      <if test="registTs != null">
+        regist_ts,
+      </if>
+      <if test="updaterId != null">
+        updater_id,
+      </if>
+      <if test="updateTs != null">
+        update_ts,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="groupId != null">
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupNameEn != null">
+        #{groupNameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="groupNameJp != null">
+        #{groupNameJp,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="invalidFlag != null">
+        #{invalidFlag,jdbcType=CHAR},
+      </if>
+      <if test="registerId != null">
+        #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="registTs != null">
+        #{registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updaterId != null">
+        #{updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTs != null">
+        #{updateTs,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MGroupEntityExample" resultType="java.lang.Long">
+    select count(*) from public.m_group
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update public.m_group
+    <set>
+      <if test="record.groupId != null">
+        group_id = #{record.groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupNameEn != null">
+        group_name_en = #{record.groupNameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupNameJp != null">
+        group_name_jp = #{record.groupNameJp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startDate != null">
+        start_date = #{record.startDate,jdbcType=DATE},
+      </if>
+      <if test="record.endDate != null">
+        end_date = #{record.endDate,jdbcType=DATE},
+      </if>
+      <if test="record.note != null">
+        note = #{record.note,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invalidFlag != null">
+        invalid_flag = #{record.invalidFlag,jdbcType=CHAR},
+      </if>
+      <if test="record.registerId != null">
+        register_id = #{record.registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registTs != null">
+        regist_ts = #{record.registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updaterId != null">
+        updater_id = #{record.updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTs != null">
+        update_ts = #{record.updateTs,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update public.m_group
+    set group_id = #{record.groupId,jdbcType=VARCHAR},
+      group_name_en = #{record.groupNameEn,jdbcType=VARCHAR},
+      group_name_jp = #{record.groupNameJp,jdbcType=VARCHAR},
+      start_date = #{record.startDate,jdbcType=DATE},
+      end_date = #{record.endDate,jdbcType=DATE},
+      note = #{record.note,jdbcType=VARCHAR},
+      invalid_flag = #{record.invalidFlag,jdbcType=CHAR},
+      register_id = #{record.registerId,jdbcType=VARCHAR},
+      regist_ts = #{record.registTs,jdbcType=TIMESTAMP},
+      updater_id = #{record.updaterId,jdbcType=VARCHAR},
+      update_ts = #{record.updateTs,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="jp.co.axio.masterMentsetSystem.model.MGroupEntity">
+    update public.m_group
+    <set>
+      <if test="groupNameEn != null">
+        group_name_en = #{groupNameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="groupNameJp != null">
+        group_name_jp = #{groupNameJp,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="invalidFlag != null">
+        invalid_flag = #{invalidFlag,jdbcType=CHAR},
+      </if>
+      <if test="registerId != null">
+        register_id = #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="registTs != null">
+        regist_ts = #{registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updaterId != null">
+        updater_id = #{updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTs != null">
+        update_ts = #{updateTs,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where group_id = #{groupId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="jp.co.axio.masterMentsetSystem.model.MGroupEntity">
+    update public.m_group
+    set group_name_en = #{groupNameEn,jdbcType=VARCHAR},
+      group_name_jp = #{groupNameJp,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      note = #{note,jdbcType=VARCHAR},
+      invalid_flag = #{invalidFlag,jdbcType=CHAR},
+      register_id = #{registerId,jdbcType=VARCHAR},
+      regist_ts = #{registTs,jdbcType=TIMESTAMP},
+      updater_id = #{updaterId,jdbcType=VARCHAR},
+      update_ts = #{updateTs,jdbcType=TIMESTAMP}
+    where group_id = #{groupId,jdbcType=VARCHAR}
+  </update>
+
+  <update id="invalidByKey" parameterType="java.lang.String">
+    update m_group
+    set invalid_flag = '1'
+        ,update_ts = current_timestamp
+    where group_id = #{groupId,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByInput" parameterType="jp.co.axio.masterMentsetSystem.model.MGroupEntity">
+    update m_group
+    set group_name_en = #{groupNameEn,jdbcType=VARCHAR},
+      group_name_jp = #{groupNameJp,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      note = #{note,jdbcType=VARCHAR},
+      updater_id = #{updaterId,jdbcType=VARCHAR},
+      update_ts = #{updateTs,jdbcType=TIMESTAMP}
+    where group_id = #{groupId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="getNewId" resultMap="BaseResultMap">
+    select nextval('m_group_seq') as group_id
+  </select>
+
+  <select id="getByGroupNameJp" resultMap="BaseResultMap">
+    select group_id from m_group where group_name_jp =  #{groupNameJp}
+  </select>
+
+  <select id="getValidByName" resultMap="BaseResultMap">
+    select group_id from m_group where group_name_jp =  #{groupNameJp} and invalid_flag = '0'
+  </select>
+
+</mapper>

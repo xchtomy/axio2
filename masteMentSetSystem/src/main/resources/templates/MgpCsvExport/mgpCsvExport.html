@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>汎用CSV管理機能</title>
+<!--   <link rel="stylesheet" href="/webjars/bootstrap/4.5.1/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.5.1/css/bootstrap.min.css}" /> -->
+<link href="./vendor/jquery-ui-1.12.1/jquery-ui.css" th:href="@{./vendor/jquery-ui-1.12.1/jquery-ui.css}" rel="stylesheet" />
+<link href="./vendor/bootstrap-3.3.7/css/bootstrap.min.css" th:href="@{./vendor/bootstrap-3.3.7/css/bootstrap.min.css}" rel="stylesheet" />
+<link href="./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css" th:href="@{./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css}" rel="stylesheet" />
+<link href="./vendor/datatables/dataTables.bootstrap.css" th:href="@{./vendor/datatables/dataTables.bootstrap.css}" rel="stylesheet" />
+<link href="./css/common.css" th:href="@{./css/common.css}" rel="stylesheet" />
+<link href="./css/mgpCsvExport.css" th:href="@{./css/mgpCsvExport.css}" rel="stylesheet" />
+
+<link href="./assets/css/header_footer.css" th:href="@{./assets/css/header_footer.css}" rel="stylesheet" />
+
+<!-- common's javascript start -->
+<script type="text/javascript" src="./vendor/jquery-3.2.1.js" th:src="@{./vendor/jquery-3.2.1.js}"></script>
+<script type="text/javascript" src="./vendor/jquery-ui-1.12.1/jquery-ui.min.js" th:src="@{./vendor/jquery-ui-1.12.1/jquery-ui.min.js}"></script>
+<script type="text/javascript" src="./vendor/datatables/jquery.dataTables.js" th:src="@{./vendor/datatables/jquery.dataTables.js}"></script>
+<script type="text/javascript" src="./vendor/datatables/dataTables.bootstrap.js" th:src="@{./vendor/datatables/dataTables.bootstrap.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/js/bootstrap.min.js" th:src="@{./vendor/bootstrap-3.3.7/js/bootstrap.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js}"></script>
+<script type="text/javascript" src="./vendor/knockout-3.4.2.js" th:src="@{./vendor/knockout-3.4.2.js}"></script>
+<script type="text/javascript" src="./js/axio_common.js" th:src="@{./js/axio_common.js}"></script>
+<!-- common's javascript end -->
+  <script src="./js/mgpCsvExport.js" th:src="@{./js/mgpCsvExport.js}"></script>
+  <script>
+
+
+  </script>
+</head>
+<body  id= "tensor">
+
+    <!-- ヘッダーエリア -->
+    <header id="header" class="header">
+        <div class="header__inner">
+          <figure class="header__img"><img src="./assets/img/common/img_logo01.png" th:src="@{./assets/img/common/img_logo01.png}" alt="AXIO" width="73" height="36"></figure>
+          <a href="./logout" class="header__link">ログアウト</a>
+        </div>
+      </header>
+
+      <!-- タイトルエリア -->
+      <div class="modTitleArea">
+        <div class="modTitleArea__inner">
+          <h1 class="modTitleArea__title">汎用CSV管理機能</h1>
+          <a class="modTitleArea__prevButton" id="btn_logout" href="./login"  th:href="@{./login}"><span>戻る</span></a>
+        </div>
+      </div>
+
+<div class="container">
+  <div style="display:none;">
+   <div id="axioMessageDialog" title="完了" th:if="${axioMessage}">
+        <span th:text="${axioMessage}"></span>
+   </div>
+  </div>
+  <div layout:fragment="content " >
+    <form role="form" action="./MgpCsvExport/" th:action="@{/}" th:object="${mgpCsvExportForm}" method="post" class="form-horizontal">
+       <div id="MSTO0005M001" class="col-sm-12 alert alert-danger asm_alert" style="display:none" role="alert" >
+       <p th:utext="#{MSTO0005M001}"></p>
+      </div>
+      <div id="MSTO0005M002" class="col-sm-12 alert alert-danger asm_alert" style="display:none" role="alert" >
+       <p th:utext="#{MSTO0005M002}"></p>
+      </div>
+      <div id="MSTO0005M003" class="col-sm-12 alert alert-danger asm_alert" style="display:none" role="alert" >
+       <p th:utext="#{MSTO0005M003}"></p>
+      </div>
+      <ul th:if="${#fields.hasErrors('*')}" class="col-sm-12 alert alert-danger asm_alert" role="alert">
+      <!-- 	<li th:each="e : ${#fields.detailedErrors()}" th:text="${e.global}? ${'*:' + e.message } : ${e.fieldName + ':' + e.message}" /> -->
+      	<li th:each="e : ${#fields.errors('*')}" th:text="${e}" />
+      </ul>
+
+  <div class="row">
+  <div class="form-group  ">
+      <div class="asm_ctrl text-right col-xs-12" style="margin-top:10px; margin-bottom: -15px;">
+          <button type="button" class="btn btn-info btn-md axio_btn_middle" id="save"  data-action="./mgpCsvExportSave" th:disabled="*{disabledSave}" >登録</button>
+          <button type="button" id="clear" class="btn btn-info btn-md axio_btn_middle" data-action="./mgpCsvExport">クリア</button>
+      </div>
+  </div>
+    <fieldset class="scheduler-border">
+        <legend class="scheduler-border " >CSVファイル情報</legend>
+   <div class="col-xs-12">
+    <div class="form-group form-group-flex" >
+        <div class="td-color3 col-xs-12 ">
+           <select id="selectClassCode" name="selectClassCode" th:errorclass="axio_field_error" class="form-control input-sm " >
+                <option value=""></option>
+                <option th:each="gpCode : *{mgpCsvExportList}" th:value="${gpCode.sqlNo}"  th:selected="${gpCode.sqlNo == mgpCsvExportForm.sqlNo}" th:inline="text">システム名：[[${gpCode.systemId}]]  登録名：[[${gpCode.sqlRegisterName}]]  有効フラグ：[[${gpCode.validFlag=='1' ? '有効' : '無効'}]]</option>
+            </select>
+        </div>
+    </div>
+   </div>
+</fieldset>
+
+    </div>
+<div class="row">
+    <fieldset class="scheduler-border">
+        <legend class="scheduler-border " >ファイル名選択形式</legend>
+<div class="col-xs-12">
+    <div class="form-group form-group-flex" >
+        <div class="td-color2 col-xs-2 form-group-flex middle-center"><label class="control-label ">システム名<span class="text-center small font-red">(※)</span></label> </div>
+		<div class="td-color2 col-xs-1 form-group-flex middle-center" style="padding-left:0px;padding-right:0px;">
+        </div>
+        <div class="td-color3 col-xs-9 form-group-flex middle-center">
+            <input type="text" id="systemId" name="systemId" th:maxlength="30" th:errorclass="axio_field_error" class="form-control input-sm  "  th:value="${mgpCsvExportForm.systemId}" />
+        </div>
+
+    </div>
+    <div class="form-group form-group-flex" >
+        <div class="td-color2 col-xs-2 form-group-flex middle-center"><label class="control-label  ">登録名<span class="text-center small font-red">(※)</span></label>  </div>
+        <div class="td-color2 col-xs-1 form-group-flex middle-center" style="padding-left:0px;padding-right:0px;">
+        </div>
+        <div class="td-color3 col-xs-9 form-group-flex  ">
+            <input type="text" id="sqlRegisterName" name="sqlRegisterName" th:maxlength="100" th:errorclass="axio_field_error" class="form-control input-sm "  th:value="${mgpCsvExportForm.sqlRegisterName}" />
+        </div>
+    </div>
+
+    <div class="form-group form-group-flex" >
+        <div class="td-color2 col-xs-3 form-group-flex middle-center"><label class="control-label ">有効フラグ</label></div>
+        <div class=" radio td-color3 col-xs-9 ">
+             <label>
+                <input type="radio"  id="validFlag" name="validFlag" value="1" th:checked="${mgpCsvExportForm.validFlag}== '1' "  />
+                                   有効</label>
+             <label style="padding-left:40px">
+                <input type="radio" id="validFlag" name="validFlag" value="0" th:checked="${mgpCsvExportForm.validFlag}== '0' " />
+                                   無効</label>
+        </div>
+    </div>
+    <div class="form-group form-group-flex" >
+        <div class="td-color2 col-xs-3 form-group-flex middle-center" ><label class="control-label  ">保存先 <span style="margin-left:2    0px">親ディレクトリ</span></label></div>
+        <div class="radio td-color3 col-xs-4 " style="padding-left:0px">
+            <label  th:text="${mgpCsvExportForm.parentFilePath}" ></label>
+        </div>
+        <div class="td-color2 col-xs-2 form-group-flex middle-center" style="padding-right:0px;"><label class="control-label  ">サブディレクトリ</label></div>
+        <div class="td-color3 col-xs-3 form-group-flex middle-center">
+            <input type="text" id="subFilePath" name="subFilePath" th:maxlength="80" th:errorclass="axio_field_error" class="form-control input-sm "  th:value="${mgpCsvExportForm.subFilePath}" />
+        </div>
+
+    </div>
+    <div class="form-group form-group-flex" >
+        <div class="td-color2 col-xs-2 form-group-flex middle-center"><label class="control-label ">ファイル名<span class="text-center small font-red">(※)</span></label> </div>
+        <div class="td-color2 col-xs-1 form-group-flex middle-center" style="padding-left:0px;padding-right:0px;">
+        </div>
+        <div class="td-color3 col-xs-4 form-group-flex middle-center">
+            <input type="text" id="fileName" name="fileName" th:maxlength="50" th:errorclass="axio_field_error" class="form-control input-sm "  th:value="${mgpCsvExportForm.fileName}" />
+        </div>
+
+        <div class="td-color2 col-xs-2 form-group-flex middle-center"><label class="control-label ">ファイル拡張子</label></div>
+        <div class="td-color3 col-xs-3 form-group-flex middle-center">
+            <select id="fileClass" name="fileClass" th:errorclass="axio_field_error" class="form-control input-sm " th:value="${mgpCsvExportForm.fileClass}"  >
+                <option value="csv"  th:selected="${mgpCsvExportForm.fileClass}== 'csv'">csv</option>
+                <option value="tsv"  th:selected="${mgpCsvExportForm.fileClass}== 'tsv'">tsv</option>
+                <option value="txt"  th:selected="${mgpCsvExportForm.fileClass}== 'txt'">txt</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group form-group-flex">
+        <div class="td-color2 col-xs-3 form-group-flex middle-center"  ><label class="control-label" >ファイル名日付</label></div>
+
+                        <div class="radio col-xs-9 td-color3 " >
+                            <label >
+                            <input type="radio" id="fileNamingClass" name="fileNamingClass" value="1" th:checked="${mgpCsvExportForm.fileNamingClass}== '1' " />
+                            ファイル名の先頭に、""YYYYMMDD_"を付与する。</label>
+                        <br>
+                            <label>
+                            <input type="radio" id="fileNamingClass" name="fileNamingClass" value="2" th:checked="${mgpCsvExportForm.fileNamingClass}== '2' " />
+                            ファイル名の先頭に、"YYYYMMDDHHMMSS_"を付与する。</label>
+                        <br>
+                            <label>
+                            <input type="radio" id="fileNamingClass" name="fileNamingClass" value="3" th:checked="${mgpCsvExportForm.fileNamingClass}== '3' " />
+                            ファイル名の後尾（拡張子の前）に、""_YYYYMMDD"を付与する。</label>
+                        <br>
+                            <label>
+                            <input type="radio" id="fileNamingClass" name="fileNamingClass" value="4" th:checked="${mgpCsvExportForm.fileNamingClass}== '4' " />
+                            ファイル名の後尾（拡張子の前）に、""_YYYYMMDDHHMMSS"を付与する。</label>
+                        <br>
+                            <label>
+                            <input type="radio" id="fileNamingClass" name="fileNamingClass" value="0" th:checked="${mgpCsvExportForm.fileNamingClass}== '0' " />
+                            何も付与しない。</label>
+                        </div>
+
+    </div>
+
+    <div class="form-group form-group-flex" >
+        <div class="td-color2 col-xs-3 form-group-flex middle-center"><label class="control-label ">文字コード</label></div>
+        <div class="td-color3 col-xs-9 ">
+            <select id="strCode" name="strCode" th:errorclass="axio_field_error" class="form-control input-sm " >
+                <option th:each="gpCode : *{charCodeList}" th:value="${gpCode.codeValue}"  th:selected="${gpCode.codeValue == mgpCsvExportForm.strCode}" th:inline="text">[[${gpCode.codeName}]]</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group form-group-flex">
+        <div class="td-color2 col-xs-3 form-group-flex middle-center " > <label  class="control-label" >区切り文字</label></div>
+        <div class="radio col-xs-9 td-color3 ">
+            <label>
+                <input type="radio" id="delimiterClass" name="delimiterClass" value="1" th:checked="${mgpCsvExportForm.delimiterClass}== '1' "  />
+                                    タブ区切り</label>
+            <label style="padding-left:40px">
+                <input type="radio" id="delimiterClass" name="delimiterClass" value="0" th:checked="${mgpCsvExportForm.delimiterClass}== '0' " />
+                                    カンマ区切り</label>
+        </div>
+
+    </div>
+    <div class="form-group form-group-flex">
+        <div class="td-color2 col-xs-3 form-group-flex middle-center"  > <label  class="control-label" >改行コード</label></div>
+        <div class="radio col-xs-9 td-color3 " >
+            <label>
+                <input type="radio" id="fileCodeFormatClass" name="fileCodeFormatClass" value="1" th:checked="${mgpCsvExportForm.fileCodeFormatClass}== '1' "  />
+                CR<span style="margin-left:10px;margin-right:10px">＋</span>LF</label>
+            <label  style="padding-left:40px">
+                <input type="radio" id="fileCodeFormatClass" name="fileCodeFormatClass" value="2" th:checked="${mgpCsvExportForm.fileCodeFormatClass}== '2' " />
+                CR </label>
+            <label style="padding-left:40px">
+                <input type="radio" id="fileCodeFormatClass" name="fileCodeFormatClass" value="0" th:checked="${mgpCsvExportForm.fileCodeFormatClass}== '0' "/>
+                LF</label>
+        </div>
+
+    </div>
+    <div class="form-group form-group-flex">
+        <div class="td-color2 col-xs-3 form-group-flex middle-center " > <label  class="control-label" >囲い文字</label></div>
+
+        <div class="radio col-xs-9 td-color3" >
+            <label>
+                <input type="radio" id="separationDefClass" name="separationDefClass" value="1" th:checked="${mgpCsvExportForm.separationDefClass}== '1' "  />
+                囲い文字（ダブルクォーテーション）を付与する。</label>
+            <label style="padding-left:40px">
+                <input type="radio" id="separationDefClass" name="separationDefClass" value="0" th:checked="${mgpCsvExportForm.separationDefClass}== '0' "/>
+                           何も付与しない。</label>
+        </div>
+    </div>
+    <div class="form-group form-group-flex">
+        <div class="td-color2 col-xs-3 form-group-flex middle-center" > <label  class="control-label" >ヘッダー情報</label></div>
+
+        <div class="radio col-xs-9 td-color3" >
+            <label>
+                <input type="radio" id="fileHeaderInfoClass" name="fileHeaderInfoClass" value="1" th:checked="${mgpCsvExportForm.fileHeaderInfoClass}== '1' " />
+                ヘッダー情報を論理名で出力する。</label>
+        <br>
+            <label>
+                <input type="radio" id="fileHeaderInfoClass" name="fileHeaderInfoClass" value="2" th:checked="${mgpCsvExportForm.fileHeaderInfoClass}== '2' " />
+                ヘッダー情報を物理名で出力する。     </label>
+        <br>
+            <label>
+                <input type="radio" id="fileHeaderInfoClass" name="fileHeaderInfoClass" value="0" th:checked="${mgpCsvExportForm.fileHeaderInfoClass}== '0' "/>
+                 ヘッダー情報を出力しない。</label>
+        </div>
+    </div>
+
+    </div>
+    </fieldset>
+</div>
+
+    <div class="row">
+    <fieldset class="scheduler-border ">
+            <legend class="scheduler-border " >カラム選択</legend>
+    <div class="col-xs-12">
+        <div class="form-group row-padding form-group-flex" >
+            <div class="td-color2 col-xs-3  form-group-flex middle-center "><label class="control-label ">出力対象</label></div>
+            <div class="td-color3 col-xs-9  form-group-flex middle-center">
+                <select id="sqlOutTableName" name="sqlOutTableName" th:errorclass="axio_field_error" class="form-control input-sm "  >
+                    <option value=""></option>
+                    <option th:each="mstExportObject : ${mgpCsvExportForm.mstExportList}" th:value="${mstExportObject.outputScopeTable}"  th:selected="${mstExportObject.outputScopeTable == mgpCsvExportForm.sqlOutTableName}" th:inline="text">[[${mstExportObject.outputScopeName}]]</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+            <div class="form-group">
+                <div class="col-xs-5 " >
+                    <div class=" td-color2 div-td-bottom text-center "><label>抽出元情報</label></div>
+                </div>
+                <div class="col-xs-1">
+                </div>
+                <div class="col-xs-5">
+                    <div class=" col-xs-12 td-color2 div-td-bottom text-center"><label>出力情報</label></div>
+                </div>
+                <div class="col-xs-5 "  style="padding-left:0px;padding-right:0px">
+		            <table id="sourceInfo-table" class="table table-bordered asm_data_table text-center"  >
+		                <thead >
+		                     <tr class="asm_data_table_header">
+                                <th class="text-center ">No</th>
+		                        <th style="display:none" class="text-center">カラム物理名</th>
+                                <th class="text-center ">カラム論理名</th>
+		                    </tr>
+		                 </thead>
+
+		                 <tbody id="sourceInfo" >
+		                    <tr th:each="resultList, start : *{targetViewInfoList}" th:object="${resultList}" >
+		                        <td th:id="${'dirNo_' + start.index}"  th:text="${resultList.dirNo}"></td>
+		                        <td style="display:none" th:id="${'columnPhysicalName_' + start.index}" class="text-left" th:text="${resultList.columnPhysicalName}"></td>
+		                        <td th:id="${'columnLogicalName_' + start.index}" class="text-left " th:text="${resultList.columnLogicalName}"></td>
+		                    </tr>
+		                </tbody>
+		            </table>
+		        </div>
+                <div class="col-xs-1 " style="padding-top: 70px" >
+                    <input type="button" name="allRight" value="&gt;&gt;" class="btn btn-info btn-md " />
+                    <br /><br />
+                    <input type="button" name="right" value="&nbsp;&gt;&nbsp;" class="btn btn-info btn-md " />
+                    <br /><br />
+                    <input type="button" name="left" value="&nbsp;&lt;&nbsp;" class="btn btn-info btn-md " />
+                    <br /><br />
+                    <input type="button" name="allLeft" value="&lt;&lt;" class="btn btn-info btn-md " />
+                </div>
+
+                <div class="col-xs-5 "  style="padding-left:0px;padding-right:0px">
+                    <table id="sourceOut-table"  class="table table-bordered asm_data_table text-center"  >
+                        <thead >
+                             <tr class="asm_data_table_header">
+                                <th class="text-center ">No</th>
+                                <th style="display:none" class="text-center ">カラム物理名</th>
+                                <th class="text-center ">カラム論理名</th>
+                            </tr>
+                         </thead>
+
+                            <tbody id="outputInfo" >
+                            <tr th:each="resultList, start : *{targetViewOutList}" th:object="${resultList}" >
+                                <td th:id="${'dirNo_' + start.index}"  th:text="${resultList.dirNo}"></td>
+                                <td style="display:none" th:id="${'columnPhysicalName_' + start.index}" class="text-left " th:text="${resultList.columnPhysicalName}"></td>
+                                <td th:id="${'columnLogicalName_' + start.index}" class="text-left " th:text="${resultList.columnLogicalName}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-xs-1" id="profile-mailaddress-div" style="padding-left: 0px;">
+                  <button type="button" class="btn btn-info" style="margin-top: 70px;" id="btn_up" th:disabled="*{disabledBtnUp}">
+                    <i class="glyphicon glyphicon-arrow-up"></i>
+                  </button>
+                  <br />
+                  <button type="button" class="btn btn-info" style="margin-top: 140px;" id="btn_down"  th:disabled="*{disabledBtnDown}">
+                    <i class="glyphicon glyphicon-arrow-down"></i>
+                  </button>
+                </div>
+            </div>
+
+
+            <input type="hidden" id="sqlNo" th:field="*{sqlNo}" />
+            <input type="hidden" id="selectClassCodeBak" th:field="*{selectClassCodeBak}" />
+            <input type="hidden" id="sqlOutTableNameBak" th:field="*{sqlOutTableNameBak}" />
+            <input type="hidden" id="editFlg" th:field="*{editFlg}" />
+            <input type="hidden" id="sqlInfoData" th:field="*{sqlInfoData}" />
+            <input type="hidden" id="sqlOutData" th:field="*{sqlOutData}" />
+            <input type="hidden" id="sqlColumnDef" th:field="*{sqlColumnDef}" />
+            <input type="hidden" id="versionNumber" th:field="*{versionNumber}" />
+            <input type="hidden" id="changedDataFlg" th:field="*{changedDataFlg}" />
+            <input type="hidden" id="changedDataRedrawFlg" th:field="*{changedDataRedrawFlg}" />
+            <input type="hidden" id="changedDataSqlWhereDefFlg" th:field="*{changedDataSqlWhereDefFlg}" />
+            <input type="hidden" id="accessToken" name="accessToken" th:field="*{accessToken}" />
+
+    </fieldset>
+    </div>
+
+
+
+    <div class="row">
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border " >出力条件及びソート順編集（SQL式編集）</legend>
+
+            <div class="form-group">
+              <div class="col-xs-12 ">
+                   <div><a  id="sqlInputLink"  >抽出元情報一覧</a></div>
+                   <input type="hidden" id="sqlInputDataTxt" th:field="*{sqlInputDataTxt}" />
+              </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-12 ">
+                   <div class="td-color2 col-xs-12 div-td-bottom " ><label>WHERE<span style="margin-left:10px;margin-right:10px">／</span>ORDER<span style="margin-left:10px">BY</span></label></div>
+
+                   <textarea rows="5" class="form-control" th:errorclass="axio_field_error" id="sqlWhereDef" name="sqlWhereDef" th:text="${mgpCsvExportForm.sqlWhereDef}" data-ignore-prohibited-char="yes" ></textarea>
+                </div>
+            </div>
+            <div class="form-group form-group-flex" >
+              <div class="col-xs-12 ">
+                <div class="td-color4 col-xs-12 " >
+                <span class="text-center small font-red">※出力条件の最初のキーワード「WHERE」をつけてください。</span><br>
+                <span class="text-center small font-red">※ソート順の最初にキーワード「ORDER<span style="margin-left:10px">BY</span>」を付けてください。</span>
+                </div>
+            </div>
+            </div>
+            <div class="form-group">
+                <div class="text-right col-xs-12" style="margin-top: 15px;">
+                    <button type="button" id="sqlCheck" class="btn btn-info btn-md " data-action="./mgpCsvExportSqlCheck">SQLチェック</button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    </form>
+    </div>
+    </div>
+    <!-- フッター -->
+    <footer id="footer" class="footer">
+        <p class="footer__text">Copyright &copy; AXIO corporation. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,63 @@
+// main: ../style.scss
+
+.menu{
+  .main__inner{
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  &ListArea{
+    margin-top: 30px;
+    &__title{
+      @include fontsize(18);
+      padding-bottom: 5px;
+      letter-spacing: 0;
+      color: $default_blue;
+      border-bottom: 1px solid rgba(31,57,114,0.2);
+    }
+    &__list{
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      &__item{
+        width: calc(100% / 7 - 13px);
+        background-color: #fff;
+        margin-right: 15.1px;
+        box-shadow: $shadow;
+        &:nth-child(7n){
+          margin-right: 0;
+        }
+        >a{
+          display: block;
+          padding: 18px 10px 6px;
+          border: 4px solid #fff;
+          transition: 0.3s all;
+          &:hover{
+            border: 4px solid rgb(32, 57, 144);
+          }
+          .img{
+            width: 60px;
+            margin: 0 auto;
+          }
+          .text{
+            color: $default_blue;
+            margin-top: 16px;
+            text-align: center;
+            letter-spacing: -0.5px;
+            font-weight: bold;
+            @include fontsize(14);
+          }
+        }
+        &--file{
+          >a{
+            .img{
+              width: 54px;
+            }
+            .text{
+              margin-top: 11px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

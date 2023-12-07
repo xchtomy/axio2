@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.axio.masterMentsetSystem.repository.MgpCsvExportDefInfoMapper">
+  <resultMap id="BaseResultMap" type="jp.co.axio.masterMentsetSystem.model.MgpCsvExportDefInfo">
+    <id column="sql_no" jdbcType="INTEGER" property="sqlNo" />
+    <result column="system_id" jdbcType="VARCHAR" property="systemId" />
+    <result column="sql_register_name" jdbcType="VARCHAR" property="sqlRegisterName" />
+    <result column="valid_flag" jdbcType="VARCHAR" property="validFlag" />
+    <result column="file_save_path" jdbcType="VARCHAR" property="fileSavePath" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="file_class" jdbcType="VARCHAR" property="fileClass" />
+    <result column="file_naming_class" jdbcType="VARCHAR" property="fileNamingClass" />
+    <result column="str_code" jdbcType="VARCHAR" property="strCode" />
+    <result column="delimiter_class" jdbcType="VARCHAR" property="delimiterClass" />
+    <result column="file_code_format_class" jdbcType="VARCHAR" property="fileCodeFormatClass" />
+    <result column="separation_def_class" jdbcType="VARCHAR" property="separationDefClass" />
+    <result column="file_header_info_class" jdbcType="VARCHAR" property="fileHeaderInfoClass" />
+    <result column="sql_out_table_name" jdbcType="VARCHAR" property="sqlOutTableName" />
+    <result column="sql_out_data" jdbcType="VARCHAR" property="sqlOutData" />
+    <result column="sql_column_def" jdbcType="VARCHAR" property="sqlColumnDef" />
+    <result column="sql_where_def" jdbcType="VARCHAR" property="sqlWhereDef" />
+    <result column="register_id" jdbcType="VARCHAR" property="registerId" />
+    <result column="regist_ts" jdbcType="TIMESTAMP" property="registTs" />
+    <result column="updater_id" jdbcType="VARCHAR" property="updaterId" />
+    <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
+    <result column="version_number" jdbcType="INTEGER" property="versionNumber" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    sql_no, system_id, sql_register_name, valid_flag, file_save_path, file_name, file_class, 
+    file_naming_class, str_code, delimiter_class, file_code_format_class, separation_def_class, 
+    file_header_info_class, sql_out_table_name, sql_out_data, sql_column_def, sql_where_def, 
+    register_id, regist_ts, updater_id, update_ts, version_number
+  </sql>
+  <select id="selectByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCsvExportDefInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from m_gp_csvexport_definfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from m_gp_csvexport_definfo
+    where sql_no = #{sqlNo,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_gp_csvexport_definfo
+    where sql_no = #{sqlNo,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCsvExportDefInfoExample">
+    delete from m_gp_csvexport_definfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCsvExportDefInfo">
+    insert into m_gp_csvexport_definfo (sql_no, system_id, sql_register_name, 
+      valid_flag, file_save_path, file_name, 
+      file_class, file_naming_class, str_code, 
+      delimiter_class, file_code_format_class, separation_def_class, 
+      file_header_info_class, sql_out_table_name, sql_out_data, 
+      sql_column_def, sql_where_def, register_id, 
+      regist_ts, updater_id, update_ts, 
+      version_number)
+    values (#{sqlNo,jdbcType=INTEGER}, #{systemId,jdbcType=VARCHAR}, #{sqlRegisterName,jdbcType=VARCHAR}, 
+      #{validFlag,jdbcType=VARCHAR}, #{fileSavePath,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, 
+      #{fileClass,jdbcType=VARCHAR}, #{fileNamingClass,jdbcType=VARCHAR}, #{strCode,jdbcType=VARCHAR}, 
+      #{delimiterClass,jdbcType=VARCHAR}, #{fileCodeFormatClass,jdbcType=VARCHAR}, #{separationDefClass,jdbcType=VARCHAR}, 
+      #{fileHeaderInfoClass,jdbcType=VARCHAR}, #{sqlOutTableName,jdbcType=VARCHAR}, #{sqlOutData,jdbcType=VARCHAR}, 
+      #{sqlColumnDef,jdbcType=VARCHAR}, #{sqlWhereDef,jdbcType=VARCHAR}, #{registerId,jdbcType=VARCHAR}, 
+      #{registTs,jdbcType=TIMESTAMP}, #{updaterId,jdbcType=VARCHAR}, #{updateTs,jdbcType=TIMESTAMP}, 
+      #{versionNumber,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCsvExportDefInfo">
+    insert into m_gp_csvexport_definfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        sql_no,
+      <if test="systemId != null">
+        system_id,
+      </if>
+      <if test="sqlRegisterName != null">
+        sql_register_name,
+      </if>
+      <if test="validFlag != null">
+        valid_flag,
+      </if>
+      <if test="fileSavePath != null">
+        file_save_path,
+      </if>
+      <if test="fileName != null">
+        file_name,
+      </if>
+      <if test="fileClass != null">
+        file_class,
+      </if>
+      <if test="fileNamingClass != null">
+        file_naming_class,
+      </if>
+      <if test="strCode != null">
+        str_code,
+      </if>
+      <if test="delimiterClass != null">
+        delimiter_class,
+      </if>
+      <if test="fileCodeFormatClass != null">
+        file_code_format_class,
+      </if>
+      <if test="separationDefClass != null">
+        separation_def_class,
+      </if>
+      <if test="fileHeaderInfoClass != null">
+        file_header_info_class,
+      </if>
+      <if test="sqlOutTableName != null">
+        sql_out_table_name,
+      </if>
+      <if test="sqlOutData != null">
+        sql_out_data,
+      </if>
+      <if test="sqlColumnDef != null">
+        sql_column_def,
+      </if>
+      <if test="sqlWhereDef != null">
+        sql_where_def,
+      </if>
+        register_id,
+        regist_ts,
+        updater_id,
+        update_ts,
+      <if test="versionNumber != null">
+        version_number,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        nextval('m_gp_csvexport_seq'),
+      <if test="systemId != null">
+        #{systemId,jdbcType=VARCHAR},
+      </if>
+      <if test="sqlRegisterName != null">
+        #{sqlRegisterName,jdbcType=VARCHAR},
+      </if>
+      <if test="validFlag != null">
+        #{validFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSavePath != null">
+        #{fileSavePath,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileClass != null">
+        #{fileClass,jdbcType=VARCHAR},
+      </if>
+      <if test="fileNamingClass != null">
+        #{fileNamingClass,jdbcType=VARCHAR},
+      </if>
+      <if test="strCode != null">
+        #{strCode,jdbcType=VARCHAR},
+      </if>
+      <if test="delimiterClass != null">
+        #{delimiterClass,jdbcType=VARCHAR},
+      </if>
+      <if test="fileCodeFormatClass != null">
+        #{fileCodeFormatClass,jdbcType=VARCHAR},
+      </if>
+      <if test="separationDefClass != null">
+        #{separationDefClass,jdbcType=VARCHAR},
+      </if>
+      <if test="fileHeaderInfoClass != null">
+        #{fileHeaderInfoClass,jdbcType=VARCHAR},
+      </if>
+      <if test="sqlOutTableName != null">
+        #{sqlOutTableName,jdbcType=VARCHAR},
+      </if>
+      <if test="sqlOutData != null">
+        #{sqlOutData,jdbcType=VARCHAR},
+      </if>
+      <if test="sqlColumnDef != null">
+        #{sqlColumnDef,jdbcType=VARCHAR},
+      </if>
+      <if test="sqlWhereDef != null">
+        #{sqlWhereDef,jdbcType=VARCHAR},
+      </if>
+               ' 汎用CSV管理機能',
+       current_timestamp,
+                ' 汎用CSV管理機能',
+       current_timestamp,
+      <if test="versionNumber != null">
+        #{versionNumber,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCsvExportDefInfoExample" resultType="java.lang.Long">
+    select count(*) from m_gp_csvexport_definfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update m_gp_csvexport_definfo
+    <set>
+      <if test="record.sqlNo != null">
+        sql_no = #{record.sqlNo,jdbcType=INTEGER},
+      </if>
+      <if test="record.systemId != null">
+        system_id = #{record.systemId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sqlRegisterName != null">
+        sql_register_name = #{record.sqlRegisterName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.validFlag != null">
+        valid_flag = #{record.validFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileSavePath != null">
+        file_save_path = #{record.fileSavePath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileName != null">
+        file_name = #{record.fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileClass != null">
+        file_class = #{record.fileClass,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileNamingClass != null">
+        file_naming_class = #{record.fileNamingClass,jdbcType=VARCHAR},
+      </if>
+      <if test="record.strCode != null">
+        str_code = #{record.strCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delimiterClass != null">
+        delimiter_class = #{record.delimiterClass,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileCodeFormatClass != null">
+        file_code_format_class = #{record.fileCodeFormatClass,jdbcType=VARCHAR},
+      </if>
+      <if test="record.separationDefClass != null">
+        separation_def_class = #{record.separationDefClass,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileHeaderInfoClass != null">
+        file_header_info_class = #{record.fileHeaderInfoClass,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sqlOutTableName != null">
+        sql_out_table_name = #{record.sqlOutTableName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sqlOutData != null">
+        sql_out_data = #{record.sqlOutData,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sqlColumnDef != null">
+        sql_column_def = #{record.sqlColumnDef,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sqlWhereDef != null">
+        sql_where_def = #{record.sqlWhereDef,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registerId != null">
+        register_id = #{record.registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registTs != null">
+        regist_ts = #{record.registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updaterId != null">
+        updater_id = #{record.updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTs != null">
+        update_ts = #{record.updateTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.versionNumber != null">
+        version_number = #{record.versionNumber,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update m_gp_csvexport_definfo
+    set sql_no = #{record.sqlNo,jdbcType=INTEGER},
+      system_id = #{record.systemId,jdbcType=VARCHAR},
+      sql_register_name = #{record.sqlRegisterName,jdbcType=VARCHAR},
+      valid_flag = #{record.validFlag,jdbcType=VARCHAR},
+      file_save_path = #{record.fileSavePath,jdbcType=VARCHAR},
+      file_name = #{record.fileName,jdbcType=VARCHAR},
+      file_class = #{record.fileClass,jdbcType=VARCHAR},
+      file_naming_class = #{record.fileNamingClass,jdbcType=VARCHAR},
+      str_code = #{record.strCode,jdbcType=VARCHAR},
+      delimiter_class = #{record.delimiterClass,jdbcType=VARCHAR},
+      file_code_format_class = #{record.fileCodeFormatClass,jdbcType=VARCHAR},
+      separation_def_class = #{record.separationDefClass,jdbcType=VARCHAR},
+      file_header_info_class = #{record.fileHeaderInfoClass,jdbcType=VARCHAR},
+      sql_out_table_name = #{record.sqlOutTableName,jdbcType=VARCHAR},
+      sql_out_data = #{record.sqlOutData,jdbcType=VARCHAR},
+      sql_column_def = #{record.sqlColumnDef,jdbcType=VARCHAR},
+      sql_where_def = #{record.sqlWhereDef,jdbcType=VARCHAR},
+      register_id = #{record.registerId,jdbcType=VARCHAR},
+      regist_ts = #{record.registTs,jdbcType=TIMESTAMP},
+      updater_id = #{record.updaterId,jdbcType=VARCHAR},
+      update_ts = #{record.updateTs,jdbcType=TIMESTAMP},
+      version_number = #{record.versionNumber,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCsvExportDefInfo">
+    update m_gp_csvexport_definfo
+    <set>
+      <if test="systemId != null">
+        system_id = #{systemId,jdbcType=VARCHAR},
+      </if>
+      <if test="sqlRegisterName != null">
+        sql_register_name = #{sqlRegisterName,jdbcType=VARCHAR},
+      </if>
+      <if test="validFlag != null">
+        valid_flag = #{validFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSavePath != null">
+        file_save_path = #{fileSavePath,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileClass != null">
+        file_class = #{fileClass,jdbcType=VARCHAR},
+      </if>
+      <if test="fileNamingClass != null">
+        file_naming_class = #{fileNamingClass,jdbcType=VARCHAR},
+      </if>
+      <if test="strCode != null">
+        str_code = #{strCode,jdbcType=VARCHAR},
+      </if>
+      <if test="delimiterClass != null">
+        delimiter_class = #{delimiterClass,jdbcType=VARCHAR},
+      </if>
+      <if test="fileCodeFormatClass != null">
+        file_code_format_class = #{fileCodeFormatClass,jdbcType=VARCHAR},
+      </if>
+      <if test="separationDefClass != null">
+        separation_def_class = #{separationDefClass,jdbcType=VARCHAR},
+      </if>
+      <if test="fileHeaderInfoClass != null">
+        file_header_info_class = #{fileHeaderInfoClass,jdbcType=VARCHAR},
+      </if>
+      <if test="sqlOutTableName != null">
+        sql_out_table_name = #{sqlOutTableName,jdbcType=VARCHAR},
+      </if>
+      <if test="sqlOutData != null">
+        sql_out_data = #{sqlOutData,jdbcType=VARCHAR},
+      </if>
+      <if test="sqlColumnDef != null">
+        sql_column_def = #{sqlColumnDef,jdbcType=VARCHAR},
+      </if>
+      <if test="sqlWhereDef != null">
+        sql_where_def = #{sqlWhereDef,jdbcType=VARCHAR},
+      </if>
+      <if test="registerId != null">
+        register_id = #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="registTs != null">
+        regist_ts = #{registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updaterId != null">
+        updater_id = #{updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTs != null">
+        update_ts = #{updateTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="versionNumber != null">
+        version_number = #{versionNumber,jdbcType=INTEGER},
+      </if>
+    </set>
+    where sql_no = #{sqlNo,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCsvExportDefInfo">
+    update m_gp_csvexport_definfo
+    set system_id = #{systemId,jdbcType=VARCHAR},
+      sql_register_name = #{sqlRegisterName,jdbcType=VARCHAR},
+      valid_flag = #{validFlag,jdbcType=VARCHAR},
+      file_save_path = #{fileSavePath,jdbcType=VARCHAR},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      file_class = #{fileClass,jdbcType=VARCHAR},
+      file_naming_class = #{fileNamingClass,jdbcType=VARCHAR},
+      str_code = #{strCode,jdbcType=VARCHAR},
+      delimiter_class = #{delimiterClass,jdbcType=VARCHAR},
+      file_code_format_class = #{fileCodeFormatClass,jdbcType=VARCHAR},
+      separation_def_class = #{separationDefClass,jdbcType=VARCHAR},
+      file_header_info_class = #{fileHeaderInfoClass,jdbcType=VARCHAR},
+      sql_out_table_name = #{sqlOutTableName,jdbcType=VARCHAR},
+      sql_out_data = #{sqlOutData,jdbcType=VARCHAR},
+      sql_column_def = #{sqlColumnDef,jdbcType=VARCHAR},
+      sql_where_def = #{sqlWhereDef,jdbcType=VARCHAR},
+      register_id = #{registerId,jdbcType=VARCHAR},
+      regist_ts = #{registTs,jdbcType=TIMESTAMP},
+      updater_id = #{updaterId,jdbcType=VARCHAR},
+      update_ts = #{updateTs,jdbcType=TIMESTAMP},
+      version_number = #{versionNumber,jdbcType=INTEGER}
+    where sql_no = #{sqlNo,jdbcType=INTEGER}
+  </update>
+</mapper>

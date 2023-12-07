@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.axio.masterMentsetSystem.repository.OutputScopeMstMapper">
+  <resultMap id="BaseResultMap" type="jp.co.axio.masterMentsetSystem.model.OutputScopeMst">
+    <result column="output_scope_no" jdbcType="INTEGER" property="outputScopeNo" />
+    <result column="output_scope_name" jdbcType="VARCHAR" property="outputScopeName" />
+    <result column="output_scope_table" jdbcType="VARCHAR" property="outputScopeTable" />
+    <result column="register_id" jdbcType="VARCHAR" property="registerId" />
+    <result column="regist_ts" jdbcType="TIMESTAMP" property="registTs" />
+    <result column="updater_id" jdbcType="VARCHAR" property="updaterId" />
+    <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
+    <result column="version_number" jdbcType="INTEGER" property="versionNumber" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    output_scope_no, output_scope_name, output_scope_table, register_id, regist_ts, updater_id, 
+    update_ts, version_number
+  </sql>
+  <select id="selectByExample" parameterType="jp.co.axio.masterMentsetSystem.model.OutputScopeMstExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from output_scope_mst
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="jp.co.axio.masterMentsetSystem.model.OutputScopeMstExample">
+    delete from output_scope_mst
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="jp.co.axio.masterMentsetSystem.model.OutputScopeMst">
+    insert into output_scope_mst (output_scope_no, output_scope_name, output_scope_table, 
+      register_id, regist_ts, updater_id, 
+      update_ts, version_number)
+    values (#{outputScopeNo,jdbcType=INTEGER}, #{outputScopeName,jdbcType=VARCHAR}, #{outputScopeTable,jdbcType=VARCHAR}, 
+      #{registerId,jdbcType=VARCHAR}, #{registTs,jdbcType=TIMESTAMP}, #{updaterId,jdbcType=VARCHAR}, 
+      #{updateTs,jdbcType=TIMESTAMP}, #{versionNumber,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="jp.co.axio.masterMentsetSystem.model.OutputScopeMst">
+    insert into output_scope_mst
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="outputScopeNo != null">
+        output_scope_no,
+      </if>
+      <if test="outputScopeName != null">
+        output_scope_name,
+      </if>
+      <if test="outputScopeTable != null">
+        output_scope_table,
+      </if>
+      <if test="registerId != null">
+        register_id,
+      </if>
+      <if test="registTs != null">
+        regist_ts,
+      </if>
+      <if test="updaterId != null">
+        updater_id,
+      </if>
+      <if test="updateTs != null">
+        update_ts,
+      </if>
+      <if test="versionNumber != null">
+        version_number,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="outputScopeNo != null">
+        #{outputScopeNo,jdbcType=INTEGER},
+      </if>
+      <if test="outputScopeName != null">
+        #{outputScopeName,jdbcType=VARCHAR},
+      </if>
+      <if test="outputScopeTable != null">
+        #{outputScopeTable,jdbcType=VARCHAR},
+      </if>
+      <if test="registerId != null">
+        #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="registTs != null">
+        #{registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updaterId != null">
+        #{updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTs != null">
+        #{updateTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="versionNumber != null">
+        #{versionNumber,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="jp.co.axio.masterMentsetSystem.model.OutputScopeMstExample" resultType="java.lang.Long">
+    select count(*) from output_scope_mst
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update output_scope_mst
+    <set>
+      <if test="record.outputScopeNo != null">
+        output_scope_no = #{record.outputScopeNo,jdbcType=INTEGER},
+      </if>
+      <if test="record.outputScopeName != null">
+        output_scope_name = #{record.outputScopeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outputScopeTable != null">
+        output_scope_table = #{record.outputScopeTable,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registerId != null">
+        register_id = #{record.registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registTs != null">
+        regist_ts = #{record.registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updaterId != null">
+        updater_id = #{record.updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTs != null">
+        update_ts = #{record.updateTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.versionNumber != null">
+        version_number = #{record.versionNumber,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update output_scope_mst
+    set output_scope_no = #{record.outputScopeNo,jdbcType=INTEGER},
+      output_scope_name = #{record.outputScopeName,jdbcType=VARCHAR},
+      output_scope_table = #{record.outputScopeTable,jdbcType=VARCHAR},
+      register_id = #{record.registerId,jdbcType=VARCHAR},
+      regist_ts = #{record.registTs,jdbcType=TIMESTAMP},
+      updater_id = #{record.updaterId,jdbcType=VARCHAR},
+      update_ts = #{record.updateTs,jdbcType=TIMESTAMP},
+      version_number = #{record.versionNumber,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

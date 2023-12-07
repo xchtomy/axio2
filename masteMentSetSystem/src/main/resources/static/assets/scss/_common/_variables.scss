@@ -1,0 +1,18 @@
+// 変数
+$default_blue:#1F3990;
+$border_color:#ddd;
+$shadow:0px 2px 4px rgba(0,0,0,0.1);
+
+// font-size
+@mixin fontsize($size: 14) {
+  font-size: $size + px;
+  font-size: $size / 10 + rem;
+}
+
+@mixin fontsize($size: 14, $unit:px) {
+  font-size: $size + $unit;
+
+  @if $unit==px {
+    font-size: $size / 10 + rem;
+  }
+}

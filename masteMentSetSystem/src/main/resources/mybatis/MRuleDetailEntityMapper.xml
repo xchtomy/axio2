@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.axio.masterMentsetSystem.repository.MRuleDetailEntityMapper">
+  <resultMap id="BaseResultMap" type="jp.co.axio.masterMentsetSystem.model.MRuleDetailEntity">
+    <id column="rule_id" jdbcType="VARCHAR" property="ruleId" />
+    <id column="rule_detail_id" jdbcType="VARCHAR" property="ruleDetailId" />
+    <id column="rule_detail_flag" jdbcType="CHAR" property="ruleDetailFlag" />
+    <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
+    <result column="organization_code" jdbcType="VARCHAR" property="organizationCode" />
+    <result column="employment_kbn" jdbcType="VARCHAR" property="employmentKbn" />
+    <result column="position_code" jdbcType="VARCHAR" property="positionCode" />
+    <result column="register_id" jdbcType="VARCHAR" property="registerId" />
+    <result column="regist_ts" jdbcType="TIMESTAMP" property="registTs" />
+    <result column="updater_id" jdbcType="VARCHAR" property="updaterId" />
+    <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    rule_id, rule_detail_id, rule_detail_flag, company_code, organization_code, employment_kbn, 
+    position_code, register_id, regist_ts, updater_id, update_ts
+  </sql>
+  <select id="selectByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleDetailEntityExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from public.m_rule_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleDetailEntityKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from public.m_rule_detail
+    where rule_id = #{ruleId,jdbcType=VARCHAR}
+      and rule_detail_id = #{ruleDetailId,jdbcType=VARCHAR}
+      and rule_detail_flag = #{ruleDetailFlag,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleDetailEntityKey">
+    delete from public.m_rule_detail
+    where rule_id = #{ruleId,jdbcType=VARCHAR}
+      and rule_detail_id = #{ruleDetailId,jdbcType=VARCHAR}
+      and rule_detail_flag = #{ruleDetailFlag,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleDetailEntityExample">
+    delete from public.m_rule_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleDetailEntity">
+    insert into public.m_rule_detail (rule_id, rule_detail_id, rule_detail_flag, 
+      company_code, organization_code, employment_kbn, 
+      position_code, register_id, regist_ts, 
+      updater_id, update_ts)
+    values (#{ruleId,jdbcType=VARCHAR}, #{ruleDetailId,jdbcType=VARCHAR}, #{ruleDetailFlag,jdbcType=CHAR}, 
+      #{companyCode,jdbcType=VARCHAR}, #{organizationCode,jdbcType=VARCHAR}, #{employmentKbn,jdbcType=VARCHAR}, 
+      #{positionCode,jdbcType=VARCHAR}, #{registerId,jdbcType=VARCHAR}, #{registTs,jdbcType=TIMESTAMP}, 
+      #{updaterId,jdbcType=VARCHAR}, #{updateTs,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleDetailEntity">
+    insert into public.m_rule_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ruleId != null">
+        rule_id,
+      </if>
+      <if test="ruleDetailId != null">
+        rule_detail_id,
+      </if>
+      <if test="ruleDetailFlag != null">
+        rule_detail_flag,
+      </if>
+      <if test="companyCode != null">
+        company_code,
+      </if>
+      <if test="organizationCode != null">
+        organization_code,
+      </if>
+      <if test="employmentKbn != null">
+        employment_kbn,
+      </if>
+      <if test="positionCode != null">
+        position_code,
+      </if>
+      <if test="registerId != null">
+        register_id,
+      </if>
+      <if test="registTs != null">
+        regist_ts,
+      </if>
+      <if test="updaterId != null">
+        updater_id,
+      </if>
+      <if test="updateTs != null">
+        update_ts,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ruleId != null">
+        #{ruleId,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleDetailId != null">
+        #{ruleDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleDetailFlag != null">
+        #{ruleDetailFlag,jdbcType=CHAR},
+      </if>
+      <if test="companyCode != null">
+        #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationCode != null">
+        #{organizationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="employmentKbn != null">
+        #{employmentKbn,jdbcType=VARCHAR},
+      </if>
+      <if test="positionCode != null">
+        #{positionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="registerId != null">
+        #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="registTs != null">
+        #{registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updaterId != null">
+        #{updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTs != null">
+        #{updateTs,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleDetailEntityExample" resultType="java.lang.Long">
+    select count(*) from public.m_rule_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update public.m_rule_detail
+    <set>
+      <if test="record.ruleId != null">
+        rule_id = #{record.ruleId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ruleDetailId != null">
+        rule_detail_id = #{record.ruleDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ruleDetailFlag != null">
+        rule_detail_flag = #{record.ruleDetailFlag,jdbcType=CHAR},
+      </if>
+      <if test="record.companyCode != null">
+        company_code = #{record.companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizationCode != null">
+        organization_code = #{record.organizationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.employmentKbn != null">
+        employment_kbn = #{record.employmentKbn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionCode != null">
+        position_code = #{record.positionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registerId != null">
+        register_id = #{record.registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registTs != null">
+        regist_ts = #{record.registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updaterId != null">
+        updater_id = #{record.updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTs != null">
+        update_ts = #{record.updateTs,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update public.m_rule_detail
+    set rule_id = #{record.ruleId,jdbcType=VARCHAR},
+      rule_detail_id = #{record.ruleDetailId,jdbcType=VARCHAR},
+      rule_detail_flag = #{record.ruleDetailFlag,jdbcType=CHAR},
+      company_code = #{record.companyCode,jdbcType=VARCHAR},
+      organization_code = #{record.organizationCode,jdbcType=VARCHAR},
+      employment_kbn = #{record.employmentKbn,jdbcType=VARCHAR},
+      position_code = #{record.positionCode,jdbcType=VARCHAR},
+      register_id = #{record.registerId,jdbcType=VARCHAR},
+      regist_ts = #{record.registTs,jdbcType=TIMESTAMP},
+      updater_id = #{record.updaterId,jdbcType=VARCHAR},
+      update_ts = #{record.updateTs,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleDetailEntity">
+    update public.m_rule_detail
+    <set>
+      <if test="companyCode != null">
+        company_code = #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationCode != null">
+        organization_code = #{organizationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="employmentKbn != null">
+        employment_kbn = #{employmentKbn,jdbcType=VARCHAR},
+      </if>
+      <if test="positionCode != null">
+        position_code = #{positionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="registerId != null">
+        register_id = #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="registTs != null">
+        regist_ts = #{registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updaterId != null">
+        updater_id = #{updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTs != null">
+        update_ts = #{updateTs,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where rule_id = #{ruleId,jdbcType=VARCHAR}
+      and rule_detail_id = #{ruleDetailId,jdbcType=VARCHAR}
+      and rule_detail_flag = #{ruleDetailFlag,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleDetailEntity">
+    update public.m_rule_detail
+    set company_code = #{companyCode,jdbcType=VARCHAR},
+      organization_code = #{organizationCode,jdbcType=VARCHAR},
+      employment_kbn = #{employmentKbn,jdbcType=VARCHAR},
+      position_code = #{positionCode,jdbcType=VARCHAR},
+      register_id = #{registerId,jdbcType=VARCHAR},
+      regist_ts = #{registTs,jdbcType=TIMESTAMP},
+      updater_id = #{updaterId,jdbcType=VARCHAR},
+      update_ts = #{updateTs,jdbcType=TIMESTAMP}
+    where rule_id = #{ruleId,jdbcType=VARCHAR}
+      and rule_detail_id = #{ruleDetailId,jdbcType=VARCHAR}
+      and rule_detail_flag = #{ruleDetailFlag,jdbcType=CHAR}
+  </update>
+</mapper>

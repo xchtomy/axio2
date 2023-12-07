@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.axio.masterMentsetSystem.repository.MgpCodeMstMapper">
+  <resultMap id="BaseResultMap" type="jp.co.axio.masterMentsetSystem.model.MgpCodeMst">
+    <id column="class_code" jdbcType="VARCHAR" property="classCode" />
+    <id column="code_value" jdbcType="VARCHAR" property="codeValue" />
+    <result column="gp_code_mst_name" jdbcType="VARCHAR" property="gpCodeMstName" />
+    <result column="value_1" jdbcType="VARCHAR" property="value1" />
+    <result column="value_2" jdbcType="VARCHAR" property="value2" />
+    <result column="value_3" jdbcType="VARCHAR" property="value3" />
+    <result column="value_4" jdbcType="VARCHAR" property="value4" />
+    <result column="value_5" jdbcType="VARCHAR" property="value5" />
+    <result column="value_6" jdbcType="VARCHAR" property="value6" />
+    <result column="value_7" jdbcType="VARCHAR" property="value7" />
+    <result column="value_8" jdbcType="VARCHAR" property="value8" />
+    <result column="value_9" jdbcType="VARCHAR" property="value9" />
+    <result column="value_10" jdbcType="VARCHAR" property="value10" />
+    <result column="value_11" jdbcType="VARCHAR" property="value11" />
+    <result column="value_12" jdbcType="VARCHAR" property="value12" />
+    <result column="value_13" jdbcType="VARCHAR" property="value13" />
+    <result column="value_14" jdbcType="VARCHAR" property="value14" />
+    <result column="value_15" jdbcType="VARCHAR" property="value15" />
+    <result column="disp_order" jdbcType="VARCHAR" property="dispOrder" />
+    <result column="register_id" jdbcType="VARCHAR" property="registerId" />
+    <result column="regist_ts" jdbcType="TIMESTAMP" property="registTs" />
+    <result column="updater_id" jdbcType="VARCHAR" property="updaterId" />
+    <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
+    <result column="delete_flag" jdbcType="CHAR" property="deleteFlag" />
+    <result column="version_number" jdbcType="INTEGER" property="versionNumber" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    class_code, code_value, gp_code_mst_name, value_1, value_2, value_3, value_4, value_5, 
+    value_6, value_7, value_8, value_9, value_10, value_11, value_12, value_13, value_14, 
+    value_15, disp_order, register_id, regist_ts, updater_id, update_ts, delete_flag, 
+    version_number
+  </sql>
+  <select id="selectByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCodeMstExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from m_gp_code_mst
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCodeMstKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from m_gp_code_mst
+    where class_code = #{classCode,jdbcType=VARCHAR}
+      and code_value = #{codeValue,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCodeMstKey">
+    delete from m_gp_code_mst
+    where class_code = #{classCode,jdbcType=VARCHAR}
+      and code_value = #{codeValue,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCodeMstExample">
+    delete from m_gp_code_mst
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCodeMst">
+    insert into m_gp_code_mst (class_code, code_value, gp_code_mst_name, 
+      value_1, value_2, value_3, 
+      value_4, value_5, value_6, 
+      value_7, value_8, value_9, 
+      value_10, value_11, value_12, 
+      value_13, value_14, value_15, 
+      disp_order, register_id, regist_ts, 
+      updater_id, update_ts, delete_flag, 
+      version_number)
+    values (#{classCode,jdbcType=VARCHAR}, #{codeValue,jdbcType=VARCHAR}, #{gpCodeMstName,jdbcType=VARCHAR}, 
+      #{value1,jdbcType=VARCHAR}, #{value2,jdbcType=VARCHAR}, #{value3,jdbcType=VARCHAR}, 
+      #{value4,jdbcType=VARCHAR}, #{value5,jdbcType=VARCHAR}, #{value6,jdbcType=VARCHAR}, 
+      #{value7,jdbcType=VARCHAR}, #{value8,jdbcType=VARCHAR}, #{value9,jdbcType=VARCHAR}, 
+      #{value10,jdbcType=VARCHAR}, #{value11,jdbcType=VARCHAR}, #{value12,jdbcType=VARCHAR}, 
+      #{value13,jdbcType=VARCHAR}, #{value14,jdbcType=VARCHAR}, #{value15,jdbcType=VARCHAR}, 
+      #{dispOrder,jdbcType=VARCHAR}, #{registerId,jdbcType=VARCHAR}, #{registTs,jdbcType=TIMESTAMP}, 
+      #{updaterId,jdbcType=VARCHAR}, #{updateTs,jdbcType=TIMESTAMP}, #{deleteFlag,jdbcType=CHAR}, 
+      #{versionNumber,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCodeMst">
+    insert into m_gp_code_mst
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="classCode != null">
+        class_code,
+      </if>
+      <if test="codeValue != null">
+        code_value,
+      </if>
+      <if test="gpCodeMstName != null">
+        gp_code_mst_name,
+      </if>
+      <if test="value1 != null">
+        value_1,
+      </if>
+      <if test="value2 != null">
+        value_2,
+      </if>
+      <if test="value3 != null">
+        value_3,
+      </if>
+      <if test="value4 != null">
+        value_4,
+      </if>
+      <if test="value5 != null">
+        value_5,
+      </if>
+      <if test="value6 != null">
+        value_6,
+      </if>
+      <if test="value7 != null">
+        value_7,
+      </if>
+      <if test="value8 != null">
+        value_8,
+      </if>
+      <if test="value9 != null">
+        value_9,
+      </if>
+      <if test="value10 != null">
+        value_10,
+      </if>
+      <if test="value11 != null">
+        value_11,
+      </if>
+      <if test="value12 != null">
+        value_12,
+      </if>
+      <if test="value13 != null">
+        value_13,
+      </if>
+      <if test="value14 != null">
+        value_14,
+      </if>
+      <if test="value15 != null">
+        value_15,
+      </if>
+      <if test="dispOrder != null">
+        disp_order,
+      </if>
+      register_id,
+      regist_ts, 
+      updater_id,
+      update_ts, 
+      <if test="deleteFlag != null">
+        delete_flag,
+      </if>
+      <if test="versionNumber != null">
+        version_number,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="classCode != null">
+        #{classCode,jdbcType=VARCHAR},
+      </if>
+      <if test="codeValue != null">
+        #{codeValue,jdbcType=VARCHAR},
+      </if>
+      <if test="gpCodeMstName != null">
+        #{gpCodeMstName,jdbcType=VARCHAR},
+      </if>
+      <if test="value1 != null">
+        #{value1,jdbcType=VARCHAR},
+      </if>
+      <if test="value2 != null">
+        #{value2,jdbcType=VARCHAR},
+      </if>
+      <if test="value3 != null">
+        #{value3,jdbcType=VARCHAR},
+      </if>
+      <if test="value4 != null">
+        #{value4,jdbcType=VARCHAR},
+      </if>
+      <if test="value5 != null">
+        #{value5,jdbcType=VARCHAR},
+      </if>
+      <if test="value6 != null">
+        #{value6,jdbcType=VARCHAR},
+      </if>
+      <if test="value7 != null">
+        #{value7,jdbcType=VARCHAR},
+      </if>
+      <if test="value8 != null">
+        #{value8,jdbcType=VARCHAR},
+      </if>
+      <if test="value9 != null">
+        #{value9,jdbcType=VARCHAR},
+      </if>
+      <if test="value10 != null">
+        #{value10,jdbcType=VARCHAR},
+      </if>
+      <if test="value11 != null">
+        #{value11,jdbcType=VARCHAR},
+      </if>
+      <if test="value12 != null">
+        #{value12,jdbcType=VARCHAR},
+      </if>
+      <if test="value13 != null">
+        #{value13,jdbcType=VARCHAR},
+      </if>
+      <if test="value14 != null">
+        #{value14,jdbcType=VARCHAR},
+      </if>
+      <if test="value15 != null">
+        #{value15,jdbcType=VARCHAR},
+      </if>
+      <if test="dispOrder != null">
+        #{dispOrder,jdbcType=VARCHAR},
+      </if>
+               '汎用コードマスタ管理機能',
+       current_timestamp,
+                '汎用コードマスタ管理機能',
+       current_timestamp,
+      <if test="deleteFlag != null">
+        #{deleteFlag,jdbcType=CHAR},
+      </if>
+      <if test="versionNumber != null">
+        #{versionNumber,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCodeMstExample" resultType="java.lang.Long">
+    select count(*) from m_gp_code_mst
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update m_gp_code_mst
+    <set>
+      <if test="record.classCode != null">
+        class_code = #{record.classCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.codeValue != null">
+        code_value = #{record.codeValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gpCodeMstName != null">
+        gp_code_mst_name = #{record.gpCodeMstName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value1 != null">
+        value_1 = #{record.value1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value2 != null">
+        value_2 = #{record.value2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value3 != null">
+        value_3 = #{record.value3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value4 != null">
+        value_4 = #{record.value4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value5 != null">
+        value_5 = #{record.value5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value6 != null">
+        value_6 = #{record.value6,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value7 != null">
+        value_7 = #{record.value7,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value8 != null">
+        value_8 = #{record.value8,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value9 != null">
+        value_9 = #{record.value9,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value10 != null">
+        value_10 = #{record.value10,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value11 != null">
+        value_11 = #{record.value11,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value12 != null">
+        value_12 = #{record.value12,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value13 != null">
+        value_13 = #{record.value13,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value14 != null">
+        value_14 = #{record.value14,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value15 != null">
+        value_15 = #{record.value15,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dispOrder != null">
+        disp_order = #{record.dispOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registerId != null">
+        register_id = #{record.registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registTs != null">
+        regist_ts = #{record.registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updaterId != null">
+        updater_id = #{record.updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTs != null">
+        update_ts = #{record.updateTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteFlag != null">
+        delete_flag = #{record.deleteFlag,jdbcType=CHAR},
+      </if>
+      <if test="record.versionNumber != null">
+        version_number = #{record.versionNumber,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update m_gp_code_mst
+    set class_code = #{record.classCode,jdbcType=VARCHAR},
+      code_value = #{record.codeValue,jdbcType=VARCHAR},
+      gp_code_mst_name = #{record.gpCodeMstName,jdbcType=VARCHAR},
+      value_1 = #{record.value1,jdbcType=VARCHAR},
+      value_2 = #{record.value2,jdbcType=VARCHAR},
+      value_3 = #{record.value3,jdbcType=VARCHAR},
+      value_4 = #{record.value4,jdbcType=VARCHAR},
+      value_5 = #{record.value5,jdbcType=VARCHAR},
+      value_6 = #{record.value6,jdbcType=VARCHAR},
+      value_7 = #{record.value7,jdbcType=VARCHAR},
+      value_8 = #{record.value8,jdbcType=VARCHAR},
+      value_9 = #{record.value9,jdbcType=VARCHAR},
+      value_10 = #{record.value10,jdbcType=VARCHAR},
+      value_11 = #{record.value11,jdbcType=VARCHAR},
+      value_12 = #{record.value12,jdbcType=VARCHAR},
+      value_13 = #{record.value13,jdbcType=VARCHAR},
+      value_14 = #{record.value14,jdbcType=VARCHAR},
+      value_15 = #{record.value15,jdbcType=VARCHAR},
+      disp_order = #{record.dispOrder,jdbcType=VARCHAR},
+      register_id = #{record.registerId,jdbcType=VARCHAR},
+      regist_ts = #{record.registTs,jdbcType=TIMESTAMP},
+      updater_id = #{record.updaterId,jdbcType=VARCHAR},
+      update_ts = #{record.updateTs,jdbcType=TIMESTAMP},
+      delete_flag = #{record.deleteFlag,jdbcType=CHAR},
+      version_number = #{record.versionNumber,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCodeMst">
+    update m_gp_code_mst
+    <set>
+      <if test="gpCodeMstName != null">
+        gp_code_mst_name = #{gpCodeMstName,jdbcType=VARCHAR},
+      </if>
+      <if test="value1 != null">
+        value_1 = #{value1,jdbcType=VARCHAR},
+      </if>
+      <if test="value2 != null">
+        value_2 = #{value2,jdbcType=VARCHAR},
+      </if>
+      <if test="value3 != null">
+        value_3 = #{value3,jdbcType=VARCHAR},
+      </if>
+      <if test="value4 != null">
+        value_4 = #{value4,jdbcType=VARCHAR},
+      </if>
+      <if test="value5 != null">
+        value_5 = #{value5,jdbcType=VARCHAR},
+      </if>
+      <if test="value6 != null">
+        value_6 = #{value6,jdbcType=VARCHAR},
+      </if>
+      <if test="value7 != null">
+        value_7 = #{value7,jdbcType=VARCHAR},
+      </if>
+      <if test="value8 != null">
+        value_8 = #{value8,jdbcType=VARCHAR},
+      </if>
+      <if test="value9 != null">
+        value_9 = #{value9,jdbcType=VARCHAR},
+      </if>
+      <if test="value10 != null">
+        value_10 = #{value10,jdbcType=VARCHAR},
+      </if>
+      <if test="value11 != null">
+        value_11 = #{value11,jdbcType=VARCHAR},
+      </if>
+      <if test="value12 != null">
+        value_12 = #{value12,jdbcType=VARCHAR},
+      </if>
+      <if test="value13 != null">
+        value_13 = #{value13,jdbcType=VARCHAR},
+      </if>
+      <if test="value14 != null">
+        value_14 = #{value14,jdbcType=VARCHAR},
+      </if>
+      <if test="value15 != null">
+        value_15 = #{value15,jdbcType=VARCHAR},
+      </if>
+      <if test="dispOrder != null">
+        disp_order = #{dispOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="registerId != null">
+        register_id = #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="registTs != null">
+        regist_ts = #{registTs,jdbcType=TIMESTAMP},
+      </if>
+        updater_id = '汎用コードマスタ管理機能',
+        update_ts = current_timestamp,
+      <if test="deleteFlag != null">
+        delete_flag = #{deleteFlag,jdbcType=CHAR},
+      </if>
+        version_number = version_number + 1,
+    </set>
+    where class_code = #{classCode,jdbcType=VARCHAR}
+      and code_value = #{codeValue,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="jp.co.axio.masterMentsetSystem.model.MgpCodeMst">
+    update m_gp_code_mst
+    set gp_code_mst_name = #{gpCodeMstName,jdbcType=VARCHAR},
+      value_1 = #{value1,jdbcType=VARCHAR},
+      value_2 = #{value2,jdbcType=VARCHAR},
+      value_3 = #{value3,jdbcType=VARCHAR},
+      value_4 = #{value4,jdbcType=VARCHAR},
+      value_5 = #{value5,jdbcType=VARCHAR},
+      value_6 = #{value6,jdbcType=VARCHAR},
+      value_7 = #{value7,jdbcType=VARCHAR},
+      value_8 = #{value8,jdbcType=VARCHAR},
+      value_9 = #{value9,jdbcType=VARCHAR},
+      value_10 = #{value10,jdbcType=VARCHAR},
+      value_11 = #{value11,jdbcType=VARCHAR},
+      value_12 = #{value12,jdbcType=VARCHAR},
+      value_13 = #{value13,jdbcType=VARCHAR},
+      value_14 = #{value14,jdbcType=VARCHAR},
+      value_15 = #{value15,jdbcType=VARCHAR},
+      disp_order = #{dispOrder,jdbcType=VARCHAR},
+      register_id = #{registerId,jdbcType=VARCHAR},
+      regist_ts = #{registTs,jdbcType=TIMESTAMP},
+      updater_id = #{updaterId,jdbcType=VARCHAR},
+      update_ts = #{updateTs,jdbcType=TIMESTAMP},
+      delete_flag = #{deleteFlag,jdbcType=CHAR},
+      version_number = #{versionNumber,jdbcType=INTEGER}
+    where class_code = #{classCode,jdbcType=VARCHAR}
+      and code_value = #{codeValue,jdbcType=VARCHAR}
+  </update>
+</mapper>

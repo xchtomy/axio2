@@ -1,0 +1,83 @@
+// main: ../style.scss
+
+//文字コードはutf-8
+@charset "UTF-8";
+*{
+  box-sizing: border-box;
+}
+html{
+  font-size: 62.5%;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  position: relative;
+  font-family: 'ヒラギノ角ゴシック','Hiragino Sans','Hiragino Kaku Gothic Pro','ヒラギノ角ゴ Pro W3', メイリオ,Osaka,'MS PGothic',sans-serif;
+  line-height: 1.6;
+  background-color: #F4F4F4;
+  @include fontsize(16);
+  min-width:1280px;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+main{
+  position: relative;
+}
+
+
+//header
+.header{
+  padding: 10px 20px 14px;
+  background-color: #fff;
+  &__inner{
+    max-width: 1260px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__img{
+    width: 73px;
+  }
+  &__link{
+    position: relative;
+    margin-top: 2px ;
+    padding: 6px 20px 5px 28px;
+    border-radius: 4px;
+    border: 1px solid $border_color;
+    z-index: 10;
+    letter-spacing: -1px;
+    @include fontsize(12);
+    &::before{
+      position: absolute;
+      content: "";
+      width: 14px;
+      height: 14px;
+      background-image: url("/assets/img/common/icon_logout.svg");
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+    }
+  }
+}
+
+
+//footer
+.footer{
+  text-align: center;
+  padding: 10px 0;
+  background-color: $default_blue;
+  letter-spacing: -0.5px;
+  margin-top: 30px;
+  &__text{
+    color: #fff;
+    @include fontsize(12);
+  }
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/website#">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>login</title>
+  <link href="./css/common.css" th:href="@{/css/common.css}" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/style.css" th:href="@{./assets/css/style.css}">
+</head>
+
+<body style="min-width: auto;">
+  <div class="login">
+    <main class="main">
+      <div class="loginField">
+        <figure class="loginField__img">
+          <img src="/assets/img/common/img_logo01.png" th:src="@{./assets/img/common/img_logo01.png}" alt="axio" width="117" height="57">
+        </figure>
+		<form id="loginInfo" th:action="@{/loginAuthentication}" th:object="${loginInfo}" method="POST">
+          <div class="loginField__textArea">
+            <p class="loginField__textArea__title">ユーザーID</p>
+            <input type="text" title="" placeholder="ユーザーID" value="" class="modInput" th:field="*{inputId}" th:errorclass="axio_field_error">
+            <p class="loginField__textArea__text">&nbsp;</p>
+          </div>
+          <div class="loginField__textArea">
+            <p class="loginField__textArea__title">パスワード</p>
+            <div class="loginField__textArea__eyeWrap">
+              <input type="password" placeholder="パスワードを入力して下さい。" value="" class="modInput" th:field = "*{pass}" th:errorclass="axio_field_error">
+              <i class="icon"></i>
+            </div>
+            <p class="loginField__textArea__text loginField__textArea__text--error" th:text="*{errMessage}">バリデートテキストが入ります。バリデートテキストが入ります。</p>
+			<th:block th:if="${#fields.hasErrors('*')}">
+				<p class="loginField__textArea__text loginField__textArea__text--error" th:if="${#fields.errors('inputId')}" th:errors="*{inputId}" />
+				<p class="loginField__textArea__text loginField__textArea__text--error" th:if="${#fields.errors('pass')}" th:errors="*{pass}" />
+			</th:block>
+
+          </div>
+          <button type="submit" id="btn_submit" class="loginField__button">
+            ログイン
+          </button>
+          <!-- <p class="loginField__link">
+            <a href="" class="loginField__link">パスワードを忘れた方はこちら</a>
+          </p> -->
+        </form>
+      </div>
+    </main>
+  </div>
+  <script src="/assets/js/libs/jquery.min.js" th:src="@{./assets/js/libs/jquery.min.js}"></script>
+  <script src="/assets/js/common.js" th:src="@{./assets/js/common.js}"></script>
+  <script src="/js/login.js" th:src="@{./js/login.js}"></script>
+</body>
+
+</html>

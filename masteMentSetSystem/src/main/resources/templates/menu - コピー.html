@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/website#">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>menu</title>
+  <link rel="stylesheet" href="/assets/css/style.css" th:href="@{./assets/css/style.css}">
+  <link href="./vendor/bootstrap-3.3.7/css/bootstrap.min.css" th:href="@{./vendor/bootstrap-3.3.7/css/bootstrap.min.css}" rel="stylesheet" />
+  <!-- 個別設定CSS -->
+  <link href="./vendor/fontawesome-free-6.1.1-web/css/all.css"
+    th:href="@{./vendor/fontawesome-free-6.1.1-web/css/all.css}" rel="stylesheet">
+</head>
+
+<body>
+  <!-- ヘッダー -->
+  <header id="header" class="header">
+    <div class="header__inner">
+      <figure class="header__img"><img src="./assets/img/common/img_logo01.png"
+          th:src="@{./assets/img/common/img_logo01.png}" alt="AXIO" width="73" height="36"></figure>
+      <a href="./logout" class="header__link">ログアウト</a>
+    </div>
+  </header>
+
+
+  <!--#include virtual="/assets/include/header.html" -->
+  <div id="ActionErrorMessage" class="alert alert-danger asm_alert" th:style="*{errMessage} ? 'display:block' : 'display:none'" role="alert" >
+    <span id="ActionErrorText" th:text="${errMessage}"></span>
+  </div>
+  <div class="menu">
+    <main class="main">
+
+      <!-- タイトルエリア -->
+      <div class="modTitleArea">
+      </div>
+
+      <div class="main__inner">
+        <section class="menuListArea" th:if="${#session != null and #session.getAttribute('LoginController.loginInfo') != null and #session.getAttribute('LoginController.loginInfo').isAdmin}">
+          <h1 class="menuListArea__title"><b>管理者メニュー</b></h1>
+          <h2 class="menuListArea__title">ユーザー管理</h2>
+          <ul class="menuListArea__list">
+              <li class="menuListArea__list__item">
+                <a href="./userList" th:href="@{./userList}" style="text-align: center;">
+                <i class="fa-solid fa-user fa-4x"></i>
+                  <p class="text">利用者検索<br>詳細情報</p>
+                </a>
+              </li>
+          </ul>
+          <h2 class="menuListArea__title">汎用設定</h2>
+          <ul class="menuListArea__list">
+            <li class="menuListArea__list__item">
+              <a href="./GpuMasterSet" th:href="@{./GpuMasterSet}" style="text-align: center;">
+                <i class="fa-solid fa-gear fa-4x"></i>
+                <p class="text">汎用コード設定</p>
+              </a>
+            </li>
+            <li class="menuListArea__list__item menuListArea__list__item--file">
+              <a href="./mgpCsvExport" th:href="@{./mgpCsvExport}" style="text-align: center;">
+                <i class="fa-solid fa-file-csv fa-4x"></i>
+                <p class="text">汎用CSV設定</p>
+              </a>
+            </li>
+          </ul>
+          <h2 class="menuListArea__title">グループ管理</h2>
+          <ul class="menuListArea__list">
+            <li class="menuListArea__list__item">
+              <a href="./authGroupSet" th:href="@{./authGroupSet}" style="text-align: center;">
+                <i class="fa-solid fa-users fa-4x"></i>
+                <p class="text">グループ設定</p><br>
+              </a>
+            </li>
+            <li class="menuListArea__list__item">
+              <a href="./authRuleSet" th:href="@{./authRuleSet}" style="text-align: center;">
+                <i class="fa-solid fa-list-check fa-4x"></i>
+                <p class="text">ルール条件設定</p><br>
+              </a>
+            </li>
+              <li class="menuListArea__list__item">
+                <!-- <a href="./userList" th:href="@{./securityGrpSet}" > -->
+                <a href="./userList" th:href="@{./securityGrpSet}" style="text-align: center;">
+                  <i class="fa-solid fa-user-shield fa-4x"></i>
+                  <p class="text">組織<br>グループ設定</p>
+                </a>
+              </li>
+          </ul>
+        </section>
+      </div>
+    </main>
+  </div>
+  <!--#include virtual="/assets/include/footer.html" -->
+</body>
+
+</html>

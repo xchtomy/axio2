@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.axio.masterMentsetSystem.repository.MOrganizationEntityMapper">
+  <resultMap id="BaseResultMap" type="jp.co.axio.masterMentsetSystem.model.MOrganizationEntity">
+    <id column="company_code" jdbcType="VARCHAR" property="companyCode" />
+    <id column="organization_code" jdbcType="VARCHAR" property="organizationCode" />
+    <result column="start_date" jdbcType="DATE" property="startDate" />
+    <result column="end_date" jdbcType="DATE" property="endDate" />
+    <result column="invalid_flag" jdbcType="CHAR" property="invalidFlag" />
+    <result column="organization_name_en" jdbcType="VARCHAR" property="organizationNameEn" />
+    <result column="organization_name_jp" jdbcType="VARCHAR" property="organizationNameJp" />
+    <result column="location_code" jdbcType="CHAR" property="locationCode" />
+    <result column="location_name_en" jdbcType="VARCHAR" property="locationNameEn" />
+    <result column="location_name_jp" jdbcType="VARCHAR" property="locationNameJp" />
+    <result column="organization_disp_order" jdbcType="VARCHAR" property="organizationDispOrder" />
+    <result column="organization_code_top" jdbcType="VARCHAR" property="organizationCodeTop" />
+    <result column="register_id" jdbcType="VARCHAR" property="registerId" />
+    <result column="regist_ts" jdbcType="TIMESTAMP" property="registTs" />
+    <result column="updater_id" jdbcType="VARCHAR" property="updaterId" />
+    <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    company_code, organization_code, start_date, end_date, invalid_flag, organization_name_en,
+    organization_name_jp, location_code, location_name_en, location_name_jp, organization_disp_order,
+    organization_code_top, register_id, regist_ts, updater_id, update_ts
+  </sql>
+  <select id="selectByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationEntityExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from public.m_organization
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationEntityKey" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from public.m_organization
+    where company_code = #{companyCode,jdbcType=VARCHAR}
+      and organization_code = #{organizationCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationEntityKey">
+    delete from public.m_organization
+    where company_code = #{companyCode,jdbcType=VARCHAR}
+      and organization_code = #{organizationCode,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationEntityExample">
+    delete from public.m_organization
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationEntity">
+    insert into public.m_organization (company_code, organization_code, start_date,
+      end_date, invalid_flag, organization_name_en,
+      organization_name_jp, location_code, location_name_en,
+      location_name_jp, organization_disp_order,
+      organization_code_top, register_id, regist_ts,
+      updater_id, update_ts)
+    values (#{companyCode,jdbcType=VARCHAR}, #{organizationCode,jdbcType=VARCHAR}, #{startDate,jdbcType=DATE},
+      #{endDate,jdbcType=DATE}, #{invalidFlag,jdbcType=CHAR}, #{organizationNameEn,jdbcType=VARCHAR},
+      #{organizationNameJp,jdbcType=VARCHAR}, #{locationCode,jdbcType=CHAR}, #{locationNameEn,jdbcType=VARCHAR},
+      #{locationNameJp,jdbcType=VARCHAR}, #{organizationDispOrder,jdbcType=VARCHAR},
+      #{organizationCodeTop,jdbcType=VARCHAR}, #{registerId,jdbcType=VARCHAR}, #{registTs,jdbcType=TIMESTAMP},
+      #{updaterId,jdbcType=VARCHAR}, #{updateTs,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationEntity">
+    insert into public.m_organization
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="companyCode != null">
+        company_code,
+      </if>
+      <if test="organizationCode != null">
+        organization_code,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="invalidFlag != null">
+        invalid_flag,
+      </if>
+      <if test="organizationNameEn != null">
+        organization_name_en,
+      </if>
+      <if test="organizationNameJp != null">
+        organization_name_jp,
+      </if>
+      <if test="locationCode != null">
+        location_code,
+      </if>
+      <if test="locationNameEn != null">
+        location_name_en,
+      </if>
+      <if test="locationNameJp != null">
+        location_name_jp,
+      </if>
+      <if test="organizationDispOrder != null">
+        organization_disp_order,
+      </if>
+      <if test="organizationCodeTop != null">
+        organization_code_top,
+      </if>
+      <if test="registerId != null">
+        register_id,
+      </if>
+      <if test="registTs != null">
+        regist_ts,
+      </if>
+      <if test="updaterId != null">
+        updater_id,
+      </if>
+      <if test="updateTs != null">
+        update_ts,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="companyCode != null">
+        #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationCode != null">
+        #{organizationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="invalidFlag != null">
+        #{invalidFlag,jdbcType=CHAR},
+      </if>
+      <if test="organizationNameEn != null">
+        #{organizationNameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationNameJp != null">
+        #{organizationNameJp,jdbcType=VARCHAR},
+      </if>
+      <if test="locationCode != null">
+        #{locationCode,jdbcType=CHAR},
+      </if>
+      <if test="locationNameEn != null">
+        #{locationNameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="locationNameJp != null">
+        #{locationNameJp,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationDispOrder != null">
+        #{organizationDispOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationCodeTop != null">
+        #{organizationCodeTop,jdbcType=VARCHAR},
+      </if>
+      <if test="registerId != null">
+        #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="registTs != null">
+        #{registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updaterId != null">
+        #{updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTs != null">
+        #{updateTs,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationEntityExample" resultType="java.lang.Long">
+    select count(*) from public.m_organization
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update public.m_organization
+    <set>
+      <if test="record.companyCode != null">
+        company_code = #{record.companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizationCode != null">
+        organization_code = #{record.organizationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startDate != null">
+        start_date = #{record.startDate,jdbcType=DATE},
+      </if>
+      <if test="record.endDate != null">
+        end_date = #{record.endDate,jdbcType=DATE},
+      </if>
+      <if test="record.invalidFlag != null">
+        invalid_flag = #{record.invalidFlag,jdbcType=CHAR},
+      </if>
+      <if test="record.organizationNameEn != null">
+        organization_name_en = #{record.organizationNameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizationNameJp != null">
+        organization_name_jp = #{record.organizationNameJp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.locationCode != null">
+        location_code = #{record.locationCode,jdbcType=CHAR},
+      </if>
+      <if test="record.locationNameEn != null">
+        location_name_en = #{record.locationNameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.locationNameJp != null">
+        location_name_jp = #{record.locationNameJp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizationDispOrder != null">
+        organization_disp_order = #{record.organizationDispOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizationCodeTop != null">
+        organization_code_top = #{record.organizationCodeTop,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registerId != null">
+        register_id = #{record.registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registTs != null">
+        regist_ts = #{record.registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updaterId != null">
+        updater_id = #{record.updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTs != null">
+        update_ts = #{record.updateTs,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update public.m_organization
+    set company_code = #{record.companyCode,jdbcType=VARCHAR},
+      organization_code = #{record.organizationCode,jdbcType=VARCHAR},
+      start_date = #{record.startDate,jdbcType=DATE},
+      end_date = #{record.endDate,jdbcType=DATE},
+      invalid_flag = #{record.invalidFlag,jdbcType=CHAR},
+      organization_name_en = #{record.organizationNameEn,jdbcType=VARCHAR},
+      organization_name_jp = #{record.organizationNameJp,jdbcType=VARCHAR},
+      location_code = #{record.locationCode,jdbcType=CHAR},
+      location_name_en = #{record.locationNameEn,jdbcType=VARCHAR},
+      location_name_jp = #{record.locationNameJp,jdbcType=VARCHAR},
+      organization_disp_order = #{record.organizationDispOrder,jdbcType=VARCHAR},
+      organization_code_top = #{record.organizationCodeTop,jdbcType=VARCHAR},
+      register_id = #{record.registerId,jdbcType=VARCHAR},
+      regist_ts = #{record.registTs,jdbcType=TIMESTAMP},
+      updater_id = #{record.updaterId,jdbcType=VARCHAR},
+      update_ts = #{record.updateTs,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationEntity">
+    update public.m_organization
+    <set>
+      <if test="startDate != null">
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="invalidFlag != null">
+        invalid_flag = #{invalidFlag,jdbcType=CHAR},
+      </if>
+      <if test="organizationNameEn != null">
+        organization_name_en = #{organizationNameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationNameJp != null">
+        organization_name_jp = #{organizationNameJp,jdbcType=VARCHAR},
+      </if>
+      <if test="locationCode != null">
+        location_code = #{locationCode,jdbcType=CHAR},
+      </if>
+      <if test="locationNameEn != null">
+        location_name_en = #{locationNameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="locationNameJp != null">
+        location_name_jp = #{locationNameJp,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationDispOrder != null">
+        organization_disp_order = #{organizationDispOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationCodeTop != null">
+        organization_code_top = #{organizationCodeTop,jdbcType=VARCHAR},
+      </if>
+      <if test="registerId != null">
+        register_id = #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="registTs != null">
+        regist_ts = #{registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updaterId != null">
+        updater_id = #{updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTs != null">
+        update_ts = #{updateTs,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where company_code = #{companyCode,jdbcType=VARCHAR}
+      and organization_code = #{organizationCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationEntity">
+    update public.m_organization
+    set start_date = #{startDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      invalid_flag = #{invalidFlag,jdbcType=CHAR},
+      organization_name_en = #{organizationNameEn,jdbcType=VARCHAR},
+      organization_name_jp = #{organizationNameJp,jdbcType=VARCHAR},
+      location_code = #{locationCode,jdbcType=CHAR},
+      location_name_en = #{locationNameEn,jdbcType=VARCHAR},
+      location_name_jp = #{locationNameJp,jdbcType=VARCHAR},
+      organization_disp_order = #{organizationDispOrder,jdbcType=VARCHAR},
+      organization_code_top = #{organizationCodeTop,jdbcType=VARCHAR},
+      register_id = #{registerId,jdbcType=VARCHAR},
+      regist_ts = #{registTs,jdbcType=TIMESTAMP},
+      updater_id = #{updaterId,jdbcType=VARCHAR},
+      update_ts = #{updateTs,jdbcType=TIMESTAMP}
+    where company_code = #{companyCode,jdbcType=VARCHAR}
+      and organization_code = #{organizationCode,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="selectMOrganizationByAuthOrgCodeList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from m_organization
+    where invalid_flag = '0'
+    <if test="!searchFlag">
+      <foreach item="codeMap" index="index" collection="codeMapList" open="and (" separator=" or " close=")">
+        <foreach item="value" index="key" collection="codeMap" open="(" separator=" and " close=")">
+          <if test="key == 'companyCode'">
+            company_code = #{value,jdbcType=VARCHAR}
+          </if>
+          <if test="key == 'organizationCode'">
+            organization_code = #{value,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </foreach>
+    </if>
+    <if test="searchFlag">
+      and (
+        (
+        company_code like '%' || #{searchCompanyCode,jdbcType=VARCHAR} || '%'
+        and organization_code like '%' || #{searchDepartmentCode,jdbcType=VARCHAR} || '%'
+        and (organization_name_jp like '%' || #{searchDepartmentName,jdbcType=VARCHAR} || '%' or organization_name_en like '%' || #{searchDepartmentName,jdbcType=VARCHAR} || '%')
+       	<if test="searchStartDateYmd != null and searchStartDateYmd != ''">
+       		<![CDATA[and TO_DATE(#{searchStartDateYmd,jdbcType=VARCHAR}, 'yyyy/MM/dd') between start_date and end_date ]]>
+       	</if>
+        )
+        <foreach item="codeMap" index="index" collection="codeMapList" open="or (" separator=" or " close=")">
+          <foreach item="value" index="key" collection="codeMap" open="(" separator=" and " close=")">
+            <if test="key == 'companyCode'">
+              company_code = #{value,jdbcType=VARCHAR}
+            </if>
+            <if test="key == 'organizationCode'">
+              organization_code = #{value,jdbcType=VARCHAR}
+            </if>
+          </foreach>
+        </foreach>
+        )
+    </if>
+    order by company_code, organization_code
+  </select>
+</mapper>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>権限ルール条件設定画面</title>
+<link href="./vendor/jquery-ui-1.12.1/jquery-ui.css" th:href="@{./vendor/jquery-ui-1.12.1/jquery-ui.css}" rel="stylesheet" />
+<link href="./vendor/bootstrap-3.3.7/css/bootstrap.min.css" th:href="@{./vendor/bootstrap-3.3.7/css/bootstrap.min.css}" rel="stylesheet" />
+<link href="./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css" th:href="@{./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css}" rel="stylesheet" />
+<link href="./vendor/datatables/dataTables.bootstrap.css" th:href="@{./vendor/datatables/dataTables.bootstrap.css}" rel="stylesheet" />
+<link href="./css/common.css" th:href="@{./css/common.css}" rel="stylesheet" />
+
+<link href="./assets/css/header_footer.css" th:href="@{./assets/css/header_footer.css}" rel="stylesheet" />
+
+<!-- common's javascript start -->
+<script type="text/javascript" src="./vendor/jquery-3.2.1.js" th:src="@{./vendor/jquery-3.2.1.js}"></script>
+<script type="text/javascript" src="./vendor/jquery-ui-1.12.1/jquery-ui.min.js" th:src="@{./vendor/jquery-ui-1.12.1/jquery-ui.min.js}"></script>
+<script type="text/javascript" src="./vendor/datatables/jquery.dataTables.js" th:src="@{./vendor/datatables/jquery.dataTables.js}"></script>
+<script type="text/javascript" src="./vendor/datatables/dataTables.bootstrap.js" th:src="@{./vendor/datatables/dataTables.bootstrap.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/js/bootstrap.min.js" th:src="@{./vendor/bootstrap-3.3.7/js/bootstrap.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js}"></script>
+<script type="text/javascript" src="./vendor/knockout-3.4.2.js" th:src="@{./vendor/knockout-3.4.2.js}"></script>
+<script type="text/javascript" src="./js/axio_common.js" th:src="@{./js/axio_common.js}"></script>
+<!-- common's javascript end -->
+<script>
+jQuery(function($){
+
+	$("#ui-datepicker-div").remove();
+	$("#startDate").datepicker({
+			 showButtonPanel: false		// 「Today」「Done」ボタン 無効
+			,changeMonth: false 		// 「月」リスト選択 無効
+			,changeYear: false			// 「年」リスト選択 無効
+			,dateFormat: "yy/mm/dd"		// 日付フォーマット yyyy/MM/dd
+			,firstDay: 0 			 	// 週の最初の曜日 0:日曜日
+			, beforeShow: function (elem,dp) {
+  	            dp.dpDiv.css('z-index', '10');
+  	        }
+	});
+	$("#endDate").datepicker({
+			 showButtonPanel: false		// 「Today」「Done」ボタン 無効
+			,changeMonth: false 		// 「月」リスト選択 無効
+			,changeYear: false			// 「年」リスト選択 無効
+			,dateFormat: "yy/mm/dd"		// 日付フォーマット yyyy/MM/dd
+			,firstDay: 0 			 	// 週の最初の曜日 0:日曜日
+			, beforeShow: function (elem,dp) {
+  	            dp.dpDiv.css('z-index', '10');
+  	        }
+	});
+});
+</script>
+<script src="./js/authRuleSet.js" th:src="@{./js/authRuleSet.js}"></script>
+<style type="text/css">
+.ar_textarea {
+ resize: none;
+ row:2;
+}
+.ar_topline {
+ border-top: 2px #996600 solid;
+}
+.ar_bottomline {
+ border-bottom: 2px #996600 solid;
+};
+.ar_rulelist {
+ margin-top:-15px;
+ padding-top:0px;
+ padding-bottom:0px;
+};
+</style>
+</head>
+
+<!-- 画面ボーディ -->
+<body>
+<!-- ダイヤログモーダル表示エリア -->
+ <div id="listModalArea">
+  <div class="modal fade" id="listModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" style="width:1100px;">
+	<div class="modal-content" style="width:1100px;height:800px;overflow-y:auto">
+		<form id="dialogParamForm" name="dialogParamForm" >
+	        <input type="hidden" id="callFrom" name="callFrom" value="" />
+	        <input type="hidden" id="callParameter" name="callParameter" value="" />
+	        <input type="hidden" id="callReturn" name = "callReturn" value="" />
+	    </form>
+		<div id="modal_dailog_body">
+    	</div>
+	</div>
+    </div>
+  </div>
+ </div>
+
+		<!-- ヘッダーエリア -->
+     <header id="header" class="header">
+        <div class="header__inner">
+          <figure class="header__img"><img src="./assets/img/common/img_logo01.png" th:src="@{./assets/img/common/img_logo01.png}" alt="AXIO" width="73" height="36"></figure>
+          <a href="./logout" class="header__link">ログアウト</a>
+        </div>
+      </header>
+
+      <!-- タイトルエリア -->
+      <div class="modTitleArea">
+        <div class="modTitleArea__inner">
+          <h1 class="modTitleArea__title">権限管理機能：ルール条件設定画面</h1>
+          <a class="modTitleArea__prevButton" id="btn_logout" href="./login"  th:href="@{./login}"><span>戻る</span></a>
+        </div>
+      </div>
+
+  <div id="AuthRuleConditionSet" class="container">
+  <div style="display:none;">
+   <div id="axioMessageDialog" title="完了" th:if="${axioMessage}">
+        <span th:text="${axioMessage}"></span>
+   </div>
+  </div>
+  <div id="contentAera" layout:fragment="content" >
+    <form id="authRuleSetForm" role="form-inline" action="./authRuleSet" th:action="@{/}" th:object="${AuthRuleSetForm}" method="post" class="form-horizontal" >
+     <div id="ActionErrorMessage" class="col-sm-12 alert alert-danger asm_alert" th:style="*{errMessage} ? 'display:block' : 'display:none'" role="alert" >
+        <span id="ActionErrorText" th:text="*{errMessage}"></span>
+     </div>
+      <ul th:if="${#fields.hasErrors('*')}" class="col-sm-12 alert alert-danger asm_alert" role="alert">
+      <!-- 	<li th:each="e : ${#fields.detailedErrors()}" th:text="${e.global}? ${'*:' + e.message } : ${e.fieldName + ':' + e.message}" /> -->
+      	<li th:each="e : ${#fields.errors('*')}" th:text="${e}" />
+      </ul>
+      <div class="row ">
+                <div class="form-inline " >
+                    <div class="asm_ctrl text-right col-xs-12" style="margin-top: 10px;">
+                        <button type="button" id="ruleSearch" name="ruleAction" value="ruleSearch" class="btn btn-info axio_btn_middle" >ルール検索</button>
+                        <button type="button" id="ruleUpdate" name="ruleAction" value="ruleUpdate" class="btn btn-info axio_btn_middle" >ルール保存</button>
+                        <button type="button" id="ruleDelete" name="ruleAction" value="ruleDelete" class="btn btn-info axio_btn_middle"
+                        	th:attr="disabled=*{#strings.isEmpty(ruleId)} ? true : false" >ルール削除</button>
+                        <button type="button" id="ruleClear" name="ruleAction" value="ruleClear" class="btn btn-info axio_btn_middle" >クリア</button>
+                    </div>
+                </div>
+          <fieldset class="scheduler-border">
+                <legend class="scheduler-border " >ルール編集</legend>
+
+                <div class="col-xs-12" >
+                <div class="form-group form-group-flex">
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center "><label class="control-label " >ルールID</label></div>
+                    <div class="td-color3 col-xs-2  ">
+                        <input  type="text"  id="ruleId" name="ruleId" class="form-control input-sm" readonly="readonly" th:field="*{ruleId}" />
+                    </div>
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center "><label class="control-label " >ルール概要<span class="font-red"> (※)</span></label></div>
+                    <div class="td-color3 col-xs-6  ">
+                        <input type="text" id="ruleName" th:maxlength="200" th:errorclass="axio_field_error" class="form-control input-sm" th:field="*{ruleName}" data-ignore-prohibited-char="yes" style="ime-mode:active;"/>
+                    </div>
+                </div>
+                <div class="form-group form-group-flex">
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center"><label class="control-label " >備考</label></div>
+                    <div class="td-color3 col-xs-10 ">
+                        <input type="text"  id="ruleNote" th:maxlength="1000" class="form-control input-sm " th:field="*{ruleNote}" data-ignore-prohibited-char="yes" style="ime-mode:active;"/>
+                    </div>
+                </div>
+                <div class="form-group form-group-flex">
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center "><label class="control-label " >適用開始日<span class="font-red"> (※)</span></label></div>
+                    <div class="td-color3 col-xs-4  ">
+                        <input type="text" id="startDate" th:maxlength="10" th:errorclass="axio_field_error" class="form-control input-sm" th:field="*{startDate}"
+                        	placeholder="yyyy/mm/dd" autocomplete="off" style="ime-mode: inactive;"/>
+                    </div>
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center"><label class="control-label " >適用終了日<span class="font-red"> (※)</span></label></div>
+                    <div class="td-color3 col-xs-4 ">
+                        <input type="text" id="endDate" th:maxlength="10" th:errorclass="axio_field_error" class="form-control input-sm " th:field="*{endDate}"
+                        	placeholder="yyyy/mm/dd" autocomplete="off" style="ime-mode: inactive;"/>
+                    </div>
+                </div>
+                </div>
+        </fieldset>
+    </div>
+
+    <div class="row">
+        <fieldset class="scheduler-border">
+        　		<legend class="scheduler-border " >設定条件一覧編集</legend>
+            <div class="col-xs-12">
+                <div class="form-group form-group-flex" >
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center"><label class="control-label  ">ルール条件</label></div>
+                    <div class="td-color3 col-xs-7 form-group-flex middle-center">
+                        <select id="ruleSelectOpt" name="ruleSelectOpt" class="form-control input-sm "  >
+                            <option th:each="opt : *{ruleSelectList}" th:value="${opt.OptNo}+'-'+${opt.OptKbn}" th:selected="${opt.optValue == AuthRuleSetForm.currentOptValue}"  th:inline="text">[[${opt.optValue}]]</option>
+                        </select>
+                        <input type="hidden" id="currentOptKbn" name="currentOptKbn" th:field="*{currentOptKbn}" />
+                        <input type="hidden" id="currentOptNo" name="currentOptNo" th:field="*{currentOptNo}" />
+                        <input type="hidden" id="currentOptValue" name="currentOptValue" th:field="*{currentOptValue}" />
+						<th:block th:each="rs, status : *{ruleSelectList}">
+	               	    	<input type="hidden" th:attr="name='ruleSelectList['+__${status.index}__+'].OptNo'" th:value="${rs.OptNo}"/>
+	               	    	<input type="hidden" th:attr="name='ruleSelectList['+__${status.index}__+'].OptKbn'" th:value="${rs.OptKbn}"/>
+	               	    	<input type="hidden" th:attr="name='ruleSelectList['+__${status.index}__+'].optValue'" th:value="${rs.optValue}"/>
+						</th:block>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="form-inline " >
+                    		<div class="asm_ctrl text-right " >
+                     		<button type="button" id="updateToList" name="updateToList" class="btn btn-info btn-xs">一覧に反映</button>
+                        	<button type="button" id="deleteFrList" name="deleteFrList" class="btn btn-info btn-xs"
+                        		th:attr="disabled=*{currentOptNo=='0'} ? true : false" >一覧から削除</button>
+                  		    </div>
+                		</div>
+                    </div>
+               </div>
+               <div class="form-group form-group-flex">
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center "><label class="control-label " >会社</label></div>
+                    <div class="td-color3 col-xs-8 ">
+                     <textarea id="companyCode" class="form-control input-sm ar_textarea" th:field="*{companyCode}" readonly="readonly"></textarea>
+                    </div>
+                    <div class="col-xs-2">
+                    	<button type="button" class="btn btn-default btn-xs" id="companySelect">
+  							<span class="glyphicon glyphicon-search" aria-hidden="true"></span> 会社コード選択
+						</button>
+					</div>
+               </div>
+               <div class="form-group form-group-flex">
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center "><label class="control-label " >雇用区分</label></div>
+                    <div class="td-color3 col-xs-8 ">
+                        <textarea id="employmentCode" class="form-control input-sm ar_textarea" th:field="*{employmentCode}" readonly="readonly"></textarea>
+                    </div>
+                    <div class="col-xs-2">
+                    	<button type="button" class="btn btn-default btn-xs" id="employmentKbnSelect">
+  							<span class="glyphicon glyphicon-search" aria-hidden="true"></span> 雇用コード選択
+						</button>
+					</div>
+               </div>
+               <div class="form-group form-group-flex">
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center "><label class="control-label " >組織</label></div>
+                    <div class="td-color3 col-xs-8  ">
+                        <textarea  id="organizationCode" class="form-control input-sm ar_textarea" th:field="*{organizationCode}" readonly="readonly"></textarea>
+                    </div>
+                    <div class="col-xs-2">
+                    	<button type="button" class="btn btn-default btn-xs" id="organizationSelect">
+  							<span class="glyphicon glyphicon-search" aria-hidden="true"></span> 組織コード選択
+						</button>
+					</div>
+               </div>
+               <div class="form-group form-group-flex">
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center "><label class="control-label " >役職</label></div>
+                    <div class="td-color3 col-xs-8  ">
+                        <textarea  id="positionCode" class="form-control input-sm ar_textarea" th:field="*{positionCode}" readonly="readonly"></textarea>
+                    </div>
+                    <div class="col-xs-2">
+                    	<button type="button" class="btn btn-default btn-xs" id="postionSelect">
+  							<span class="glyphicon glyphicon-search" aria-hidden="true"></span> 役職コード選択
+						</button>
+					</div>
+               </div>
+               <div></div>
+           </div>
+    	</fieldset>
+    </div>
+    <div class="row">
+        <fieldset class="scheduler-border">
+        <legend class="scheduler-border ">設定済条件一覧</legend>
+		<table class="table table-bordered asm_data_table text-center ar_rulelist" style="margin-top:-15px; padding-top:0px; padding-bottom:0px;" >
+        	<thead >
+           		<tr class="asm_data_table_header">
+                  	<th class="text-center" style="width:8%;">NO</th>
+                  	<th class="text-center" style="width:12%;">区分</th>
+                  	<th class="text-center" style="width:40%;">付与条件</th>
+                  	<th class="text-center" style="width:40%;">除外条件</th>
+              	</tr>
+           	</thead>
+            <tbody id="ruleConditionList" >
+			<th:block th:each="rt, status : *{ruleConditionList}">
+               	<tr class="ar_topline">
+                   	<td rowspan="4" class="asm_data_table_header text-center" th:id="${'ruleCondition_'+ status.index}" style="vertical-align:middle;">[['条件'+${status.index+1}]]
+               	    	<input type="hidden" th:id="${'hcruleId_'+ status.index}"
+               	    		th:attr="name='ruleConditionList['+__${status.index}__+'].ruleId'" th:value="${rt.ruleId}"/>
+               	    	<input type="hidden" th:id="${'hruleDetailNo_'+ status.index}"
+               	    		th:attr="name='ruleConditionList['+__${status.index}__+'].ruleDetailNo'" th:value="${rt.ruleDetailNo}"/>
+                   	</td>
+                   	<td class="asm_data_table_header text-left">会社</td>
+                   	<td class="master-back-grey text-left" th:id="${'companySet_'+ status.index}" style="background-color: #66FFFF;" >[[${rt.ruleSetCompany}]]
+               	    	<input type="hidden" th:id="${'hcompanySet_'+ status.index}"
+               	    		th:attr="name='ruleConditionList['+__${status.index}__+'].ruleSetCompany'" th:value="${rt.ruleSetCompany}"/>
+                   	</td>
+                   	<td class="master-back-grey text-left" th:id="${'companyExt_'+ status.index}" style="background-color: #EEEEEE;" >[[${rt.ruleExtCompany}]]
+               	    	<input type="hidden" th:id="${'hcompanyExt_'+ status.index}"
+               	    		th:attr="name='ruleConditionList['+__${status.index}__+'].ruleExtCompany'" th:value="${rt.ruleExtCompany}"/>
+                   	</td>
+               	</tr>
+               	<tr >
+                   	<td class="asm_data_table_header text-left" >雇用区分</td>
+                   	<td class="master-back-grey text-left" th:id="${'employmentSet_'+ status.index}" style="background-color: #66FFFF;" >[[${rt.ruleSetEmployment}]]
+               	    	<input type="hidden" th:id="${'hemploymentSet_'+ status.index}"
+               	    		th:attr="name='ruleConditionList['+__${status.index}__+'].ruleSetEmployment'" th:value="${rt.ruleSetEmployment}"/>
+                   	</td>
+                   	<td class="master-back-grey text-left" th:id="${'employmentExt_'+ status.index}" style="background-color: #EEEEEE;" >[[${rt.ruleExtEmployment}]]
+               	    	<input type="hidden" th:id="${'hemploymentExt_'+ status.index}"
+               	    		th:attr="name='ruleConditionList['+__${status.index}__+'].ruleExtEmployment'" th:value="${rt.ruleExtEmployment}"/>
+                   	</td>
+               	</tr>
+               	<tr >
+                   	<td class="asm_data_table_header text-left" >組織</td>
+                   	<td class="master-back-grey text-left" th:id="${'organizationSet_'+ status.index}" style="background-color: #66FFFF;" >[[${rt.ruleSetOrganization}]]
+               	    	<input type="hidden" th:id="${'horganizationSet_'+ status.index}"
+               	    		th:attr="name='ruleConditionList['+__${status.index}__+'].ruleSetOrganization'" th:value="${rt.ruleSetOrganization}"/>
+                   	</td>
+                   	<td class="master-back-grey text-left" th:id="${'organizationExt_'+ status.index}" style="background-color: #EEEEEE;" >[[${rt.ruleExtOrganization}]]
+               	    	<input type="hidden" th:id="${'horganizationExt_'+ status.index}"
+               	    		th:attr="name='ruleConditionList['+__${status.index}__+'].ruleExtOrganization'" th:value="${rt.ruleExtOrganization}"/>
+                   	</td>
+               	</tr>
+               	<tr class="ar_bottomline">
+                   	<td class="asm_data_table_header text-left" >役職</td>
+                   	<td class="master-back-grey text-left" th:id="${'positionSet_'+ status.index}" style="background-color: #66FFFF;" >[[${rt.ruleSetPosition}]]
+               	    	<input type="hidden" th:id="${'hpositionSet_'+ status.index}"
+               	    		th:attr="name='ruleConditionList['+__${status.index}__+'].ruleSetPosition'" th:value="${rt.ruleSetPosition}"/>
+                   	</td>
+                   	<td class="master-back-grey text-left" th:id="${'positionExt_'+ status.index}" style="background-color: #EEEEEE;" >[[${rt.ruleExtPosition}]]
+               	    	<input type="hidden" th:id="${'hpositionExt_'+ status.index}"
+               	    		th:attr="name='ruleConditionList['+__${status.index}__+'].ruleExtPosition'" th:value="${rt.ruleExtPosition}"/>
+                   	</td>
+               	</tr>
+			</th:block>
+           	</tbody>
+　　　　　　		</table>
+        </fieldset>
+    </div>
+    <div class="row">
+        <fieldset class="scheduler-border">
+        <legend class="scheduler-border " style="padding-bottom:0px;">設定済ユーザー条件</legend>
+            <div class="col-xs-12">
+               <div class="form-group form-group-flex">
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center "><label class="control-label " >ユーザー付与</label></div>
+                    <div class="td-color3 col-xs-8  ">
+                        <textarea  id="userCode" class="form-control input-sm ar_textarea" th:field="*{userCode}" readonly="readonly"></textarea>
+                    </div>
+                    <div class="col-xs-2">
+                    	<button type="button" class="btn btn-default btn-xs" id="userSelect" th:attr="disabled=*{userSetFlag=='0'} ? true : false">
+  							<span class="glyphicon glyphicon-search" aria-hidden="true"></span> ユーザーID選択
+						</button>
+					</div>
+               </div>
+            </div>
+            <div class="col-xs-12">
+               <div class="form-group form-group-flex">
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center "><label class="control-label " >ユーザー除外</label></div>
+                    <div class="td-color3 col-xs-8  ">
+                        <textarea  id="userExtCode" class="form-control input-sm ar_textarea" th:field="*{userExtCode}" readonly="readonly"></textarea>
+                    </div>
+                    <div class="col-xs-2">
+                    	<button type="button" class="btn btn-default btn-xs" id="userExtSelect">
+  							<span class="glyphicon glyphicon-search" aria-hidden="true"></span> ユーザーID選択
+						</button>
+					</div>
+               </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="row">
+        <fieldset class="scheduler-border">
+        <legend class="scheduler-border " style="padding-bottom:0px;">適用済権限グループ一覧</legend>
+            <div class="col-xs-12" style="margin-top:-45px; padding-top:0px; padding-bottom:0px;">
+               <div class="form-group form-group-flex" style="padding-top:0px; padding-bottom:0px;" >
+            	    <div class="col-xs-3"></div>
+                    <div class="col-xs-11 middle-left ">
+                        <div class="form-inline " >
+                    		<div class="asm_ctrl text-right " >
+		                    	<button type="button" class="btn btn-default btn-sm" id="groupSelect">
+		  							<span class="glyphicon glyphicon-search" aria-hidden="true"></span> グループ選択
+								</button>
+                  		    </div>
+                		</div>
+                    </div>
+            	</div>
+            </div>
+          	<table class="table table-bordered asm_data_table text-center" style="margin-top:-15px; padding-top:0px; padding-bottom:0px;">
+          	<thead >
+              	 <tr class="asm_data_table_header">
+                  	<th class="text-center" style="width:20%;">NO</th>
+                  	<th class="text-center" style="width:20%;">グループID</th>
+                  	<th class="text-center" style="width:38%;">グループ名</th>
+                  	<th class="text-center" style="width:22%;">グループ適用期間</th>
+              	</tr>
+           	</thead>
+           	<tbody id="ruleGroupList">
+           	<th:block th:each="rt, status : *{ruleGroupList}">
+               	<tr >
+                   	<td  th:id="${'ruleGroup_'+ status.index}" class="asm_data_table_header text-center">[['グループ'+${status.index+1}]]
+               	    	<input type="hidden" th:id="${'hgruleId_'+ status.index}"
+               	    		th:attr="name='ruleGroupList['+__${status.index}__+'].ruleId'" th:value="${rt.ruleId}"/>
+                   	</td>
+                   	<td class="master-back-grey text-left" th:id="${'groupId_'+ status.index}" style="background-color: #66FFFF;">[[${rt.groupId}]]
+                   		<span th:if="${rt.delFlg}" style="color:red;" class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+                   	   	<input type="hidden" th:id="${'hgroupId_'+ status.index}"
+                   	   		th:attr="name='ruleGroupList['+__${status.index}__+'].groupId'"  th:value="${rt.groupId}"/>
+                   	   	<input type="hidden" th:id="${'hdelFlg_'+ status.index}"
+                   	   		th:attr="name='ruleGroupList['+__${status.index}__+'].delFlg'"  th:value="${rt.delFlg}"/>
+                    	</td>
+                   	<td class="master-back-grey text-left" th:id="${'groupNameJP_'+ status.index}" style="background-color: #66FFFF;" >[[${rt.groupNameJP}]]
+                   	   	<input type="hidden" th:id="${'hgroupNameJP_'+ status.index}"
+                   	   		th:attr="name='ruleGroupList['+__${status.index}__+'].groupNameJP'"  th:value="${rt.groupNameJP}"/>
+                   	   	<input type="hidden" th:id="${'hgroupNameEn_'+ status.index}"
+                   	   		th:attr="name='ruleGroupList['+__${status.index}__+'].groupNameEn'"  th:value="${rt.groupNameEn}"/>
+                   	</td>
+                   	<td class="master-back-grey text-left" th:id="${'term_'+ status.index}" style="background-color: #66FFFF;" >[[${rt.startDate+'-'+rt.endDate}]]
+               	    	<input type="hidden" th:id="${'hstartDate_'+ status.index}"
+               	    		th:attr="name='ruleGroupList['+__${status.index}__+'].startDate'"  th:value="${rt.startDate}"/>
+               	    	<input type="hidden" th:id="${'hendDate_'+ status.index}"
+               	    		th:attr="name='ruleGroupList['+__${status.index}__+'].endDate'"  th:value="${rt.endDate}"/>
+                   	</td>
+               	</tr>
+            </th:block>
+           	</tbody>
+       　　　　　　　	</table>
+        </fieldset>
+    </div>
+         <input type="hidden" id="accessToken" name="accessToken" th:field="*{accessToken}" />
+         <input type="hidden" id="searchFlg" name="searchFlg" th:field="*{searchFlg}" />
+         <input type="hidden" id="editFlg" name="editFlg" th:field="*{editFlg}"/>
+         <input type="hidden" id="changedFlg" name="changedFlg" th:field="*{changedFlg}" />
+         <input type="hidden" id="reflectFunction" name = "reflectFunction" th:field="*{reflectFunction}" />
+         <input type="hidden" id="paramVal" name = "paramVal" th:field="*{paramVal}" />
+         <input type="hidden" id="userSetFlag" name="userSetFlag" th:field="*{userSetFlag}" />
+    </form>
+    </div>
+    </div>
+
+		<!-- フッター -->
+    <footer id="footer" class="footer">
+			<p class="footer__text">Copyright &copy; AXIO corporation. All Rights Reserved.</p>
+		</footer>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.axio.masterMentsetSystem.repository.VLoginInfoEntityMapper">
+  <resultMap id="BaseResultMap" type="jp.co.axio.masterMentsetSystem.model.VLoginInfoEntity">
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
+    <result column="organization_code" jdbcType="VARCHAR" property="organizationCode" />
+    <result column="position_code" jdbcType="VARCHAR" property="positionCode" />
+    <result column="user_organization_honmu_flag" jdbcType="CHAR" property="userOrganizationHonmuFlag" />
+    <result column="user_organization_start_date" jdbcType="DATE" property="userOrganizationStartDate" />
+    <result column="user_organization_end_date" jdbcType="DATE" property="userOrganizationEndDate" />
+  </resultMap>
+  <select id="selectLoginInfoByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    user_id
+    , company_code
+    , organization_code
+    , position_code
+    , user_organization_honmu_flag
+    , user_organization_start_date
+    , user_organization_end_date
+    from
+    v_login_info
+    where
+    user_id = #{userid, jdbcType=VARCHAR}
+    order by
+      user_organization_honmu_flag desc
+    , user_organization_start_date asc
+    , user_organization_end_date asc
+  </select>
+</mapper>

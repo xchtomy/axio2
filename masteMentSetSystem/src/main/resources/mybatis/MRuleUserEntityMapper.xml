@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.axio.masterMentsetSystem.repository.MRuleUserEntityMapper">
+  <resultMap id="BaseResultMap" type="jp.co.axio.masterMentsetSystem.model.MRuleUserEntity">
+    <id column="rule_id" jdbcType="VARCHAR" property="ruleId" />
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <id column="exclusion_flag" jdbcType="CHAR" property="exclusionFlag" />
+    <result column="register_id" jdbcType="VARCHAR" property="registerId" />
+    <result column="regist_ts" jdbcType="TIMESTAMP" property="registTs" />
+    <result column="updater_id" jdbcType="VARCHAR" property="updaterId" />
+    <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    rule_id, user_id, exclusion_flag, register_id, regist_ts, updater_id, update_ts
+  </sql>
+  <select id="selectByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleUserEntityExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from public.m_rule_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleUserEntityKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from public.m_rule_user
+    where rule_id = #{ruleId,jdbcType=VARCHAR}
+      and user_id = #{userId,jdbcType=VARCHAR}
+      and exclusion_flag = #{exclusionFlag,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleUserEntityKey">
+    delete from public.m_rule_user
+    where rule_id = #{ruleId,jdbcType=VARCHAR}
+      and user_id = #{userId,jdbcType=VARCHAR}
+      and exclusion_flag = #{exclusionFlag,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleUserEntityExample">
+    delete from public.m_rule_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleUserEntity">
+    insert into public.m_rule_user (rule_id, user_id, exclusion_flag, 
+      register_id, regist_ts, updater_id, 
+      update_ts)
+    values (#{ruleId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{exclusionFlag,jdbcType=CHAR}, 
+      #{registerId,jdbcType=VARCHAR}, #{registTs,jdbcType=TIMESTAMP}, #{updaterId,jdbcType=VARCHAR}, 
+      #{updateTs,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleUserEntity">
+    insert into public.m_rule_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ruleId != null">
+        rule_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="exclusionFlag != null">
+        exclusion_flag,
+      </if>
+      <if test="registerId != null">
+        register_id,
+      </if>
+      <if test="registTs != null">
+        regist_ts,
+      </if>
+      <if test="updaterId != null">
+        updater_id,
+      </if>
+      <if test="updateTs != null">
+        update_ts,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ruleId != null">
+        #{ruleId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="exclusionFlag != null">
+        #{exclusionFlag,jdbcType=CHAR},
+      </if>
+      <if test="registerId != null">
+        #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="registTs != null">
+        #{registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updaterId != null">
+        #{updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTs != null">
+        #{updateTs,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleUserEntityExample" resultType="java.lang.Long">
+    select count(*) from public.m_rule_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update public.m_rule_user
+    <set>
+      <if test="row.ruleId != null">
+        rule_id = #{row.ruleId,jdbcType=VARCHAR},
+      </if>
+      <if test="row.userId != null">
+        user_id = #{row.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="row.exclusionFlag != null">
+        exclusion_flag = #{row.exclusionFlag,jdbcType=CHAR},
+      </if>
+      <if test="row.registerId != null">
+        register_id = #{row.registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="row.registTs != null">
+        regist_ts = #{row.registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updaterId != null">
+        updater_id = #{row.updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="row.updateTs != null">
+        update_ts = #{row.updateTs,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update public.m_rule_user
+    set rule_id = #{row.ruleId,jdbcType=VARCHAR},
+      user_id = #{row.userId,jdbcType=VARCHAR},
+      exclusion_flag = #{row.exclusionFlag,jdbcType=CHAR},
+      register_id = #{row.registerId,jdbcType=VARCHAR},
+      regist_ts = #{row.registTs,jdbcType=TIMESTAMP},
+      updater_id = #{row.updaterId,jdbcType=VARCHAR},
+      update_ts = #{row.updateTs,jdbcType=TIMESTAMP}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleUserEntity">
+    update public.m_rule_user
+    <set>
+      <if test="registerId != null">
+        register_id = #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="registTs != null">
+        regist_ts = #{registTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updaterId != null">
+        updater_id = #{updaterId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTs != null">
+        update_ts = #{updateTs,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where rule_id = #{ruleId,jdbcType=VARCHAR}
+      and user_id = #{userId,jdbcType=VARCHAR}
+      and exclusion_flag = #{exclusionFlag,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="jp.co.axio.masterMentsetSystem.model.MRuleUserEntity">
+    update public.m_rule_user
+    set register_id = #{registerId,jdbcType=VARCHAR},
+      regist_ts = #{registTs,jdbcType=TIMESTAMP},
+      updater_id = #{updaterId,jdbcType=VARCHAR},
+      update_ts = #{updateTs,jdbcType=TIMESTAMP}
+    where rule_id = #{ruleId,jdbcType=VARCHAR}
+      and user_id = #{userId,jdbcType=VARCHAR}
+      and exclusion_flag = #{exclusionFlag,jdbcType=CHAR}
+  </update>
+</mapper>

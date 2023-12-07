@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>権限グループ設定画面</title>
+<link href="./vendor/jquery-ui-1.12.1/jquery-ui.css" th:href="@{./vendor/jquery-ui-1.12.1/jquery-ui.css}" rel="stylesheet" />
+<link href="./vendor/bootstrap-3.3.7/css/bootstrap.min.css" th:href="@{./vendor/bootstrap-3.3.7/css/bootstrap.min.css}" rel="stylesheet" />
+<link href="./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css" th:href="@{./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css}" rel="stylesheet" />
+<link href="./vendor/datatables/dataTables.bootstrap.css" th:href="@{./vendor/datatables/dataTables.bootstrap.css}" rel="stylesheet" />
+<link href="./css/common.css" th:href="@{./css/common.css}" rel="stylesheet" />
+
+<link href="./assets/css/header_footer.css" th:href="@{./assets/css/header_footer.css}" rel="stylesheet" />
+
+<!-- common's javascript start -->
+<script type="text/javascript" src="./vendor/jquery-3.2.1.js" th:src="@{./vendor/jquery-3.2.1.js}"></script>
+<script type="text/javascript" src="./vendor/jquery-ui-1.12.1/jquery-ui.min.js" th:src="@{./vendor/jquery-ui-1.12.1/jquery-ui.min.js}"></script>
+<script type="text/javascript" src="./vendor/datatables/jquery.dataTables.js" th:src="@{./vendor/datatables/jquery.dataTables.js}"></script>
+<script type="text/javascript" src="./vendor/datatables/dataTables.bootstrap.js" th:src="@{./vendor/datatables/dataTables.bootstrap.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/js/bootstrap.min.js" th:src="@{./vendor/bootstrap-3.3.7/js/bootstrap.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js}"></script>
+<script type="text/javascript" src="./vendor/knockout-3.4.2.js" th:src="@{./vendor/knockout-3.4.2.js}"></script>
+<script type="text/javascript" src="./js/axio_common.js" th:src="@{./js/axio_common.js}"></script>
+<!-- common's javascript end -->
+<script src="./js/authGroupSet.js" th:src="@{./js/authGroupSet.js}"></script>
+<script>
+jQuery(function($){
+
+	$("#ui-datepicker-div").remove();
+	$("#groupStartDate").datepicker({
+			 showButtonPanel: false		// 「Today」「Done」ボタン 無効
+			,changeMonth: false 		// 「月」リスト選択 無効
+			,changeYear: false			// 「年」リスト選択 無効
+			,dateFormat: "yy/mm/dd"		// 日付フォーマット yyyy/MM/dd
+			,firstDay: 0 			 	// 週の最初の曜日 0:日曜日
+			, beforeShow: function (elem,dp) {
+  	            dp.dpDiv.css('z-index', '10');
+  	        }
+	});
+	$("#groupEndDate").datepicker({
+			 showButtonPanel: false		// 「Today」「Done」ボタン 無効
+			,changeMonth: false 		// 「月」リスト選択 無効
+			,changeYear: false			// 「年」リスト選択 無効
+			,dateFormat: "yy/mm/dd"		// 日付フォーマット yyyy/MM/dd
+			,firstDay: 0 			 	// 週の最初の曜日 0:日曜日
+			, beforeShow: function (elem,dp) {
+  	            dp.dpDiv.css('z-index', '10');
+  	        }
+	});
+});
+</script>
+</head>
+
+<!-- 画面ボーディ -->
+<body>
+<!-- ダイヤログモーダル表示エリア -->
+<div id="listModalArea">
+  <div class="modal fade" id="listModal" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" style="width:1100px;">
+	<div class="modal-content" style="width:1100px;height:800px;overflow-y:auto">
+		<form id="dialogParamForm" name="dialogParamForm" >
+	        <input type="hidden" id="callFrom" name="callFrom" value="" />
+	        <input type="hidden" id="callParameter" name="callParameter" value="" />
+	        <input type="hidden" id="callReturn" name = "callReturn" value="" />
+	    </form>
+		<div id="modal_dailog_body">
+	    </div>
+	</div>
+    </div>
+  </div>
+ </div>
+
+     <!-- ヘッダーエリア -->
+     <header id="header" class="header">
+        <div class="header__inner">
+          <figure class="header__img"><img src="./assets/img/common/img_logo01.png" th:src="@{./assets/img/common/img_logo01.png}" alt="AXIO" width="73" height="36"></figure>
+          <a href="./logout" class="header__link">ログアウト</a>
+        </div>
+      </header>
+
+      <!-- タイトルエリア -->
+      <div class="modTitleArea">
+        <div class="modTitleArea__inner">
+          <h1 class="modTitleArea__title">権限管理機能：グループ設定画面</h1>
+          <a class="modTitleArea__prevButton" id="btn_logout" href="./login"  th:href="@{./login}"><span>戻る</span></a>
+        </div>
+      </div>
+
+ <div class="container">
+  <div style="display:none;">
+   <div id="axioMessageDialog" title="完了" th:if="${axioMessage}">
+        <span th:text="${axioMessage}"></span>
+   </div>
+  </div>
+  <div id="contentAera" layout:fragment="content" >
+    <form role="form-inline" action="./AuthGroupSet/" th:action="@{/}" th:object="${AuthGroupSetForm}" method="post" class="form-horizontal" id="authGroupSetForm">
+     <div id="ActionErrorMessage" class="col-sm-12 alert alert-danger asm_alert" th:style="*{!#strings.isEmpty(errMessage)} ? 'display:block' : 'display:none'" role="alert" >
+        <span id="ActionErrorText" th:text="*{errMessage}"></span>
+     </div>
+      <ul th:if="${#fields.hasErrors('*')}" class="col-sm-12 alert alert-danger asm_alert" role="alert">
+      <!-- 	<li th:each="e : ${#fields.detailedErrors()}" th:text="${e.global}? ${'*:' + e.message } : ${e.fieldName + ':' + e.message}" /> -->
+      	<li th:each="e : ${#fields.errors('*')}" th:text="${e}" />
+      </ul>
+      <div class="row ">
+                <div class="form-inline " >
+                    <div class="asm_ctrl text-right col-xs-12" style="margin-top: 10px;">
+                        <button type="button" id="groupSearch" class="btn btn-info axio_btn_middle" >グループ検索</button>
+                        <button type="button" id="groupUpdate" class="btn btn-info axio_btn_middle" > グループ保存</button>
+                        <button type="button" id="groupDelete" class="btn btn-info axio_btn_middle" th:attr="disabled=*{#strings.isEmpty(groupId)} ? true : false">グループ削除</button>
+                        <button type="button" id="groupClear" class="btn btn-info axio_btn_middle">クリア</button>
+                    </div>
+                </div>
+          <fieldset class="scheduler-border">
+                <legend class="scheduler-border " >グループ編集</legend>
+
+                <div class="col-xs-12" >
+                <div class="form-group form-group-flex">
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center "><label class="control-label " >グループID</label></div>
+                    <div class="td-color3 col-xs-4  ">
+                        <input  type="text"  id="groupId" name="groupId" class="form-control input-sm" readonly="readonly" th:value="*{groupId}"
+                        	style="ime-mode: inactive;"/>
+                    </div>
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center"><label class="control-label " >グループ名<span class="font-red"> (※)</span></label></div>
+                    <div class="td-color3 col-xs-4 ">
+                        <input  type="text"  id="groupNameJp" name="groupNameJp" th:maxlength="256" class="form-control input-sm" th:errorclass="axio_field_error" th:value="*{groupNameJp}"
+                        	style="ime-mode:active;"/>
+                        <input  type="hidden"  id="groupNameEn" name="groupNameEn" th:maxlength="256" th:value="*{groupNameEn}"/>
+                    </div>
+                </div>
+                <div class="form-group form-group-flex">
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center "><label class="control-label " >適用開始日<span class="font-red"> (※)</span></label></div>
+                    <div class="td-color3 col-xs-4  ">
+                        <input  type="text"  id="groupStartDate" name="groupStartDate" th:maxlength="10" class="form-control input-sm" th:errorclass="axio_field_error" th:value="*{groupStartDate}"
+                        	placeholder="yyyy/mm/dd" autocomplete="off" style="ime-mode: inactive;"/>
+                    </div>
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center"><label class="control-label " >適用終了日<span class="font-red"> (※)</span></label></div>
+                    <div class="td-color3 col-xs-4 ">
+                        <input  type="text"  id="groupEndDate" name="groupEndDate" th:maxlength="10" class="form-control input-sm" th:errorclass="axio_field_error" th:value="*{groupEndDate}"
+                        	placeholder="yyyy/mm/dd" autocomplete="off" style="ime-mode: inactive;"/>
+                    </div>
+                </div>
+                <div class="form-group form-group-flex">
+                    <div class="td-color2 col-xs-2 form-group-flex middle-center"><label class="control-label " >備考</label></div>
+                    <div class="td-color3 col-xs-10 ">
+                        <input  type="text"  id="groupDetail" name="groupDetail" th:maxlength="2000" class="form-control input-sm" th:errorclass="axio_field_error" th:value="*{groupDetail}"
+                        	style="ime-mode:active;"/>
+                    </div>
+                </div>
+           </div>
+        </fieldset>
+    </div>
+    <div class="row">
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border " >関連済権限ルール（参照一覧）</legend>
+             	<table class="table table-bordered asm_data_table text-center" style="padding-top:0px; padding-bottom:0px;">
+             	<thead >
+                 	 <tr class="asm_data_table_header">
+                     	<th class="text-center" style="width:10%;">ルールID</th>
+                     	<th class="text-center" style="width:30%;">ルール概要</th>
+                     	<th class="text-center" style="width:38%;">備考</th>
+                     	<th class="text-center" style="width:22%;">ルール適用期間</th>
+                 	</tr>
+              	</thead>
+              	<tbody id="resultList">
+                    <tr th:each="resultList, start : *{groupRuleList}" th:object="${resultList}" >
+                        <td th:id="${'ruleId_' + start.index}" class="asm_data_table_header text-center" th:text="${resultList.ruleId}"></td>
+                        <td th:id="${'ruleName_' + start.index}" class="master-back-grey text-left" style="background-color: #66FFFF;" th:text="${resultList.ruleName}"></td>
+                        <td th:id="${'ruleNote_' + start.index}" class="master-back-grey text-left" style="background-color: #66FFFF;" th:text="${resultList.ruleNote}"></td>
+                        <td th:id="${'rulePeriod_' + start.index}" class="master-back-grey text-left" style="background-color: #66FFFF;" th:text="${resultList.rulePeriod}"></td>
+                   	</tr>
+               	</tbody>
+            	</table>
+        </fieldset>
+    </div>
+
+         <input type="hidden" id="accessToken" name="accessToken" th:field="*{accessToken}" />
+         <input type="hidden" id="searchFlg" name="searchFlg" th:field="*{searchFlg}" />
+         <input type="hidden" id="editFlg" name="editFlg" th:field="*{editFlg}"/>
+         <input type="hidden" id="changedFlg" name="changedFlg" th:field="*{changedFlg}" />
+         <input type="hidden" id="reflectFunction" name = "reflectFunction" th:field="*{reflectFunction}" />
+         <input type="hidden" id="paramVal" name = "paramVal" th:field="*{paramVal}" />
+
+    </form>
+    </div>
+    </div>
+
+    <!-- フッター -->
+    <footer id="footer" class="footer">
+        <p class="footer__text">Copyright &copy; AXIO corporation. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

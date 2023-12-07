@@ -1,0 +1,29 @@
+//文字コードはutf-8
+@charset "UTF-8";
+.modInput{
+  @include fontsize(14);
+  width: 100%;
+  background-color: #F8F8F8;
+  border: 1px solid #ddd;
+  padding: 9px 11px 9px;
+  background-size: 100%;
+} 
+
+.modTitleArea{
+  background-color: #fff;
+  border-top: 1px solid $border_color;
+  border-bottom: 1px solid $border_color;
+  margin-bottom: 40px;
+  &__inner{
+    position: relative;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  &__title{
+    letter-spacing: -0.5px;
+    @include fontsize(28);
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 19px 0 16px;
+  }
+}

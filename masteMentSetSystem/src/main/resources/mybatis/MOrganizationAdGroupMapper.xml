@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.axio.masterMentsetSystem.repository.MOrganizationAdGroupMapper">
+
+<!-- 基本設定 表取得  初期表示-->
+    <select id="selectBaseParamInit" parameterType="string" resultType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+    SELECT
+        value_1 AS groupType,
+        value_2 AS groupTypeName
+    FROM
+        m_gp_code_mst AS gcm 
+    WHERE
+        gcm.class_code = '00100'
+    AND delete_flag = '0'
+    ORDER BY value_1 ASC
+        
+    </select>
+
+    <!-- 基本設定 表取得 -->
+    <select id="selectBaseParam" parameterType="string" resultType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+    
+    <![CDATA[ 
+    WITH target_ag AS(
+    SELECT *
+    FROM m_adgroup AS ag
+    WHERE ag.adgroup_id = #{sgid}
+    )
+    SELECT
+        gcm.value_1 AS groupType,
+        gcm.value_2 AS groupTypeName,
+        ta.group_name AS groupName,
+        ta.group_id AS groupId,
+        ta.note AS note,
+        ta.invalid_flag AS invalidFlag,
+        ta.start_date AS startDate,
+        ta.end_date AS endDate
+    FROM
+        target_ag AS ta
+        RIGHT OUTER JOIN m_gp_code_mst AS gcm 
+        ON gcm.class_code = '00100'
+        AND ta.group_type = gcm.value_1
+    WHERE
+		gcm.class_code = '00100'
+		ORDER BY groupType
+    ]]>
+        
+    </select>
+
+    <!-- 基本設定 表以外取得 -->
+    <select id="selectBase" parameterType="string" resultType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+    SELECT
+        oag.adgroup_id AS securityGroupCode,
+        oag.company_code AS companyCode,
+        o.organization_code AS organizationCode,
+        o.organization_name_jp AS organizationName,
+        oag.reflection_date AS reflectionDate,
+        oag.option_attr1 AS optionAttr1,
+        oag.option_attr2 AS optionAttr2,
+        oag.option_attr3 AS optionAttr3,
+        oag.option_attr4 AS optionAttr4,
+        oag.option_attr5 AS optionAttr5,
+        oag.option_attr6 AS optionAttr6,
+        oag.option_attr7 AS optionAttr7,
+        oag.option_attr8 AS optionAttr8,
+        oag.option_attr9 AS optionAttr9,
+        oag.option_attr10 AS optionAttr10
+    FROM
+        m_organization_adgroup AS oag
+        JOIN m_organization AS o
+        ON o.company_code = oag.company_code
+        AND o.organization_code = oag.organization_code
+    WHERE
+        oag.company_code = #{companyCode}
+    AND
+        oag.organization_code = #{organizationCode}
+
+        
+    </select>
+
+    <!-- 組織SGマスタ取得 -->
+    <select id="selectOrganizationAdGroup" parameterType="string" resultType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+
+    SELECT
+        company_code AS companyCode,
+        organization_code AS organizationCode,
+        adgroup_id AS securityGroupCode,
+        reflection_date AS reflectionDate,
+        invalid_flag AS invalidFlag,
+        option_attr1 AS optionAttr1,
+        option_attr2 AS optionAttr2,
+        option_attr3 AS optionAttr3,
+        option_attr4 AS optionAttr4,
+        option_attr5 AS optionAttr5,
+        option_attr6 AS optionAttr6,
+        option_attr7 AS optionAttr7,
+        option_attr8 AS optionAttr8,
+        option_attr9 AS optionAttr9,
+        option_attr10 AS optionAttr10
+
+    FROM m_organization_adgroup
+    WHERE
+        company_code = #{companyCode}
+    AND
+        organization_code = #{organizationCode}
+    
+        
+    </select>
+
+    <!-- SGマスタのグループ名を更新する -->
+    <update id="updateNameAdGroup" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+        UPDATE
+            public.m_adgroup
+        SET
+            group_name = #{groupName,jdbcType=VARCHAR},
+            updater_id = #{updaterId,jdbcType=VARCHAR},
+            update_ts = now()
+        WHERE
+            group_id = #{groupId,jdbcType=VARCHAR}
+        AND invalid_flag = '0'
+    </update>
+
+    <!-- SGマスタの備考を更新する -->
+    <update id="updateNoteAdGroup" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+        UPDATE
+            public.m_adgroup
+        SET
+            note = #{note,jdbcType=VARCHAR},
+            updater_id = #{updaterId,jdbcType=VARCHAR},
+            update_ts = now()
+        WHERE
+            group_id = #{groupId,jdbcType=VARCHAR}
+        AND invalid_flag = '0'
+    </update>
+
+    <!-- グループ名が重複しているSGマスタの日付を更新する -->
+    <update id="updateDateAdGroup" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+        UPDATE
+            public.m_adgroup
+        SET
+            start_date = #{startDate,jdbcType=VARCHAR},
+            end_date = #{endDate,jdbcType=VARCHAR},
+            updater_id = #{updaterId,jdbcType=VARCHAR},
+            update_ts = now()
+        WHERE
+            adgroup_id in (
+                SELECT
+                    adgroup_id
+                FROM
+                    m_adgroup
+                WHERE
+                    group_name = #{groupName,jdbcType=VARCHAR}
+                AND
+                    invalid_flag = '0'
+        )
+    </update>
+    
+
+    <!-- 未設定のセキュリティーグループを取得 -->
+    <select id="selectNotSetting" parameterType="string" resultType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+    SELECT
+        oa.adgroup_id AS securityGroupCode,
+        oa.group_type AS groupType,
+        oa.group_type_name AS groupTypeName,
+        oa.group_id AS groupId,
+        oa.group_name AS groupName,
+        oa.note AS note,
+        oa.company_code AS companyCode,
+        oa.organization_code AS organizationCode,
+        oa.organization_name AS organizationName,
+        oa.start_date AS startDate,
+        oa.end_date AS endDate,
+        oa.reflection_date AS reflectionDate,
+        oa.invalid_flag AS invalidFlag,
+        oa.option_attr1 AS optionAttr1,
+        oa.option_attr2 AS optionAttr2,
+        oa.option_attr3 AS optionAttr3,
+        oa.option_attr4 AS optionAttr4,
+        oa.option_attr5 AS optionAttr5,
+        oa.option_attr6 AS optionAttr6,
+        oa.option_attr7 AS optionAttr7,
+        oa.option_attr8 AS optionAttr8,
+        oa.option_attr9 AS optionAttr9,
+        oa.option_attr10 AS optionAttr10
+    FROM
+        v_org_adgroup AS oa
+    WHERE
+        oa.company_code IS NULL
+    AND
+        oa.invalid_flag IS NULL
+    AND
+        oa.group_id IS NOT NULL
+    ORDER BY oa.end_date ASC
+
+        
+    </select>
+
+
+
+    <!-- 設定済みのセキュリティグループを取得 -->
+    <select id="selectSetting" parameterType="string" resultType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+    SELECT
+        oa.adgroup_id AS securityGroupCode,
+        oa.group_type AS groupType,
+        oa.group_type_name AS groupTypeName,
+        oa.group_id AS groupId,
+        oa.group_name AS groupName,
+        oa.note AS note,
+        oa.company_code AS companyCode,
+        oa.organization_code AS organizationCode,
+        oa.organization_name AS organizationName,
+        oa.start_date AS startDate,
+        oa.end_date AS endDate,
+        oa.reflection_date AS reflectionDate,
+        oa.invalid_flag AS invalidFlag,
+        oa.option_attr1 AS optionAttr1,
+        oa.option_attr2 AS optionAttr2,
+        oa.option_attr3 AS optionAttr3,
+        oa.option_attr4 AS optionAttr4,
+        oa.option_attr5 AS optionAttr5,
+        oa.option_attr6 AS optionAttr6,
+        oa.option_attr7 AS optionAttr7,
+        oa.option_attr8 AS optionAttr8,
+        oa.option_attr9 AS optionAttr9,
+        oa.option_attr10 AS optionAttr10
+    FROM
+        v_org_adgroup AS oa
+    WHERE
+        oa.company_code IS NOT NULL
+    AND
+        oa.invalid_flag = '0'
+    AND
+        oa.group_id IS NOT NULL
+    ORDER BY oa.end_date, company_code, organization_code, group_type ASC
+
+        
+    </select>
+
+
+    <!-- SGマスタ取得 -->
+    <select id="selectAdGroup" parameterType="string" resultType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+    SELECT
+        adgroup_id AS securityGroupCode,
+        group_type AS groupType,
+        group_id AS groupId,
+        group_name AS groupName,
+        start_date AS startDate,
+        end_date AS endDate,
+        note AS note,
+        invalid_flag AS invalidFlag
+
+    FROM m_adgroup
+    WHERE adgroup_id = #{sgid}
+
+        
+    </select>
+
+
+    <!-- SGコード発行 -->
+    <select id="selectNewSecurityGroupCode" parameterType="string" resultType="String">
+    
+    SELECT
+        'SG-' || TRIM(TO_CHAR(nextval('m_adgroup_seq'), '0000')) as adgroup_id
+        
+    </select>
+
+
+    <!-- 組織SGマスタインサート -->
+    <insert id="insertOrganizationAdGroup" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+    
+    insert into
+    public.m_organization_adgroup (
+        company_code,
+        organization_code,
+        adgroup_id,
+        reflection_date,
+        register_id,
+        regist_ts,
+        updater_id,
+        update_ts,
+        invalid_flag,
+        option_attr1,
+        option_attr2,
+        option_attr3,
+        option_attr4,
+        option_attr5,
+        option_attr6,
+        option_attr7,
+        option_attr8,
+        option_attr9,
+        option_attr10
+    )
+values
+    (
+        #{companyCode,jdbcType=VARCHAR},
+        #{organizationCode,jdbcType=VARCHAR},
+        #{securityGroupCode,jdbcType=VARCHAR},
+        #{reflectionDate,jdbcType=DATE},
+        #{registerId,jdbcType=VARCHAR},
+        now(),
+        #{updaterId,jdbcType=VARCHAR},
+        now(),
+        #{invalidFlag,jdbcType=CHAR},
+        #{optionAttr1,jdbcType=VARCHAR},
+        #{optionAttr2,jdbcType=VARCHAR},
+        #{optionAttr3,jdbcType=VARCHAR},
+        #{optionAttr4,jdbcType=VARCHAR},
+        #{optionAttr5,jdbcType=VARCHAR},
+        #{optionAttr6,jdbcType=VARCHAR},
+        #{optionAttr7,jdbcType=VARCHAR},
+        #{optionAttr8,jdbcType=VARCHAR},
+        #{optionAttr9,jdbcType=VARCHAR},
+        #{optionAttr10,jdbcType=VARCHAR}
+        
+    )
+        
+    </insert>
+
+
+    <!-- 組織SGマスタ更新 -->
+    <update id="updateOrganizationAdGroup" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+        UPDATE
+            public.m_organization_adgroup
+        SET
+            company_code = #{companyCode,jdbcType=VARCHAR},
+            organization_code = #{organizationCode,jdbcType=VARCHAR},
+            adgroup_id = #{securityGroupCode,jdbcType=VARCHAR},
+            reflection_date = #{reflectionDate,jdbcType=DATE},
+            invalid_flag = #{invalidFlag,jdbcType=VARCHAR},
+            updater_id = #{updaterId,jdbcType=VARCHAR},
+            update_ts = now(),
+            option_attr1 = #{optionAttr1,jdbcType=VARCHAR},
+            option_attr2 = #{optionAttr2,jdbcType=VARCHAR},
+            option_attr3 = #{optionAttr3,jdbcType=VARCHAR},
+            option_attr4 = #{optionAttr4,jdbcType=VARCHAR},
+            option_attr5 = #{optionAttr5,jdbcType=VARCHAR},
+            option_attr6 = #{optionAttr6,jdbcType=VARCHAR},
+            option_attr7 = #{optionAttr7,jdbcType=VARCHAR},
+            option_attr8 = #{optionAttr8,jdbcType=VARCHAR},
+            option_attr9 = #{optionAttr9,jdbcType=VARCHAR},
+            option_attr10 = #{optionAttr10,jdbcType=VARCHAR}
+        WHERE
+            company_code = #{companyCode,jdbcType=VARCHAR}
+        AND
+            organization_code = #{organizationCode,jdbcType=VARCHAR}
+    </update>
+
+
+    <!-- 組織SGマスタインサート -->
+    <insert id="insertAdGroup" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+    
+    insert into
+    public.m_adgroup (
+        adgroup_id,
+        group_type,
+        group_id,
+        group_name,
+        start_date,
+        end_date,
+        note,
+        invalid_flag,
+        register_id,
+        regist_ts,
+        updater_id,
+        update_ts
+    )
+    values
+    (
+        #{securityGroupCode,jdbcType=VARCHAR},
+        #{groupType,jdbcType=VARCHAR},
+        #{groupId,jdbcType=VARCHAR},
+        #{groupName,jdbcType=VARCHAR},
+        #{startDate,jdbcType=DATE},
+        #{endDate,jdbcType=DATE},
+        #{note,jdbcType=VARCHAR},
+        #{invalidFlag,jdbcType=CHAR},
+        #{registerId,jdbcType=VARCHAR},
+        now(),
+        #{updaterId,jdbcType=VARCHAR},
+        now()
+        
+        
+    )
+        
+    </insert>
+
+    <update id="updateAdGroup" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+    
+    UPDATE
+        public.m_adgroup
+    SET
+        group_id = #{groupId,jdbcType=VARCHAR},
+        group_name = #{groupName,jdbcType=VARCHAR},
+        start_date = #{startDate,jdbcType=DATE},
+        end_date = #{endDate,jdbcType=DATE},
+        note = #{note,jdbcType=VARCHAR},
+        invalid_flag = #{invalidFlag,jdbcType=VARCHAR},
+        updater_id = #{updaterId,jdbcType=VARCHAR},
+        update_ts = now()
+    WHERE
+        adgroup_id = #{securityGroupCode,jdbcType=VARCHAR}
+    AND
+        group_type = #{groupType,jdbcType=VARCHAR}
+        
+    </update>
+
+
+
+    <!-- 重複しているグループ名を検索 -->
+    <select id="selectDuplicatedGroupName" parameterType="jp.co.axio.masterMentsetSystem.model.MGroupEntity" resultType="jp.co.axio.masterMentsetSystem.model.MGroupEntity">
+    
+    <![CDATA[ 
+        WITH gn AS (
+            SELECT
+                    group_id
+                ,   group_name_jp
+            FROM 
+                m_group AS g
+            WHERE
+                g.start_date <= now()
+            AND
+                g.end_date >= now()
+            AND
+                g.invalid_flag = '0'
+
+            UNION
+
+            SELECT
+                group_id
+            ,   group_name 
+            FROM 
+                m_adgroup AS ag
+            WHERE
+                ag.start_date <= now()
+            AND
+                ag.end_date >= now()
+            AND
+                ag.invalid_flag = '0'
+        )
+        SELECT
+            group_id AS groupId
+        FROM 
+            gn
+        WHERE 
+            gn.group_name_jp = #{groupName,jdbcType=VARCHAR}
+    ]]>
+
+
+    </select>
+
+    <!-- 重複しているグループ名を検索 -->
+    <select id="selectDuplicatedGroupId" parameterType="jp.co.axio.masterMentsetSystem.model.MGroupEntity" resultType="jp.co.axio.masterMentsetSystem.model.MGroupEntity">
+    
+    <![CDATA[ 
+        WITH gn AS (
+            SELECT
+                    adgroup_id
+                ,   group_type
+                ,   group_id
+                ,   group_name
+                ,   start_date
+                ,   end_date
+                ,   note
+                ,   invalid_flag
+            FROM 
+                m_adgroup AS ag
+            WHERE
+                ag.start_date <= now()
+            AND
+                ag.end_date >= now()
+            AND
+                ag.invalid_flag = '0'
+            AND
+                ag.adgroup_id <> #{securityGrpCode,jdbcType=VARCHAR}
+        )
+        SELECT
+                adgroup_id AS securityGroupCode
+            ,   group_type AS groupType
+            ,   group_id AS groupId
+            ,   group_name AS groupNameJp
+            ,   start_date AS startDate
+            ,   end_date AS endDate
+            ,   note AS note
+            ,   invalid_flag AS invalidFlag
+        FROM 
+            gn
+        WHERE 
+            gn.group_id = #{groupId,jdbcType=VARCHAR}
+    ]]>
+
+
+    </select>
+
+    <!-- 重複データ上書き -->
+    <update id="updateDuplicatedAdGroup" parameterType="string" >
+        <![CDATA[ 
+            UPDATE
+                public.m_adgroup
+            SET
+                    group_id = #{newGroupId}
+                ,   group_name = #{newGroupName}
+                ,   note = #{newGroupNote}
+                ,   update_ts = now()
+            WHERE
+                group_id = #{oldGroupId}
+            AND
+                start_date <= now()
+            AND
+                end_date >= now()
+            AND
+                invalid_flag = '0'
+        ]]>
+    </update>
+
+
+
+    <!-- SGコード発行 -->
+    <select id="selectGroupList" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity" 
+        resultType="jp.co.axio.masterMentsetSystem.dto.AuthSecurityGrpListDto">
+    
+        <![CDATA[ 
+            SELECT
+            ag.adgroup_id AS securityGroupCode,
+            ag.group_type AS groupType,
+            ag.group_id AS groupId,
+            ag.group_name AS groupName,
+            ag.start_date AS startDate,
+            ag.end_date AS endDate,
+            ag.note AS note
+
+            FROM m_adgroup AS ag
+            WHERE
+            ag.adgroup_id LIKE concat('%' , #{securityGroupCode,jdbcType=VARCHAR} ,'%')
+            AND
+            ag.group_name LIKE concat('%' , #{groupName,jdbcType=VARCHAR} ,'%')
+            AND
+            ag.note LIKE concat('%' , #{note,jdbcType=VARCHAR} ,'%')
+            AND
+            ag.start_date <= #{startDate,jdbcType=DATE}
+            AND
+            ag.end_date >= #{startDate,jdbcType=DATE}
+            AND
+            ag.invalid_flag = '0'
+            ORDER BY ag.adgroup_id ASC
+        
+        ]]>
+
+    </select>
+
+    <!-- 組織SGマスタ無効化更新全て -->
+    <update id="updateAdGroupInvalid" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+        UPDATE
+            public.m_adgroup
+        SET
+            end_date = #{endDate,jdbcType=VARCHAR},
+            invalid_flag = #{invalidFlag,jdbcType=VARCHAR},
+            updater_id = #{updaterId,jdbcType=VARCHAR},
+            update_ts = now()
+        WHERE
+            adgroup_id = #{securityGroupCode,jdbcType=VARCHAR}
+    </update>
+
+    <!-- 組織SGマスタ無効化更新単体 -->
+    <update id="updateOneAdGroupInvalid" parameterType="jp.co.axio.masterMentsetSystem.model.MOrganizationAdGroupEntity">
+        UPDATE
+            public.m_adgroup
+        SET
+            end_date = #{endDate,jdbcType=VARCHAR},
+            invalid_flag = #{invalidFlag,jdbcType=VARCHAR},
+            updater_id = #{updaterId,jdbcType=VARCHAR},
+            update_ts = now()
+        WHERE
+            adgroup_id = #{securityGroupCode,jdbcType=VARCHAR}
+        AND group_type = #{groupType,jdbcType=VARCHAR}
+    </update>
+
+
+    <!-- SGマスタカウント -->
+    <!-- TODO -->
+    <select id="countAdGroupRecord" resultType="Integer" parameterType="string" >
+        SELECT COUNT( * ) FROM m_adgroup
+        WHERE
+            adgroup_id = #{sgid}
+        AND
+            group_type = #{groupType}
+    </select>
+
+
+    <select id="countAdGroupOrg" resultType="Integer" parameterType="string">
+    SELECT COUNT( * ) FROM m_organization_adgroup
+        WHERE
+            company_code = #{companyCode}
+        AND
+            organization_code = #{organizationCode}
+        AND
+            invalid_flag = '0'
+    </select>
+
+    <select id="countAdGroupName" resultType="Integer" parameterType="string" >
+    
+        <![CDATA[ 
+
+            SELECT
+                COUNT( * ) 
+            FROM 
+                m_adgroup
+            WHERE
+                start_date <= now()
+            AND
+                end_date >=  now()
+            AND
+                invalid_flag = '0'
+            AND
+                group_name = #{groupName}
+        ]]>
+    </select>
+
+
+    <!--  -->
+    <update id="updateAdGroupSetInvalid" parameterType="string">
+    UPDATE
+            public.m_organization_adgroup
+        SET
+            invalid_flag = #{invalidFlag,jdbcType=VARCHAR},
+            updater_id = #{updaterId,jdbcType=VARCHAR},
+            update_ts = now()
+        WHERE
+            company_code = #{companyCode,jdbcType=VARCHAR}
+        AND organization_code = #{organizationCode,jdbcType=VARCHAR}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,228 @@
+body,html {
+    background-color:#F8F8F8!important;
+
+}
+.navbar {
+    /* background-color:#007300!important; */
+    background-color: #1F3990!important;
+    color:#fff;
+    margin-bottom: 0px!important;
+}
+.lead {
+	margin-bottom: 0px!important;
+}
+header.page-title {
+	background-color:#616BA3;
+	color:#fff;
+	padding-top:10px;
+	height:30px;
+}
+
+.row {
+  margin-right: 15px !important;
+  margin-left: 15px !important;
+}
+.container{
+	width:900px;
+}
+
+.form-group {
+    margin-bottom: 5px!important;
+}
+.form-group-flex{
+	display:flex
+}
+
+.btn-info {
+  color: #000 !important;
+  background-color: #d3d3d3 !important;
+  border-color: #d3d3d3 !important;
+}
+
+.btn-info:hover  {
+    background-color: #a9a9a9 !important;
+    border-color: #a9a9a9 !important;
+
+}
+
+.control-label{
+	padding-top:0px !important;
+}
+
+/* .btn:hover  { */
+/*     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); */
+/* } */
+
+/* fieldset*/
+fieldset.scheduler-border {
+    border: solid 1px #DDD !important;
+    padding: 0 10px 10px 20px;
+    border-bottom: none;
+    margin:0;
+    margin-bottom:10px;
+    width:auto;
+}
+/* legend */
+legend.scheduler-border {
+    width: auto !important;
+    padding:  7px 7px 7px 7px;
+    background-color: #fff;
+    border: 1px solid #DDDDDD;
+    border-left: 3px solid #337ab7;
+    font-size: 18px ;
+}
+
+/* 繝懊ち繝ｳ繧ｵ繧､繧ｺ */
+.axio_btn_middle {
+	width:100px;
+}
+
+.axio_btn_large {
+	width:150px;
+}
+
+/* 繝懊ち繝ｳ繧偵∪縺ｨ繧√※驟咲ｽｮ縺吶ｋ繝悶Ο繝�繧ｯ隕∫ｴ� */
+.asm_ctrl {
+	margin-bottom:10px;
+}
+
+/* 繝�繝ｼ繧ｿ繝�繝ｼ繝悶Ν */
+.asm_data_table {
+	background:#fff;
+    table-layout: fixed;      /* 蛻怜ｹ�繧貞崋螳� */
+}
+
+/* 繝�繝ｼ繧ｿ繝�繝ｼ繝悶Ν繝倥ャ繝� */
+.asm_data_table .asm_data_table_header {
+    background:#337ab7;
+    color:#fff;
+}
+
+/* 繝�繝ｼ繧ｿ繝�繝ｼ繝悶ΝTH TD */
+.asm_data_table th, td {
+	word-wrap: break-word;     /* 謾ｹ陦� */
+}
+
+/* 繧ｨ繝ｩ繝ｼ繧ｹ繧ｿ繧､繝ｫ�ｼ夐��逶ｮ縺斐→縺ｮ繧ｨ繝ｩ繝ｼ繝｡繝�繧ｻ繝ｼ繧ｸ */
+.asm_error_style_item {
+	display:inline-block;
+	padding:2px 10px;
+	margin-left:20px;
+	margin-top:5px;
+	margin-bottom:5px;
+	color:red;
+	border:1px solid pink;
+	border-radius:1px;
+	background:#f2dede;
+}
+
+/* 繧ｨ繝ｩ繝ｼ繧ｹ繧ｿ繧､繝ｫ�ｼ夐��逶ｮ繧ｨ繝ｩ繝ｼ */
+.axio_field_error {
+	border:1px solid #F29494 !important;
+	color:#a94442 !important;
+	background:#f2dede !important;
+}
+
+/* 逕ｻ髱｢諠�蝣ｱ繧ｨ繝ｩ繝ｼ繝｡繝�繧ｻ繝ｼ繧ｸ */
+ul.asm_alert {
+	list-style-type: none
+}
+
+/* 逕ｻ髱｢繧ｿ繧､繝医Ν */
+#screenTitle {
+    background-color: #fff;
+    padding: 7px 7px 7px 7px;
+    border:1px solid #DDDDDD;
+    border-left: 3px solid #337ab7;
+}
+/* 逕ｻ髱｢繧ｿ繧､繝医Ν */
+#screenTitle h2 {
+	margin:0;
+}
+
+/* 蠢�鬆医�槭�ｼ繧ｯ */
+.required  {
+	color:red;
+	font-weight:bold;
+	margin-left:2px;
+	display:inline-block;
+}
+
+/* 蠢�鬆医�槭�ｼ繧ｯ */
+.required2  {
+	background:red;
+	color:#fff;
+	font-weight:bold;
+	margin-left:2px;
+	display:inline-block;
+	padding:1px 2px
+}
+
+
+.form-horizontal .control-label,
+.form-inline .control-label {
+	text-align:left !important;
+}
+
+@-ms-viewport
+{
+    width: auto;
+    initial-scale: 1;
+}
+
+.pull-right{
+  right: 0;
+  left: auto;
+}
+
+
+ .font-red{
+   color:red;
+   font-size:12px;
+ }
+
+.td-color2{
+   background-color:#337ab7;
+   color:#fff;
+   }
+
+.td-color3{
+   background-color:#DDDDDD;
+   }
+
+.td-color4{
+   background-color:white;
+   }
+
+.th-height{
+   height:54px;
+}
+
+.middle-margin{
+   margin-top:5px;
+   margin-bottom:5px;
+ }
+
+.middle-center{
+   align-items:center;
+ }
+
+.div-td-bottom{
+   vertical-align: bottom;
+   border: 2px solid #ddd;
+  }
+
+
+.heightInfo{
+    height: 540px !important;
+}
+
+.must-padding{
+    padding-left:0px;
+    padding-right:0px;
+ }
+
+.dataTables_scrollBody {
+	overflow-x: hidden!important;
+ }
+

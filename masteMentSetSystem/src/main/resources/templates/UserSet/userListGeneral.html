@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>利用者一覧画面</title>
+
+<link href="./vendor/jquery-ui-1.12.1/jquery-ui.css" th:href="@{./vendor/jquery-ui-1.12.1/jquery-ui.css}" rel="stylesheet" />
+<link href="./vendor/bootstrap-3.3.7/css/bootstrap.min.css" th:href="@{./vendor/bootstrap-3.3.7/css/bootstrap.min.css}" rel="stylesheet" />
+<link href="./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css" th:href="@{./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css}" rel="stylesheet" />
+<link href="./vendor/datatables/dataTables.bootstrap.css" th:href="@{./vendor/datatables/dataTables.bootstrap.css}" rel="stylesheet" />
+<link href="./css/common.css" th:href="@{./css/common.css}" rel="stylesheet" />
+<!-- 個別設定CSS -->
+<link href="./assets/css/style3.css" th:href="@{./assets/css/style3.css}" rel="stylesheet" />
+
+<!-- common's javascript start -->
+<script type="text/javascript" src="./vendor/jquery-3.2.1.js" th:src="@{./vendor/jquery-3.2.1.js}"></script>
+<script type="text/javascript" src="./vendor/jquery-ui-1.12.1/jquery-ui.min.js" th:src="@{./vendor/jquery-ui-1.12.1/jquery-ui.min.js}"></script>
+<script type="text/javascript" src="./vendor/datatables/jquery.dataTables.js" th:src="@{./vendor/datatables/jquery.dataTables.js}"></script>
+<script type="text/javascript" src="./vendor/datatables/dataTables.bootstrap.js" th:src="@{./vendor/datatables/dataTables.bootstrap.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/js/bootstrap.min.js" th:src="@{./vendor/bootstrap-3.3.7/js/bootstrap.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js}"></script>
+<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js" th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js}"></script>
+<script type="text/javascript" src="./vendor/knockout-3.4.2.js" th:src="@{./vendor/knockout-3.4.2.js}"></script>
+<script type="text/javascript" src="./js/axio_common.js" th:src="@{./js/axio_common.js}"></script>
+<!-- common's javascript end -->
+
+<script type="text/javascript" src="./js/userListGeneral.js" th:src="@{./js/userListGeneral.js}"></script>
+
+</head>
+<body onContextmenu="return false" onCopy="alert('コピー禁止');  return false" onCut ="alert('切り取り禁止');return false">
+<!--// header -->
+<header id="header" class="header">
+  <div class="header__inner">
+    <figure class="header__img"><img src="./assets/img/common/img_logo01.png" th:src="@{./assets/img/common/img_logo01.png}" alt="AXIO" width="73" height="36"></figure>
+    <a href="./logout" class="header__link">ログアウト</a>
+  </div>
+</header>
+<!-- header //-->
+
+<div class="search">
+    <main class="main">
+<form role="form-inline" id="userListForm" th:action="@{/}" th:object="${UserListForm}" method="post" class="form-horizontal">
+
+      <div class="modTitleArea">
+        <div class="modTitleArea__inner">
+          <h1 class="modTitleArea__title">　　　　　利用者検索</h1>
+          <a href="./login"  th:href="@{./login}" class="modTitleArea__prevButton"><span>戻る</span></a>
+        </div>
+      </div>
+
+      <!-- 検索条件エリア -->
+      <div class="main__inner">
+        <section class="searchBox">
+          <div class="searchBox__titleArea"><h2 class="searchBox__titleArea__title">検索条件</h2></div>
+          <div class="searchBox__content">
+              <input type="hidden" name="PageNo" th:value="*{pageNo}" />
+              <input type="hidden" id="sortCondition" name="sortCondition" th:value="*{sortCondition}" />
+              <input type="hidden" name="curRowId" id ="curRowId" th:value="*{curRowId}" />
+              <input type="hidden" name="countCheck" id ="countCheck" th:value="*{countCheck}" />
+              <input type="hidden" name="popupShowFlg" id ="popupShowFlg" th:value="*{popupShowFlg}" />
+              <input type="hidden" name="popupMsg" id ="popupMsg" th:value="*{popupMsg}" />
+              <input type="hidden" name="zeroCntFlg" id ="zeroCntFlg" th:value="*{zeroCntFlg}" />
+              <input type="hidden" name="csvFlg" id ="csvFlg" th:value="*{csvFlg}" />
+
+              <div id="condition">
+	              <ul class="searchBox__content__inputList">
+	                <li class="item"><p class="item__text">所属部署</p><input type="text" class="modInput" name="orgName"  th:field="*{orgName}"></li>
+	                <li class="item"><p class="item__text">漢字氏名</p><input type="text" class="modInput" name="userName" th:field="*{userName}"></li>
+	                <li class="item"><p class="item__text">内線電話</p><input type="text" class="modInput" name="tel" th:field="*{tel}"></li>
+	                <li>
+	                </li>
+	              </ul>
+              </div>
+              <div class="searchBox__content__buttonArea">
+				<span class="item__text">ページ件数</span>
+				<span style="display: inline-block;">
+					<select id="cntSelect" class="form-control" style="width:80px;" th:field="*{cntSelected}">
+					    <th:block th:each="rs, status : ${UserListForm.userMaxCntList}">
+					  		<option th:value="${rs.cntValue}" th:selected="${rs.cntValue == UserListForm.cntSelected}" th:text="${rs.cntName}">
+						    </option>
+					</th:block>
+					</select>
+				</span>
+				　
+                <button type="button" id="clear" class="clear">条件をクリア</button>
+                <button type="button" id="search" class="search">検索</button>
+              </div>
+          </div>
+        </section>
+
+        <!-- 検索結果エリア -->
+        <section class="searchBox">
+          <div class="searchBox__titleArea"><h2 class="searchBox__titleArea__title">検索結果</h2>
+          </div>
+          <table class="modTable">
+            <colgroup>
+				<col width="400">
+				<col width="180">
+				<col width="140">
+				<col width="190">
+				<col width="100">
+				<col width="130">
+				<col width="120">
+			</colgroup>
+            <tr id="orderBar">
+              <th><button type="button" class="modTable__state" disabled id="organizationNameBtn">部署</button></th>
+              <th><button type="button" class="modTable__state" disabled id="userNameKanaBtn">仮名姓/名</button></th>
+              <th><button type="button" class="modTable__state" disabled id="userNameJpBtn">漢字姓/名</button></th>
+              <th><button type="button" class="modTable__state" disabled id="userNameEnBtn">ローマ字姓/名</button></th>
+              <th><button type="button" class="modTable__state" disabled id="positionNameBtn">役職</button></th>
+              <th><button type="button" class="modTable__state" disabled id="expansionAttr36Btn">原価センタ</button></th>
+              <th><button type="button" class="modTable__state" disabled id="telExBtn">内線番号</button></th>
+            </tr>
+            <th:block th:if="${UserListForm.zeroCntFlg} == 'ON'">
+                <tr>
+					<td colspan="7">検索条件に一致するユーザー情報がありません。</td>
+				</tr>
+            </th:block>
+             <tr class="jstableLink" th:each="rs, status : ${UserListForm.detailList}" th:id ="${rs.userId}">
+	              <td th:id="${'organizationNameJp_' + status.index}" th:title="${rs.organizationNameJp}" th:text="${rs.organizationNameJp}">本社 品質管理部</td>
+	              <td th:id="${'nameKana_' + status.index}" th:title="${rs.nameKana}" th:text="${rs.nameKana}">カタ カナ</td>
+	              <td th:id="${'nameJp_' + status.index}" th:title="${rs.nameJp}" th:text="${rs.nameJp}">漢 字</td>
+	              <td th:id="${'nameEn_' + status.index}" th:title="${rs.nameEn}" th:text="${rs.nameEn}">ro ma</td>
+	              <td th:id="${'positionNameJp_' + status.index}" th:text="${rs.positionNameJp}">課長</td>
+	              <td th:id="${'expansionAttr36_' + status.index}" th:text="${rs.expansionAttr36}">123</td>
+	              <td th:id="${'telEx_' + status.index}" th:text="${rs.telEx}">123</td>
+            </tr>
+
+          </table>
+        </section>
+
+        <div class="searchResult">
+          <p class="searchResult__text" th:text="${UserListForm.cntMessage}"></p>
+          <div class="searchResult__btnArea">
+            <button type="button" class="searchResult__btnArea__btn" id="prePageBtn" th:if="${UserListForm.prePageFlg == 'ON'}">前のページ</button>
+            <button type="button" class="searchResult__btnArea__btn_dis" th:if="${UserListForm.prePageFlg == 'OFF'}">前のページ</button>
+
+            <button type="button" class="searchResult__btnArea__btn" id="nextPageBtn" th:if="${UserListForm.nextPageFlg == 'ON'}">次のページ</button>
+            <button type="button" class="searchResult__btnArea__btn_dis" th:if="${UserListForm.nextPageFlg == 'OFF'}">次のページ</button>
+          </div>
+        </div>
+      </div>
+</form>
+    </main>
+	</div>
+<footer id="footer" class="footer">
+  <p class="footer__text">Copyright &copy; AXIO corporation. All Rights Reserved.</p>
+</footer>
+</body>
+</html>

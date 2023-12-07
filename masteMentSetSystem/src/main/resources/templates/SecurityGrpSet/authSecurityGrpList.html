@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>セキュリティグループ一覧画面</title>
+	<link href="./vendor/jquery-ui-1.12.1/jquery-ui.css" th:href="@{./vendor/jquery-ui-1.12.1/jquery-ui.css}"
+		rel="stylesheet" />
+	<link href="./vendor/bootstrap-3.3.7/css/bootstrap.min.css"
+		th:href="@{./vendor/bootstrap-3.3.7/css/bootstrap.min.css}" rel="stylesheet" />
+	<link href="./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css"
+		th:href="@{./vendor/bootstrap-3.3.7/datepicker/css/bootstrap-datetimepicker.css}" rel="stylesheet" />
+	<link href="./vendor/datatables/dataTables.bootstrap.css" th:href="@{./vendor/datatables/dataTables.bootstrap.css}"
+		rel="stylesheet" />
+	<link href="./css/common.css" th:href="@{./css/common.css}" rel="stylesheet" />
+
+	<!-- common's javascript start -->
+	<script type="text/javascript" src="./vendor/jquery-3.2.1.js" th:src="@{./vendor/jquery-3.2.1.js}"></script>
+	<script type="text/javascript" src="./vendor/jquery-ui-1.12.1/jquery-ui.min.js"
+		th:src="@{./vendor/jquery-ui-1.12.1/jquery-ui.min.js}"></script>
+	<script type="text/javascript" src="./vendor/datatables/jquery.dataTables.js"
+		th:src="@{./vendor/datatables/jquery.dataTables.js}"></script>
+	<script type="text/javascript" src="./vendor/datatables/dataTables.bootstrap.js"
+		th:src="@{./vendor/datatables/dataTables.bootstrap.js}"></script>
+	<script type="text/javascript" src="./vendor/bootstrap-3.3.7/js/bootstrap.min.js"
+		th:src="@{./vendor/bootstrap-3.3.7/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js"
+		th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment.min.js}"></script>
+	<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js"
+		th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/moment-with-locales.min.js}"></script>
+	<script type="text/javascript" src="./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js"
+		th:src="@{./vendor/bootstrap-3.3.7/datepicker/js/bootstrap-datetimepicker.js}"></script>
+	<script type="text/javascript" src="./vendor/knockout-3.4.2.js" th:src="@{./vendor/knockout-3.4.2.js}"></script>
+	<script type="text/javascript" src="./js/axio_common.js" th:src="@{./js/axio_common.js}"></script>
+	<!-- common's javascript end -->
+	<script type="text/javascript" src="./js/authSecurityGroupList.js" th:src="@{./js/authSecurityGroupList.js}"></script>
+	<script>
+		jQuery(function ($) {
+			/*
+				$("#groupSearchListTbl").DataTable({
+							 lengthChange: false	// 件数切替機能 無効
+							,searching: false		// 検索機能 無効
+							,ordering: false		// ソート機能 無効
+							,info: false			// 情報表示 無効
+							,paging: false			// ページング機能 無効
+			//				,scrollY: '350px'		// 縦スクロールバーを有効にする
+							,scrollCollapse: true
+							,autoWidth:false		// 列幅の自動計算 無効
+							,destroy: true			// 再描画 可能
+							,columns:[
+									 {"width":"18%" }	// チェックボックス+グループID
+									,{"width":"28%"}	// グループ名
+									,{"width":"32%"}	// 備考
+									,{"width":"22%"}	// グループ適用期間
+									]
+						});
+			*/
+			/*
+						$('#dailogStartDate, #dailogEndDate')
+						.off()
+							.focusin(function(e) {
+								$('#ui-datepicker-div').remove();
+								$(this).removeClass('hasDatepicker');
+								$(this).datepicker({
+									dateFormat: 'yy/mm/dd'
+									, beforeShow: function (elem,dp) {
+													dp.dpDiv.css('z-index', '1051');
+										}
+								});
+								$('#ui-datepicker-div').show();
+						})
+			*/
+			$("#ui-datepicker-div").remove();
+			$("#dailogStartDate").datepicker({
+				showButtonPanel: false		// 「Today」「Done」ボタン 無効
+				, changeMonth: false 		// 「月」リスト選択 無効
+				, changeYear: false			// 「年」リスト選択 無効
+				, dateFormat: "yy/mm/dd"		// 日付フォーマット yyyy/MM/dd
+				, firstDay: 0 			 	// 週の最初の曜日 0:日曜日
+				, beforeShow: function (elem, dp) {
+					dp.dpDiv.css('z-index', '1051');
+				}
+			});
+			$("#dailogEndDate").datepicker({
+				showButtonPanel: false		// 「Today」「Done」ボタン 無効
+				, changeMonth: false 		// 「月」リスト選択 無効
+				, changeYear: false			// 「年」リスト選択 無効
+				, dateFormat: "yy/mm/dd"		// 日付フォーマット yyyy/MM/dd
+				, firstDay: 0 			 	// 週の最初の曜日 0:日曜日
+				, beforeShow: function (elem, dp) {
+					dp.dpDiv.css('z-index', '1051');
+				}
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<nav class="navbar navbar-default ">
+		<h3 class="navbar-text " style="color:#fff; padding-top:5px; padding-left:40px;">
+			権限管理機能：セキュリティグループ一覧画面
+		</h3>
+	</nav>
+	<div id="modalAuthGroupList" class="container">
+		<div layout:fragment="content">
+			<form role="form-inline" action="./authSecurityGroupList" th:action="@{/}" th:object="${AuthSecurityGrpListForm}"
+				method="post" class="form-horizontal" id="AuthSecurityGrpListForm">
+				<div id="DailogErrorMessage" class="col-sm-12 alert alert-danger asm_alert"
+					th:style="*{dailogErrMessage} ? 'display:block' : 'display:none'" role="alert">
+					<span id="ActionErrorText" th:text="*{dailogErrMessage}"></span>
+				</div>
+				<input type="hidden" id="searchResultCount" name="searchResultCount"
+					th:value="*{listGroupItems.size()}" />
+				<div class="row ">
+					<div class="form-inline ">
+						<div class="asm_ctrl text-right col-xs-12" style="margin-top: 10px;">
+							<button type="button" id="dailogGroupSearch"
+								class="btn btn-info axio_btn_middle">検索</button>
+							<button type="button" id="dailogGroupOK" class="btn btn-info axio_btn_middle"
+								data-dismiss="modal">確定</button>
+							<button type="button" id="dailogGroupCancel" class="btn btn-info axio_btn_middle"
+								data-dismiss="modal">キャンセル</button>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<fieldset class="scheduler-border">
+						<legend class="scheduler-border ">検索条件</legend>
+						<div class="row">
+							<div class="form-group form-group-flex">
+								<div class="td-color2 col-xs-3 form-group-flex middle-center ">
+									<label class="control-label ">
+										SGID
+									</label>
+								</div>
+								<div class="td-color3 col-xs-9">
+									<input type="text" id="dailogSecurityGroupCode" class="form-control input-sm"
+										th:field="*{dailogSecurityGroupCode}" style="ime-mode: inactive;" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group form-group-flex">
+								<div class="td-color2 col-xs-3 form-group-flex middle-center">
+									<label class="control-label ">
+										グループ名
+									</label>
+								</div>
+								<div class="td-color3 col-xs-9 ">
+									<input type="text" id="dailogGroupName" class="form-control input-sm"
+										th:field="*{dailogGroupName}" data-ignore-prohibited-char="yes"
+										style="ime-mode:active;" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group form-group-flex">
+								<div class="td-color2 col-xs-3 form-group-flex middle-center"><label
+										class="control-label ">備考</label>
+								</div>
+								<div class="td-color3 col-xs-9 ">
+									<input type="text" id="dailogGroupNote" class="form-control input-sm"
+										th:field="*{dailogGroupNote}" data-ignore-prohibited-char="yes"
+										style="ime-mode:active;" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group form-group-flex">
+								<div class="td-color2 col-xs-3 form-group-flex middle-center "><label
+										class="control-label ">有効基準日</label>
+								</div>
+								<div class="td-color3 col-xs-4  ">
+									<input type="text" id="dailogStartDate"
+										class="form-control input-sm dpickDateCalendar" th:field="*{dailogStartDate}"
+										placeholder="yyyy/mm/dd" autocomplete="off" style="ime-mode: inactive;" />
+								</div>
+								<div class="td-color3 col-xs-5 "></div>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="scheduler-border">
+						<legend class="scheduler-border ">検索結果一覧</legend>
+						<div>
+							<table id="groupSearchListTbl" class="table table-bordered asm_data_table text-center"
+								style="margin-bottom:2px;">
+								<thead>
+									<tr class="asm_data_table_header">
+										<th class="text-left" style="width:20%;">
+											<input type="checkbox" id="groupListCheckAll" name="groupListCheckAll"
+												th:attr="disabled=*{dailogCallFrom == 'groupSelect'} ? false : true"
+												autocomplete="off">
+											SGID
+										</th>
+										<th class="text-center" style="width:25%;">グループ名</th>
+										<th class="text-center" style="width:30%;">備考</th>
+										<th class="text-center" style="width:25%;">適用期間</th>
+									</tr>
+								</thead>
+								<tbody id="resultList">
+									<th:block th:each="rt, status : *{listGroupItems}">
+										<tr>
+											<td th:id="${'groupId_'+ status.index}"
+												class="asm_data_table_header text-left">
+												<input th:id="${'listCheck_'+ status.index}" name="listCheck"
+													type="checkbox" autocomplete="off"
+													th:attr="checked=${rt.checkFlag} ? 'true' :'false'"
+													th:value="${rt.securityGroupCode}" />&nbsp;[[${rt.securityGroupCode}]]
+												<input type="hidden" th:id="${'groupNameHidden_' + status.index}"
+													name="groupNameHidden" th:value="${rt.groupName}" />
+												<input type="hidden" th:id="${'noteHidden_' + status.index}"
+													name="noteHidden" th:value="${rt.note}" />
+												<input type="hidden" th:id="${'startDateHidden_' + status.index}"
+													name="startDateHidden" th:value="${rt.startDate}" />
+												<input type="hidden" th:id="${'endDateHidden_' + status.index}"
+													name="endDateHidden" th:value="${rt.endDate}" />
+											</td>
+											<td class="master-back-grey text-left"
+												th:id="${'groupNameJp_'+ status.index}"
+												th:style="${rt.dispFlag} ? 'background-color: #66FFFF; text-align : left;' : 'background-color: #eaedf7; text-align : left;'">
+												[[${rt.groupName}]]</td>
+											<td class="master-back-grey text-left" th:id="${'note_'+ status.index}"
+												th:style="${rt.dispFlag} ? 'background-color: #66FFFF; text-align : left;' : 'background-color: #eaedf7; text-align : left;'">
+												[[${rt.note}]]</td>
+											<td class="master-back-grey text-left" th:id="${'term_'+ status.index}"
+												th:style="${rt.dispFlag} ? 'background-color: #66FFFF; text-align : left;' : 'background-color: #eaedf7; text-align : left;'">
+												[[${rt.startDate}]] - [[${rt.endDate}]]</td>
+										</tr>
+									</th:block>
+								</tbody>
+							</table>
+							<input type="hidden" id="checkGroupId" name="checkSecurityGroupCode" th:field="*{checkSecurityGroupCode}" />
+						</div>
+					</fieldset>
+				</div>
+				<input type="hidden" id="dailogCallFrom" name="dailogCallFrom" th:field="*{dailogCallFrom}" />
+				<input type="hidden" id="dailogCallParameter" name="dailogCallParameter"
+					th:field="*{dailogCallParameter}" />
+
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>
